@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: peachey  Wed Sep  1 11:23:37 PDT 2004
+st_graph/src
+
+Modified Files:
+	ValueSet.cxx 
+Log Message:
+Add default constructor and size() and empty() methods.
+    *
+------------------------------------------------------------
+User: peachey  Wed Sep  1 11:23:37 PDT 2004
 st_graph/st_graph
 
 Modified Files:
