@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Thu Dec 30 13:19:34 PST 2004
+st_graph/src
+
+Modified Files:
+	RootFrame.h RootFrame.cxx 
+Log Message:
+Add support for getting generic state of a widget as a string.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Dec 29 13:04:19 PST 2004
 st_graph/st_graph
 
