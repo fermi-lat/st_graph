@@ -1,4 +1,17 @@
 ------------------------------------------------------------
+User: peachey  Fri Jan 21 09:56:48 PST 2005
+st_graph/src
+
+Modified Files:
+	RootCint.cxx RootCint.h RootEngine.cxx RootFrame.cxx 
+	RootPlotFrame.h STGLayoutManager.h 
+Removed Files:
+	RootFrame.h 
+Log Message:
+Move RootFrame.h from src/ to st_graph/ directory.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Jan 21 07:49:59 PST 2005
 st_graph/src
 
