@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Tue Oct 12 11:39:05 PDT 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Use M_PI for pi rather than asin(1.) * 2.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Oct 12 11:38:35 PDT 2004
 st_graph/src
 
