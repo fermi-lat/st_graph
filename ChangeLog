@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Fri Jan 21 07:49:59 PST 2005
+st_graph/src
+
+Modified Files:
+	RootFrame.h 
+Log Message:
+Remove unused and unimplemented method setText, which caused
+problems for rootcint, and is not useful anyway.
+
+    *
+------------------------------------------------------------
 User: peachey  Thu Dec 30 13:21:05 PST 2004
 st_graph/src/test
 
