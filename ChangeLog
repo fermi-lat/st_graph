@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Fri Dec  3 06:20:28 PST 2004
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx 
+Log Message:
+Use new signature for STGMainFrame, and use STGLayoutManager to connect
+Root widgets' Layout to event receiver's layout.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Dec  3 06:18:58 PST 2004
 st_graph/src/test
 
