@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Sep 14 07:50:42 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootPlotFrame.cxx RootPlotFrame.h 
+Log Message:
+Get rid of members which are no longer needed because base class methods
+now suffice.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Sep 14 07:49:08 PDT 2004
 st_graph/src
 
