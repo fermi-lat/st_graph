@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: peachey  Tue Feb 22 13:44:26 PST 2005
+st_graph/src
+
+Modified Files:
+	RootFrame.cxx 
+Log Message:
+Add setHidden/isHidden to allow frames to be dynamically
+hidden/displayed.
+
+    *
+------------------------------------------------------------
+User: peachey  Tue Feb 22 13:44:26 PST 2005
 st_graph/st_graph
 
 Modified Files:
