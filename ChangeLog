@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Jan 21 10:30:40 PST 2005
+st_graph/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Don't use st_app, as this makes a circular dependency.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Jan 21 10:30:39 PST 2005
 st_graph/src/test
 
