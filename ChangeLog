@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Wed Nov 17 12:09:04 PST 2004
+st_graph/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Remove libThread.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Oct 13 06:02:14 PDT 2004
 st_graph/doc
 
