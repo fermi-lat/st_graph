@@ -1,5 +1,17 @@
 ------------------------------------------------------------
 User: peachey  Wed Aug 11 03:03:18 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx 
+Log Message:
+Improve handling of problems when creating the TApplication object.
+Temporarily ignore all signals while the app is being created, and
+throw an exception if, after it is created, gClient is still 0.
+
+    *
+------------------------------------------------------------
+User: peachey  Wed Aug 11 03:03:18 PDT 2004
 st_graph/src/test
 
 Modified Files:
