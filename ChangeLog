@@ -1,4 +1,17 @@
 ------------------------------------------------------------
+User: peachey  Tue Sep 14 07:44:51 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootFrame.h 
+Log Message:
+Use a set instead of a list to track subframes. Add closeWindow method
+so that close events can be accepted by RootFrames. Add a constructor
+with an IEventReceiver pointer to allow a RootFrame to forward signals
+to that (client) IEventReceiver object.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Sep 14 07:40:57 PDT 2004
 st_graph/src
 
