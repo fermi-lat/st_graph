@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: peachey  Mon Nov 22 12:14:18 PST 2004
+st_graph/pfiles
+
+Added Files:
+	test_st_graph.par 
+Log Message:
+Replace ValueSet with Sequence class. Start using st_stream for output.
+
+    *
+------------------------------------------------------------
+User: peachey  Mon Nov 22 12:14:18 PST 2004
 st_graph/cmt
 
 Modified Files:
