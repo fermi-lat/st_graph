@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: peachey  Tue Aug 31 17:48:31 PDT 2004
+st_graph/st_graph
+
+Added Files:
+	ValueSet.h 
+Log Message:
+Code and tests for ValueSet class, encapsulating a tuple-like set of
+values along with their errors.
+
+    *
+------------------------------------------------------------
+User: peachey  Tue Aug 31 17:48:31 PDT 2004
 st_graph/src/test
 
 Modified Files:
