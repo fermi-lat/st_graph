@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Tue Feb 15 09:17:42 PST 2005
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx 
+Log Message:
+Plug memory leak, and right-justify text in labels.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Jan 31 06:54:35 PST 2005
 st_graph/st_graph
 
