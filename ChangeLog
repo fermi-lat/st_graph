@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Fri Aug  6 08:29:58 PDT 2004
+st_graph/st_graph
+
+Modified Files:
+	Engine.h 
+Log Message:
+Add abstract method for creating 2D plots.
+    *
+------------------------------------------------------------
 User: peachey  Fri Aug  6 08:29:21 PDT 2004
 st_graph/src
 
