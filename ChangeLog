@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Thu Dec 30 13:20:18 PST 2004
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx 
+Log Message:
+Add support for check buttons.
+
+    *
+------------------------------------------------------------
 User: peachey  Thu Dec 30 13:19:34 PST 2004
 st_graph/src
 
