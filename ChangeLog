@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Wed Dec 29 12:58:26 PST 2004
+st_graph/src
+
+Modified Files:
+	RootPlotFrame.cxx 
+Log Message:
+Change plot frame so that it will display sliders if viewport is shrunk
+smaller than the real plot size.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Dec 29 12:55:16 PST 2004
 st_graph/src
 
