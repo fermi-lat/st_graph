@@ -1,5 +1,17 @@
 ------------------------------------------------------------
 User: peachey  Wed Nov 24 07:41:41 PST 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Replace Engine::createPlotHist* methods with more overloads for
+Engine::createPlot which have similar signatures, but allow a choice
+of plot style.
+
+    *
+------------------------------------------------------------
+User: peachey  Wed Nov 24 07:41:41 PST 2004
 st_graph/src
 
 Modified Files:
