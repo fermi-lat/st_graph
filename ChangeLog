@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Thu Dec 30 13:20:43 PST 2004
+st_graph/st_graph
+
+Modified Files:
+	IFrame.h 
+Log Message:
+Add support for getting generic state of a widget as a string.
+
+    *
+------------------------------------------------------------
 User: peachey  Thu Dec 30 13:20:18 PST 2004
 st_graph/src
 
