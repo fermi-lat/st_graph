@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Sep 14 07:49:08 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootPlot.cxx RootPlot.h 
+Log Message:
+Derive from IPlot, not IFrame. Use a TMultiFrame object to hold the
+Root plot objects.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Sep 14 07:47:35 PDT 2004
 st_graph/src
 
