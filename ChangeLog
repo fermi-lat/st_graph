@@ -1,5 +1,19 @@
 ------------------------------------------------------------
 User: peachey  Tue Nov 23 10:06:26 PST 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Improve the memory management, and the division of labor between
+RootPlotFrame and RootPlot. RootPlotFrame now keeps a list of
+RootPlots, and deletes them in its destructor. However, the underlying
+Root objects are now connected/disconnected in display/unDisplay,
+instead of by the constructor.
+
+    *
+------------------------------------------------------------
+User: peachey  Tue Nov 23 10:06:26 PST 2004
 st_graph/src
 
 Modified Files:
