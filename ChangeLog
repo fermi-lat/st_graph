@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Nov 22 12:15:21 PST 2004
+st_graph/st_graph
+
+Added Files:
+	Sequence.h 
+Log Message:
+Replace ValueSet with Sequence class.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Nov 22 12:14:19 PST 2004
 st_graph/src/test
 
