@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Aug 31 17:48:31 PDT 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Code and tests for ValueSet class, encapsulating a tuple-like set of
+values along with their errors.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Aug 11 03:03:18 PDT 2004
 st_graph/src
 
