@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Wed Sep 22 08:53:30 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx RootPlotHist.cxx 
+Log Message:
+Give window manager a hint about where to display windows.
+    *
+------------------------------------------------------------
 User: peachey  Fri Sep 17 10:28:49 PDT 2004
 st_graph/st_graph
 
