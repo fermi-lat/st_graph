@@ -1,4 +1,17 @@
 ------------------------------------------------------------
+User: peachey  Fri Aug  6 11:06:00 PDT 2004
+st_graph/src
+
+Modified Files:
+	PlotHist.cxx RootEngine.cxx RootEngine.h RootPlotHist.cxx 
+	RootPlotHist.h mainpage.h 
+Removed Files:
+	PlotHist1D.cxx RootPlotHist1D.cxx RootPlotHist1D.h 
+Log Message:
+Migrate from classes specific to 1D plots in favor of
+more general classes, not specific to any dimensionality.
+    *
+------------------------------------------------------------
 User: peachey  Fri Aug  6 08:30:12 PDT 2004
 st_graph/src/test
 
