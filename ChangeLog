@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Fri Sep  3 07:28:39 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootPlotFrame.cxx RootPlotFrame.h 
+Log Message:
+Derive only from RootFrame.
+    *
+------------------------------------------------------------
 User: peachey  Fri Sep  3 07:28:08 PDT 2004
 st_graph/st_graph
 
