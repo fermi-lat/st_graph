@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Fri Sep  3 07:33:58 PDT 2004
+st_graph/st_graph
+
+Modified Files:
+	IPlotFrame.h 
+Log Message:
+Consolidate IPlotFrame and IPlot into IFrame.
+    *
+------------------------------------------------------------
 User: peachey  Fri Sep  3 07:32:31 PDT 2004
 st_graph/st_graph
 
