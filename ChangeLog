@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Dec  3 06:18:10 PST 2004
+st_graph/st_graph
+
+Modified Files:
+	IEventReceiver.h 
+Log Message:
+Add layout() method for arranging widgets.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Dec  3 06:17:38 PST 2004
 st_graph/st_graph
 
