@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Mar  4 10:07:14 PST 2005
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx RootTabFolder.cxx 
+Log Message:
+Call setName of frames when they are created, to aid in debugging.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Mar  4 10:06:29 PST 2005
 st_graph/src
 
