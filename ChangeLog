@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 30 11:50:52 PST 2004
+st_graph/src
+
+Modified Files:
+	RootPlot.cxx RootPlotFrame.cxx RootPlotFrame.h RootPlot.h 
+Log Message:
+Move all Root widget code from RootPlot into RootPlotFrame.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 30 10:29:43 PST 2004
 st_graph/src
 
