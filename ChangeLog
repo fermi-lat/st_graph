@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: peachey  Wed Dec 29 12:55:16 PST 2004
+st_graph/src
+
+Modified Files:
+	RootFrame.h RootFrame.cxx 
+Log Message:
+Add full set of methods for positioning widgets. Add minimum width
+and height. Change modifications in text entry so that they take effect
+immediately.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Dec 29 12:49:26 PST 2004
 st_graph/st_graph
 
