@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Wed Sep  1 11:24:33 PDT 2004
+st_graph/st_graph
+
+Modified Files:
+	PlotHist.h 
+Log Message:
+Inherit from IFrame, and consequently do not include display/unDisplay.
+    *
+------------------------------------------------------------
 User: peachey  Wed Sep  1 11:23:37 PDT 2004
 st_graph/src
 
