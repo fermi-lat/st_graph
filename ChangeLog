@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Oct 12 08:53:38 PDT 2004
+st_graph/src
+
+Modified Files:
+	Engine.cxx 
+Log Message:
+Throw exception if created engine could not initialize
+graphics.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Oct 12 08:53:15 PDT 2004
 st_graph/src
 
