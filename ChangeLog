@@ -1,4 +1,44 @@
 ------------------------------------------------------------
+TAG
+Tag name: v1r1p0, operation: add
+Package: st_graph
+User: peachey  Thu Dec 16 11:09:31 2004
+Files:
+  st_graph/ChangeLog  1.135
+  st_graph/cmt/requirements  1.4
+  st_graph/doc/release.notes  1.7
+  st_graph/pfiles/st_graph.par  1.1
+  st_graph/pfiles/test_st_graph.par  1.1
+  st_graph/src/STGMainFrame.h  1.2
+  st_graph/src/RootLinkDef.h  1.1
+  st_graph/src/RootCint.h  1.3
+  st_graph/src/STGMainFrame.cxx  1.3
+  st_graph/src/RootEngine.cxx  1.18
+  st_graph/src/mainpage.h  1.3
+  st_graph/src/RootPlot.cxx  1.11
+  st_graph/src/RootPlot.h  1.8
+  st_graph/src/Engine.cxx  1.3
+  st_graph/src/RootPlotFrame.h  1.7
+  st_graph/src/RootEngine.h  1.15
+  st_graph/src/Axis.cxx  1.1
+  st_graph/src/RootCint.cxx  1.4
+  st_graph/src/RootPlotFrame.cxx  1.10
+  st_graph/src/IPlot.cxx  1.2
+  st_graph/src/RootFrame.h  1.7
+  st_graph/src/STGLayoutManager.h  1.1
+  st_graph/src/RootFrame.cxx  1.7
+  st_graph/src/st_graph/st_graph.cxx  1.4
+  st_graph/src/test/test_st_graph.cxx  1.22
+  st_graph/st_graph/IFrame.h  1.3
+  st_graph/st_graph/Engine.h  1.13
+  st_graph/st_graph/Placer.h  1.1
+  st_graph/st_graph/IPlot.h  1.4
+  st_graph/st_graph/Sequence.h  1.3
+  st_graph/st_graph/IEventReceiver.h  1.3
+  st_graph/st_graph/Axis.h  1.1
+
+    *
+------------------------------------------------------------
 User: peachey  Thu Dec 16 11:08:46 PST 2004
 st_graph/doc
 
