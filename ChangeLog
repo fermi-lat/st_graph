@@ -1,4 +1,17 @@
 ------------------------------------------------------------
+User: peachey  Tue Feb 22 13:32:23 PST 2005
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx RootEngine.h 
+Log Message:
+Add private method hideHidden which undisplays all
+frames which are marked as hidden. This is called immediately after
+displaying all frames. This is necessary because Root recursively
+displays all frames.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Feb 15 09:36:00 PST 2005
 st_graph/src
 
