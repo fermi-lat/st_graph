@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Fri Aug  6 08:30:12 PDT 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Add test for 2D plots.
+    *
+------------------------------------------------------------
 User: peachey  Fri Aug  6 08:29:58 PDT 2004
 st_graph/st_graph
 
