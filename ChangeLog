@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Dec  3 06:22:54 PST 2004
+st_graph/src
+
+Modified Files:
+	RootFrame.h 
+Log Message:
+Add getWidth()/getHeight() methods.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Dec  3 06:21:30 PST 2004
 st_graph/src
 
