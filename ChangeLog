@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Feb 15 09:32:46 PST 2005
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Plug memory leak, and do not use main gui window for laying out tab
+folders for the moment.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Feb 15 09:19:38 PST 2005
 st_graph/st_graph
 
