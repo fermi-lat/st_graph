@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: peachey  Wed Nov 24 07:22:56 PST 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Remove PlotHist class. Change signature of createPlotHist1D so that it
+returns an IFrame.
+
+    *
+------------------------------------------------------------
+User: peachey  Wed Nov 24 07:22:56 PST 2004
 st_graph/src/st_graph
 
 Modified Files:
