@@ -1,4 +1,21 @@
 ------------------------------------------------------------
+User: peachey  Tue Sep 14 07:39:54 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx 
+Log Message:
+Connect Root widget slots/signals explicitly to their parent RootFrames.
+Use a default receiver to allow main frames by default to terminate the
+event loop when they are closed. Do not add RootFrame's ancestor frame
+to the list of frames; instead call its display/unDisplay directly.
+Tweak the handling of RootPlotHist to work with this change. Return to
+using STGMainFrame for main frames, because without overriding
+TGMainFrame::CloseWindow() the window is closed twice, generating an
+error from X.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Sep  8 12:16:12 PDT 2004
 st_graph/src
 
