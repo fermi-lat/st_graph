@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Tue Sep 14 07:52:19 PDT 2004
+st_graph/src
+
+Modified Files:
+	STGMainFrame.cxx 
+Log Message:
+Call Engine::stop instead of directly calling root to terminate the app.
+    *
+------------------------------------------------------------
 User: peachey  Tue Sep 14 07:50:42 PDT 2004
 st_graph/src
 
