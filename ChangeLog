@@ -1,4 +1,18 @@
 ------------------------------------------------------------
+User: peachey  Tue Feb 15 09:36:00 PST 2005
+st_graph/src
+
+Modified Files:
+	RootTabFolder.cxx 
+Log Message:
+Add getTab and getTabCont for getting individual tabs, and for getting
+a container with all the tabs, respectively. Use the class's member
+IEventReceiver to handle layouts for all tabs, though not for the
+main frame, because that uses the native Root layout manager for
+tab folders.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Feb 15 09:34:05 PST 2005
 st_graph/src
 
