@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Wed Dec 29 13:01:48 PST 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Begin to combine widgets with plots in test.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Dec 29 12:59:31 PST 2004
 st_graph/src
 
