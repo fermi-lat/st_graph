@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Tue Sep 14 08:06:13 PDT 2004
+st_graph/st_graph
+
+Modified Files:
+	IEventReceiver.h 
+Log Message:
+Added closeWindow method to handle a window close event.
+    *
+------------------------------------------------------------
 User: peachey  Tue Sep 14 08:05:45 PDT 2004
 st_graph/st_graph
 
