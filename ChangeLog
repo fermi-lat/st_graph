@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 30 11:53:59 PST 2004
+st_graph/st_graph
+
+Modified Files:
+	Sequence.h 
+Log Message:
+Add clone() method.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 30 11:53:38 PST 2004
 st_graph/src
 
