@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Wed Dec 29 13:02:59 PST 2004
+st_graph/st_graph
+
+Modified Files:
+	IEventReceiver.h 
+Log Message:
+Add stub to handle a widget modification which can be expressed as a
+string, e.g. from a text entry widget.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Dec 29 13:01:48 PST 2004
 st_graph/src/test
 
