@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Oct 12 08:52:29 PDT 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Catch all exceptions which result from being unable to initialize
+graphics.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Oct 12 06:49:18 PDT 2004
 st_graph/doc
 
