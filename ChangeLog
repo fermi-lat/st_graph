@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: peachey  Wed Sep  1 11:20:14 PDT 2004
+st_graph/src
+
+Added Files:
+	RootPlotFrame.h RootPlotFrame.cxx 
+Log Message:
+New classes representing a graphics window/canvas which can contain
+plots.
+    *
+------------------------------------------------------------
+User: peachey  Wed Sep  1 11:20:14 PDT 2004
 st_graph/st_graph
 
 Added Files:
