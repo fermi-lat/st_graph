@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 23 06:31:16 PST 2004
+st_graph/st_graph
+
+Removed Files:
+	ValueSet.h 
+Log Message:
+Removing old class.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Nov 22 12:15:21 PST 2004
 st_graph/st_graph
 
