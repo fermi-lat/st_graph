@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 30 11:53:38 PST 2004
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx RootEngine.h 
+Log Message:
+Change signature of createPlot for self-contained plots so that it
+returns IPlot *. This uses the feature that IPlots can now own
+their parent frames. Also performed general cleanup.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 30 11:50:52 PST 2004
 st_graph/src
 
