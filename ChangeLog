@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Mon Jan 31 06:49:47 PST 2005
+st_graph/st_graph
+
+Modified Files:
+	IFrame.h 
+Log Message:
+Add setNaturalSize, to allow composite frames to be set to a
+nice size given all they contain. Add support for tool tips.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Jan 31 06:49:26 PST 2005
 st_graph/st_graph
 
