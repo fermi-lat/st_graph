@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Oct 12 08:53:15 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootEngine.h 
+Log Message:
+Add method which reports whether initialization of graphical
+environment was successful.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Oct 12 08:52:29 PDT 2004
 st_graph/src/test
 
