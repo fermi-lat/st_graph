@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Dec  3 06:29:13 PST 2004
+st_graph/st_graph
+
+Added Files:
+	Placer.h 
+Log Message:
+Placer class and subclasses, to perform geometry management.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Dec  3 06:28:36 PST 2004
 st_graph/src
 
