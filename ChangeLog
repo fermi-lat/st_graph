@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: peachey  Wed Sep  8 11:38:51 PDT 2004
+st_graph/st_graph
+
+Modified Files:
+	Engine.h 
+Log Message:
+Add stop method to terminate the app. Add createButton method.
+    *
+------------------------------------------------------------
+User: peachey  Wed Sep  8 11:38:51 PDT 2004
 st_graph/src
 
 Modified Files:
