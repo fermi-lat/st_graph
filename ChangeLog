@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Fri Sep  3 07:30:26 PDT 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Add test of new histogram plotter.
+    *
+------------------------------------------------------------
 User: peachey  Fri Sep  3 07:28:39 PDT 2004
 st_graph/src
 
