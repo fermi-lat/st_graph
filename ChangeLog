@@ -1,4 +1,22 @@
 ------------------------------------------------------------
+User: peachey  Tue Sep 14 07:47:35 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootFrame.cxx 
+Log Message:
+Use a set instead of a list to track subframes. Add closeWindow method
+so that close events can be accepted by RootFrames. Add a constructor
+with an IEventReceiver pointer to allow a RootFrame to forward signals 
+to that (client) IEventReceiver object.
+
+Do not connect Root signal/slots, because RootFrame is a generic wrapper
+to TGFrames, and it can't know which signals are relevant. Use the
+single-entry property of sets to prevent adding TGFrames to their
+parents more than once.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Sep 14 07:44:51 PDT 2004
 st_graph/src
 
