@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Feb 22 13:44:26 PST 2005
+st_graph/st_graph
+
+Modified Files:
+	IFrame.h RootFrame.h 
+Log Message:
+Add setHidden/isHidden to allow frames to be dynamically
+hidden/displayed.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Feb 22 13:32:23 PST 2005
 st_graph/src
 
