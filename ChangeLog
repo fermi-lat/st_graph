@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Wed Sep  1 11:29:45 PDT 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+New test for engine's createMainFrame, createPlot and createPlotFrame methods.
+    *
+------------------------------------------------------------
 User: peachey  Wed Sep  1 11:28:20 PDT 2004
 st_graph/st_graph
 
