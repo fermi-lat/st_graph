@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: peachey  Wed Dec 29 12:49:26 PST 2004
+st_graph/st_graph
+
+Modified Files:
+	Engine.h 
+Log Message:
+Add optional title for main frame, and methods to create labels,
+text entry boxes, composite frames and group frames (composite frame with
+visible border and label).
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Dec 29 12:38:22 PST 2004
 st_graph/src
 
