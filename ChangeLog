@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Wed Sep  8 12:14:35 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootFrame.cxx RootFrame.h 
+Log Message:
+Connect Root TQobjects to RootFrame.
+    *
+------------------------------------------------------------
 User: peachey  Wed Sep  8 11:40:22 PDT 2004
 st_graph/st_graph
 
