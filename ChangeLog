@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 30 10:02:25 PST 2004
+st_graph/st_graph
+
+Removed Files:
+	IPlotFrame.h 
+Log Message:
+Removing unused class.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 30 09:55:26 PST 2004
 st_graph/src
 
