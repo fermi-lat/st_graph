@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: peachey  Mon Jan 31 06:54:35 PST 2005
+st_graph/st_graph
+
+Added Files:
+	ITabFolder.h 
+Log Message:
+Add classes for tab folders.
+
+    *
+------------------------------------------------------------
+User: peachey  Mon Jan 31 06:54:35 PST 2005
 st_graph/src
 
 Added Files:
