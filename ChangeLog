@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Wed Dec 29 13:04:19 PST 2004
+st_graph/st_graph
+
+Modified Files:
+	Placer.h 
+Log Message:
+Generalize placer objects to handle both hvertical as well as horizontal
+placements.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Dec 29 13:03:27 PST 2004
 st_graph/st_graph
 
