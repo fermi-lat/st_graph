@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 23 07:02:07 PST 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Use address of current object for Root's object name, to eliminate
+collisions.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 23 06:33:26 PST 2004
 st_graph/st_graph
 
