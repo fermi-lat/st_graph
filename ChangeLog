@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: peachey  Tue Nov 23 06:31:16 PST 2004
+st_graph/src
+
+Removed Files:
+	ValueSet.cxx 
+Log Message:
+Removing old class.
+
+    *
+------------------------------------------------------------
+User: peachey  Tue Nov 23 06:31:16 PST 2004
 st_graph/st_graph
 
 Removed Files:
