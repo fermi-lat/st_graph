@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 30 11:55:38 PST 2004
+st_graph/st_graph
+
+Modified Files:
+	Engine.h 
+Log Message:
+Change signature of createPlot for self-contained plots so that it
+returns IPlot *. Update doc.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 30 11:54:57 PST 2004
 st_graph/st_graph
 
