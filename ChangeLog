@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Nov 22 12:14:18 PST 2004
+st_graph/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Replace ValueSet with Sequence class. Start using st_stream for output.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Nov 17 12:09:04 PST 2004
 st_graph/cmt
 
