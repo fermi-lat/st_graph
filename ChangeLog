@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Fri Dec  3 06:28:36 PST 2004
+st_graph/src
+
+Added Files:
+	STGLayoutManager.h 
+Log Message:
+New Root LayoutManager which forwards layouts to event receiver, then
+calls each child's layout manager to manage it.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Dec  3 06:23:14 PST 2004
 st_graph/src
 
