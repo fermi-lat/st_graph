@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Oct 11 11:00:07 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx RootEngine.h 
+Log Message:
+Protect against calling any Engine method if initialization failed.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Sep 22 08:53:30 PDT 2004
 st_graph/src
 
