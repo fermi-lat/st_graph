@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Dec  3 06:17:38 PST 2004
+st_graph/st_graph
+
+Modified Files:
+	IFrame.h 
+Log Message:
+Add getWidth()/getHeight() methods.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 30 12:15:37 PST 2004
 st_graph/src/test
 
