@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 30 09:55:26 PST 2004
+st_graph/st_graph
+
+Added Files:
+	Axis.h 
+Log Message:
+New class for managing properties of axes.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r0p0, operation: add
 Package: st_graph
