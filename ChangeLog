@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Jan 31 06:51:46 PST 2005
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Add tests for file dialogs, and for tabbed folders.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Jan 31 06:51:14 PST 2005
 st_graph/src
 
