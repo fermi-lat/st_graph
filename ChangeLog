@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Wed Dec 29 13:03:27 PST 2004
+st_graph/st_graph
+
+Modified Files:
+	IFrame.h 
+Log Message:
+Add full set of methods for positioning widgets. Add minimum width
+and height.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Dec 29 13:02:59 PST 2004
 st_graph/st_graph
 
