@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Tue Sep 14 07:40:57 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootEngine.h 
+Log Message:
+createMainFrame now accepts a receiver as its first arg.
+createPlot now returns an IPlot, not an IFrame.
+    *
+------------------------------------------------------------
 User: peachey  Tue Sep 14 07:39:54 PDT 2004
 st_graph/src
 
