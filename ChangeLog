@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Jan 31 06:50:52 PST 2005
+st_graph/st_graph
+
+Modified Files:
+	Engine.h 
+Log Message:
+Add file dialog support, and tabbed-folders.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Jan 31 06:49:47 PST 2005
 st_graph/st_graph
 
