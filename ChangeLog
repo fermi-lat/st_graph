@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: peachey  Fri Sep 17 10:28:49 PDT 2004
+st_graph/st_graph
+
+Modified Files:
+	Engine.h ValueSet.h 
+Log Message:
+Add capabilities for 2d plots using the newer IPlot interface.
+    *
+------------------------------------------------------------
+User: peachey  Fri Sep 17 10:28:49 PDT 2004
 st_graph/src/test
 
 Modified Files:
