@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Wed Sep  1 11:25:59 PDT 2004
+st_graph/src
+
+Modified Files:
+	Engine.cxx 
+Log Message:
+Refactor singleton to make it more consistent with other singletons.
+Simplifies the code somewhat.
+    *
+------------------------------------------------------------
 User: peachey  Wed Sep  1 11:24:33 PDT 2004
 st_graph/st_graph
 
