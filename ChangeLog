@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Jan 21 10:17:03 PST 2005
+st_graph/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Use RootcintPolicy pattern instead of running rootcint by hand.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Jan 21 09:56:48 PST 2005
 st_graph/st_graph
 
