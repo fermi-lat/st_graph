@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Sep  3 07:25:30 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootFrame.cxx RootFrame.h 
+Log Message:
+Consolidate IPlotFrame and IPlot into IFrame. Track frames in container
+in RootFrame, rather than using Engine to track them all.
+    *
+------------------------------------------------------------
 User: peachey  Fri Sep  3 07:24:08 PDT 2004
 st_graph/src
 
