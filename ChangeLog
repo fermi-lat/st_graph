@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Wed Dec 29 12:59:31 PST 2004
+st_graph/src
+
+Modified Files:
+	STGLayoutManager.h 
+Log Message:
+Be more precise with regard to how changes of size and calls to Layout
+take place.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Dec 29 12:58:41 PST 2004
 st_graph/src
 
