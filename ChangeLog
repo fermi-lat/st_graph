@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Sep 14 07:54:32 PDT 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Add a closeWindow method to the event handler. Make changes which are
+necessary because createPlot returns an IPlot, not an IFrame.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Sep 14 07:52:19 PDT 2004
 st_graph/src
 
