@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 30 12:15:37 PST 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Make sure that if a second 3D plot is added to a frame, an
+exception is thrown immediately.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 30 12:15:36 PST 2004
 st_graph/src
 
