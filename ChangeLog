@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Mon Jan 31 06:47:56 PST 2005
+st_graph/st_graph
+
+Modified Files:
+	Placer.h 
+Log Message:
+Placer actually uses IFrame inline, so include IFrame.h instead of
+just a forward declaration.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r2p0, operation: add
 Package: st_graph
