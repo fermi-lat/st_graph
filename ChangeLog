@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: peachey  Wed Sep  8 06:31:38 PDT 2004
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Use TGraph for histograms as well as scatters. General improvements.
+    *
+------------------------------------------------------------
+User: peachey  Wed Sep  8 06:31:38 PDT 2004
 st_graph/src
 
 Modified Files:
