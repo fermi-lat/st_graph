@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 30 12:15:36 PST 2004
+st_graph/src
+
+Modified Files:
+	RootPlot.cxx RootPlotFrame.cxx 
+Log Message:
+Make sure that if a second 3D plot is added to a frame, an
+exception is thrown immediately.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 30 11:56:37 PST 2004
 st_graph/src/test
 
