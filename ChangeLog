@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: peachey  Wed Sep  1 11:28:20 PDT 2004
+st_graph/st_graph
+
+Modified Files:
+	Engine.h 
+Log Message:
+Refactor to use IFrame, IPlot amd IPlotFrame.
+Added new methods createMainFrame, createPlotFrame, createPlot.
+    *
+------------------------------------------------------------
+User: peachey  Wed Sep  1 11:28:20 PDT 2004
 st_graph/src
 
 Modified Files:
