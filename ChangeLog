@@ -1,4 +1,17 @@
 ------------------------------------------------------------
+User: peachey  Wed Nov 24 07:22:56 PST 2004
+st_graph/st_graph
+
+Modified Files:
+	Engine.h 
+Removed Files:
+	PlotHist.h 
+Log Message:
+Remove PlotHist class. Change signature of createPlotHist1D so that it
+returns an IFrame.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Nov 24 07:18:56 PST 2004
 st_graph/st_graph
 
