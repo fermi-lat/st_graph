@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Fri Aug  6 08:27:33 PDT 2004
+st_graph/st_graph
+
+Modified Files:
+	PlotHist1D.h 
+Log Message:
+Do not handle intervals in PlotHist1D. Add 2D plot set method.
+    *
+------------------------------------------------------------
 User: peachey  Thu Aug  5 20:31:39 PDT 2004
 st_graph
 
