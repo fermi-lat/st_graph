@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 23 07:02:08 PST 2004
+st_graph/src
+
+Modified Files:
+	RootPlot.cxx RootPlotFrame.cxx 
+Log Message:
+Use address of current object for Root's object name, to eliminate
+collisions.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 23 07:02:07 PST 2004
 st_graph/src/test
 
