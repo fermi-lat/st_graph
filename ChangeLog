@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 30 11:54:57 PST 2004
+st_graph/st_graph
+
+Modified Files:
+	IPlot.h 
+Log Message:
+Refactor interface to accomodate new paradigm in which IPlot-derived
+objects do not communicate directly with the plotting engine.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 30 11:53:59 PST 2004
 st_graph/st_graph
 
