@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Fri Mar  4 10:06:29 PST 2005
+st_graph/st_graph
+
+Modified Files:
+	IFrame.h RootFrame.h 
+Log Message:
+Allow frames to be named, to aid in debugging. Add layout method,
+which accepts an argument which will force the layout to occur.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Feb 22 13:44:26 PST 2005
 st_graph/src
 
