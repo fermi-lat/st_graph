@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: peachey  Fri Aug  6 13:45:53 PDT 2004
+st_graph/st_graph
+
+Modified Files:
+	PlotHist.h 
+Log Message:
+Add method to return dimensionality of plot.
+    *
+------------------------------------------------------------
+User: peachey  Fri Aug  6 13:45:53 PDT 2004
 st_graph/src
 
 Modified Files:
