@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: peachey  Fri Aug  6 08:28:21 PDT 2004
+st_graph/src
+
+Modified Files:
+	RootEngine.h RootEngine.cxx 
+Log Message:
+Reset Root signal handlers. Add method for creating 2D plots.
+    *
+------------------------------------------------------------
 User: peachey  Fri Aug  6 08:27:33 PDT 2004
 st_graph/src
 
