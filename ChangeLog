@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov 30 10:29:09 PST 2004
+st_graph/src
+
+Modified Files:
+	RootFrame.h RootFrame.cxx 
+Log Message:
+Consolidate two constructors, and add support for a RootFrame which
+can safely delete its parent.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov 30 10:02:25 PST 2004
 st_graph/st_graph
 
