@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: peachey  Fri Jan 21 10:17:03 PST 2005
+st_graph/src
+
+Removed Files:
+	RootCint.cxx RootCint.h RootLinkDef.h 
+Log Message:
+Use RootcintPolicy pattern instead of running rootcint by hand.
+
+    *
+------------------------------------------------------------
+User: peachey  Fri Jan 21 10:17:03 PST 2005
 st_graph/st_graph
 
 Added Files:
