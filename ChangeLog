@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Wed Dec 29 12:58:41 PST 2004
+st_graph/src
+
+Modified Files:
+	RootCint.h RootCint.cxx 
+Log Message:
+Regenerated to match latest RootFrame.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Dec 29 12:58:26 PST 2004
 st_graph/src
 
