@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Tue Jun 21 14:19:43 PDT 2005
+st_graph/src
+
+Modified Files:
+	RootPlotFrame.cxx 
+Log Message:
+Use more colors for overplots.
+
+    *
+------------------------------------------------------------
 User: ngigliet  Thu Apr  7 09:31:21 PDT 2005
 st_graph/cmt
 
