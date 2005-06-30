@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Thu Jun 30 05:11:17 PDT 2005
+st_graph/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+To fix build problem on Windows, apply_pattern root_package after ST_library.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Jun 21 14:19:43 PDT 2005
 st_graph/src
 
