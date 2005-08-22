@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Aug 22 06:40:44 PDT 2005
+st_graph/src
+
+Modified Files:
+	RootTabFolder.cxx RootTabFolder.h 
+Log Message:
+Add getSelected method which returns the text label of the selected tab.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r3p2, operation: add
 Package: st_graph
