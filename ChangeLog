@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: peachey  Mon Aug 22 06:40:44 PDT 2005
+st_graph/st_graph
+
+Modified Files:
+	ITabFolder.h 
+Log Message:
+Add getSelected method which returns the text label of the selected tab.
+
+    *
+------------------------------------------------------------
+User: peachey  Mon Aug 22 06:40:44 PDT 2005
 st_graph/src
 
 Modified Files:
