@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Thu Aug 25 07:41:31 PDT 2005
+st_graph/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Re-order patterns to make this work in RM.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r4p1, operation: add
 Package: st_graph
