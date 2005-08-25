@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Wed Aug 24 17:41:37 PDT 2005
+st_graph/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Changes to avoid conflict between RootCintPolicy and ST_library pattern.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r4, operation: add
 Package: st_graph
