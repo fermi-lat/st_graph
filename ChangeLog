@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Aug 26 10:46:26 PDT 2005
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Do not actually run the test unless user supplies an argument to the test code.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r4p2, operation: add
 Package: st_graph
