@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Wed Oct 12 09:30:55 PDT 2005
+st_graph/src
+
+Modified Files:
+	StGui.cxx StGui.h 
+Log Message:
+Drop st_graph qualification since class is now in st_graph.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Oct 12 09:28:02 PDT 2005
 st_graph/src
 
