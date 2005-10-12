@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Wed Oct 12 09:08:46 PDT 2005
+st_graph/src
+
+Added Files:
+	StGui.cxx StGui.h 
+Log Message:
+Migrating st_app::StAppGui to st_graph.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r4p3, operation: add
 Package: st_graph
