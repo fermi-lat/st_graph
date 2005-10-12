@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Wed Oct 12 09:11:04 PDT 2005
+st_graph/cmt
+
+Modified Files:
+	requirements 
+Log Message:
+Need hoops for parameter-based GUI.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Oct 12 09:10:47 PDT 2005
 st_graph/src/test
 
