@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Wed Oct 12 09:10:47 PDT 2005
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Add test of StGui class, which moved here from st_app.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Oct 12 09:08:46 PDT 2005
 st_graph/src
 
