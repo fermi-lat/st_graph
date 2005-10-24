@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Mon Oct 24 13:16:04 PDT 2005
+st_graph/src
+
+Modified Files:
+	RootPlotFrame.cxx RootPlotFrame.h 
+Log Message:
+Display markers on plot frame, and doctor mouse events to allow only
+some Root features to be visible. Make single clicks inside the plot frame do zooming.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Oct 24 13:14:32 PDT 2005
 st_graph/src
 
