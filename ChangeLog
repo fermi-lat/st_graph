@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Mon Oct 24 13:13:16 PDT 2005
+st_graph/src
+
+Modified Files:
+	RootPlot.h RootPlot.cxx 
+Log Message:
+Add facility to add markers to a plot, and to get container of
+markers from a plot.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed Oct 12 11:13:44 PDT 2005
 st_graph/src
 
