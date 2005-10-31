@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Oct 31 11:23:23 PST 2005
+st_graph/st_graph
+
+Modified Files:
+	IFrame.h 
+Log Message:
+Add reset method which resets frame to its pristine state.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Oct 31 11:22:52 PST 2005
 st_graph/st_graph
 
