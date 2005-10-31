@@ -1,4 +1,16 @@
 ------------------------------------------------------------
+User: peachey  Mon Oct 31 11:28:34 PST 2005
+st_graph/src
+
+Modified Files:
+	RootPlotFrame.cxx 
+Log Message:
+Implement reset for plot frames. Keep track of width and height of plot,
+and use them to reinterpret mouse clicks, rather than relying on the frame
+size, which could change.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Oct 31 11:24:40 PST 2005
 st_graph/st_graph
 
