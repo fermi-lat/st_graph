@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Oct 31 11:29:08 PST 2005
+st_graph/src
+
+Modified Files:
+	RootPlotFrame.h 
+Log Message:
+Add override for reset method.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Oct 31 11:28:34 PST 2005
 st_graph/src
 
