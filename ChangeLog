@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: peachey  Mon Oct 31 11:22:52 PST 2005
+st_graph/st_graph
+
+Modified Files:
+	RootFrame.h 
+Log Message:
+Add reset method which resets frame to its pristine state. Add
+non-API method to get the event receiver from the frame.
+
+    *
+------------------------------------------------------------
+User: peachey  Mon Oct 31 11:22:52 PST 2005
 st_graph/src
 
 Modified Files:
