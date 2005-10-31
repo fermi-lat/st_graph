@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Oct 31 11:24:23 PST 2005
+st_graph/src
+
+Modified Files:
+	StGui.cxx 
+Log Message:
+Add support for a plot frame.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Oct 31 11:23:23 PST 2005
 st_graph/st_graph
 
