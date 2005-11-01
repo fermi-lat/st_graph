@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Tue Nov  1 08:32:29 PST 2005
+st_graph/src
+
+Modified Files:
+	RootPlot.cxx 
+Log Message:
+When adding a label to a plot, also add it to the plot frame so
+the display gets updated.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Oct 31 11:30:22 PST 2005
 st_graph/pfiles
 
