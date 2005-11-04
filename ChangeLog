@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Nov  4 08:46:09 PST 2005
+st_graph/src
+
+Modified Files:
+	StGui.cxx 
+Log Message:
+Do not automatically reset plot frame prior to running application.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Nov  1 08:33:10 PST 2005
 st_graph/src
 
