@@ -1,4 +1,17 @@
 ------------------------------------------------------------
+User: peachey  Fri Nov  4 08:55:41 PST 2005
+st_graph/src
+
+Modified Files:
+	RootPlotFrame.cxx 
+Log Message:
+Improve algorithm for determining whether an event was clicked inside
+a frame. Add reset method to clear graph without destroying the actual
+plot objects. Derive a class from TMultiGraph and override the distance
+computation to prevent TMultiGraph from ever responding to events.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Nov  4 08:46:09 PST 2005
 st_graph/src
 
