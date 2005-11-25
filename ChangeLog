@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Nov 25 10:03:37 PST 2005
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Handle right clicks in test plot.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Nov 25 10:03:08 PST 2005
 st_graph/src
 
