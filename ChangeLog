@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Fri Nov 25 10:46:39 PST 2005
+st_graph/src
+
+Modified Files:
+	RootPlotFrame.cxx 
+Log Message:
+Add one more pixel when remapping events to the X axis to prevent
+round-off error from causing the event to be slightly above the x axis.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Nov 25 10:33:11 PST 2005
 st_graph/src
 
