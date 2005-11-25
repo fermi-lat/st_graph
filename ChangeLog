@@ -1,5 +1,15 @@
 ------------------------------------------------------------
 User: peachey  Fri Nov 25 11:51:29 PST 2005
+st_graph/st_graph
+
+Modified Files:
+	Engine.h 
+Log Message:
+Add ability to control whether plot frames exit when they close.
+
+    *
+------------------------------------------------------------
+User: peachey  Fri Nov 25 11:51:29 PST 2005
 st_graph/src
 
 Modified Files:
