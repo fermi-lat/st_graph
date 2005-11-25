@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Fri Nov 25 11:52:03 PST 2005
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Test ability to control whether plot frames exit when they close.
+
+    *
+------------------------------------------------------------
 User: peachey  Fri Nov 25 11:51:29 PST 2005
 st_graph/st_graph
 
