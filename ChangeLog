@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Jan 30 08:46:28 PST 2006
+st_graph/src
+
+Modified Files:
+	RootPlotFrame.cxx 
+Log Message:
+Fix typo: Float_t not float_t.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r5p1, operation: add
 Package: st_graph
