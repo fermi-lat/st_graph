@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Jan 30 06:54:49 PST 2006
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx 
+Log Message:
+Changes to compile with gcc 3.4.x.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r5, operation: add
 Package: st_graph
