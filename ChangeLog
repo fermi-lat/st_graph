@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Wed Feb  8 11:31:40 PST 2006
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx 
+Log Message:
+Do not create DefaultReceiver with static scope, but create it on demand.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r5p4, operation: add
 Package: st_graph
