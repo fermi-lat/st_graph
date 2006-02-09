@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Thu Feb  9 08:44:13 PST 2006
+st_graph/src
+
+Modified Files:
+	RootEngine.cxx 
+Log Message:
+Uncomment code which extracts directory portion of file name from
+full file name.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r5p5, operation: add
 Package: st_graph
