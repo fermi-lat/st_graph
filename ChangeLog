@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Tue Feb 28 08:25:40 PST 2006
+st_graph/src
+
+Modified Files:
+	RootFrame.cxx 
+Log Message:
+Only reset text in a text entry object when the text changes.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r4p6, operation: add
 Package: st_graph
