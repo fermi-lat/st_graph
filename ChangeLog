@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Wed May 17 11:32:07 PDT 2006
+st_graph/src
+
+Modified Files:
+	RootPlot.h RootPlot.cxx RootPlotFrame.h RootPlotFrame.cxx 
+Log Message:
+Store one set of axes in RootPlotFrame; RootPlot::getAxes then returns that set,
+i.e. individual plots no longer have separate axes.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed May 17 11:30:34 PDT 2006
 st_graph/src
 
