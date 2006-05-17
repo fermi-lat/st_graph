@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Wed May 17 11:32:46 PDT 2006
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Switch order of title setting, because it's no longer true that each plot
+has its own axes.
+
+    *
+------------------------------------------------------------
 User: peachey  Wed May 17 11:32:07 PDT 2006
 st_graph/src
 
