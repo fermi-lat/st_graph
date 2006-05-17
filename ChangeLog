@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Wed May 17 11:30:33 PDT 2006
+st_graph/st_graph
+
+Modified Files:
+	Axis.h 
+Log Message:
+Add get/setScaleMode methods to switch between linear/log axes.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r5p7, operation: add
 Package: st_graph
