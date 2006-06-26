@@ -1,4 +1,15 @@
 ------------------------------------------------------------
+User: peachey  Mon Jun 26 07:32:23 PDT 2006
+st_graph/st_graph
+
+Modified Files:
+	IPlot.h 
+Log Message:
+Add option to set the curve type, allowing for optional smooth
+curves to be fit through the data.
+
+    *
+------------------------------------------------------------
 User: peachey  Tue Jun 20 08:14:17 PDT 2006
 st_graph/src
 
