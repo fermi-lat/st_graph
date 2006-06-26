@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Jun 26 07:38:50 PDT 2006
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Draw a smooth curve through the sample cos wave, just to prove this works.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Jun 26 07:32:23 PDT 2006
 st_graph/src
 
