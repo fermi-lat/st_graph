@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: peachey  Mon Jun 26 07:32:23 PDT 2006
+st_graph/src
+
+Modified Files:
+	RootPlot.h RootPlot.cxx RootPlotFrame.cxx 
+Log Message:
+Add option to set the curve type, allowing for optional smooth
+curves to be fit through the data.
+
+    *
+------------------------------------------------------------
+User: peachey  Mon Jun 26 07:32:23 PDT 2006
 st_graph/st_graph
 
 Modified Files:
