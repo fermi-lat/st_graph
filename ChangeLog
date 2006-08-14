@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Aug 14 07:02:00 PDT 2006
+st_graph/st_graph
+
+Modified Files:
+	IPlot.h 
+Log Message:
+Improve color handling scheme. Allow client to set colors of IPlots.
+
+    *
+------------------------------------------------------------
 User: peachey  Mon Aug 14 07:01:59 PDT 2006
 st_graph/src/test
 
