@@ -1,4 +1,14 @@
 ------------------------------------------------------------
+User: peachey  Mon Aug 14 07:01:59 PDT 2006
+st_graph/src
+
+Modified Files:
+	IPlot.cxx RootPlot.cxx RootPlotFrame.cxx RootPlot.h 
+Log Message:
+Improve color handling scheme. Allow client to set colors of IPlots.
+
+    *
+------------------------------------------------------------
 TAG
 Tag name: v1r6, operation: add
 Package: st_graph
