@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: golpa  Thu Feb 21 16:53:18 PST 2008
+st_graph
+
+Modified Files:
+	SConscript 
+Log Message:
+add st_graph as a dependeny, cosmetic changes
+    *
+------------------------------------------------------------
 TAG
 Tag name: st_graph-01-07-01, operation: add
 Package: st_graph
