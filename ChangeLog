@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Tue Feb 26 08:22:18 PST 2008
+ScienceTools-scons/st_graph
+
+Modified Files:
+	SConscript st_graphLib.py 
+Log Message:
+Add lib dependencies when creating a library
+    *
+------------------------------------------------------------
 TAG
 Tag name: st_graph-01-07-01, operation: mov
 Package: st_graph
