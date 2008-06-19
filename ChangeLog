@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 TAG
+Tag name: st_facilities-00-13-01, operation: del
+Package: st_graph
+User: glastrm  Thu Jun 19 16:54:50 2008
+Files:
+  st_graph/SConscript  1.4
+
+    *
+------------------------------------------------------------
+TAG
 Tag name: st_facilities-00-13-01, operation: mov
 Package: st_graph
 User: glastrm  Thu Jun 19 16:54:40 2008
