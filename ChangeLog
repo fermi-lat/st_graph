@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Thu Jun 19 16:54:51 PDT 2008
+ScienceTools-scons/st_graph
+
+Modified Files:
+	SConscript 
+Log Message:
+Added Author and Version fields
+    *
+------------------------------------------------------------
 TAG
 Tag name: st_facilities-00-13-01, operation: del
 Package: st_graph
