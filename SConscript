@@ -1,15 +1,12 @@
 # -*- python -*-
 # $Id$
 # Authors: James Peachey <peachey@lheamail.gsfc.nasa.gov>
-# Version: st_graph-01-07-01
+# Version: st_graph-01-07-02
 
 Import('baseEnv')
 Import('listFiles')
 progEnv = baseEnv.Clone()
 libEnv = baseEnv.Clone()
-
-if baseEnv['PLATFORM'] != 'win32':
-        progEnv.AppendUnique(CPPDEFINES = ['TRAP_FPE'])
 
 libEnv.Tool('st_graphLib', depsOnly = 1)
 st_graphRootcint = libEnv.Rootcint('st_graph/st_graph_rootcint', ['st_graph/RootFrame.h', 'st_graph/LinkDef.h'], includes = ['.', 'src'])
