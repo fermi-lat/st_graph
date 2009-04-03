@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: glastrm  Fri Apr  3 08:35:04 PDT 2009
+ScienceTools-scons/st_graph
+
+Modified Files:
+	SConscript 
+Log Message:
+No longer set TRAP_FPE. It's set at top level
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-11-00, operation: add
 Package: st_graph
