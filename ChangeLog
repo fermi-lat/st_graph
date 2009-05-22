@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: peachey  Fri May 22 07:10:24 PDT 2009
+st_graph
+
+Modified Files:
+	SConscript 
+Log Message:
+Build library shared.
+    *
+------------------------------------------------------------
+User: peachey  Fri May 22 07:10:24 PDT 2009
 st_graph/cmt
 
 Modified Files:
