@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+TAG
+Tag name: v1r7p4, operation: mov
+Package: st_graph
+User: glastrm  Wed Jul 15 11:33:10 2009
+Files:
+  st_graph/SConscript  1.12
+
+    *
+------------------------------------------------------------
 User: glastrm  Wed Jul 15 11:33:04 PDT 2009
 st_graph
 
