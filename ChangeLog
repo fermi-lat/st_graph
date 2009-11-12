@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: vernaleo  Thu Nov 12 13:31:57 PST 2009
+st_graph/src
+
+Modified Files:
+	StGui.cxx 
+Log Message:
+Removed an unneeded header file that was preventing root-free builds at the FSSC
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-15-05, operation: add
 Package: st_graph
