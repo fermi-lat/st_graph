@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: jrb  Fri Aug  6 09:20:55 PDT 2010
+ScienceTools-scons/st_graph
+
+Modified Files:
+	SConscript 
+Log Message:
+add additional keyword args for Rootcint
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-17-00, operation: add
 Package: st_graph
