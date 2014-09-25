@@ -1,4 +1,17 @@
 ------------------------------------------------------------
+User: asercion  Thu Sep 25 11:49:58 PDT 2014
+st_graph/src
+
+Modified Files:
+	Engine.cxx 
+Added Files:
+	MPLEngine.h Lego.py MPLPlot.cxx EmbedPython.cpp MPLFrame.cxx 
+	MPLEngine.cxx STTopLevel.py EmbedPython.h MPLTabFolder.h 
+	MPLPlot.h MPLPlotFrame.cxx MPLPlotFrame.h MPLTabFolder.cxx 
+Log Message:
+Added Tom Stephen's changes to st_graph which enable root-free plotting using the matplotlib package
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-09-34-02, operation: add
 Package: st_graph
