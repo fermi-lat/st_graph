@@ -1,5 +1,16 @@
 ------------------------------------------------------------
 User: asercion  Thu Sep 25 11:49:58 PDT 2014
+st_graph/st_graph
+
+Modified Files:
+	Sequence.h 
+Added Files:
+	MPLFrame.h 
+Log Message:
+Added Tom Stephen's changes to st_graph which enable root-free plotting using the matplotlib package
+    *
+------------------------------------------------------------
+User: asercion  Thu Sep 25 11:49:58 PDT 2014
 st_graph/src
 
 Modified Files:
