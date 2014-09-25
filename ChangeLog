@@ -1,5 +1,14 @@
 ------------------------------------------------------------
 User: asercion  Thu Sep 25 11:49:58 PDT 2014
+st_graph/src/test
+
+Modified Files:
+	test_st_graph.cxx 
+Log Message:
+Added Tom Stephen's changes to st_graph which enable root-free plotting using the matplotlib package
+    *
+------------------------------------------------------------
+User: asercion  Thu Sep 25 11:49:58 PDT 2014
 st_graph/st_graph
 
 Modified Files:
