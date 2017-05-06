@@ -1,4 +1,13 @@
 ------------------------------------------------------------
+User: jrb  Fri May  5 17:54:21 PDT 2017
+st_graph
+
+Modified Files:
+	SConscript st_graphLib.py 
+Log Message:
+updates so that ST_User can be ROOTless
+    *
+------------------------------------------------------------
 TAG
 Tag name: ScienceTools-11-05-03, operation: add
 Package: st_graph
