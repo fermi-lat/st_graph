@@ -12,7 +12,7 @@ if baseEnv['PLATFORM'] == "posix":
 
 includeFiles = listFiles(["st_graph/*"], recursive=True)
 
-if libEnv.get('CONTAINERNAME', '') == 'ScienceTools_User':
+if libEnv.get('CONTAINERNAME', '') != 'ScienceTools_User':
     st_graphRootcint = libEnv.Rootcint('st_graph/st_graph_rootcint',
                                        ['st_graph/RootFrame.h',
                                         'st_graph/LinkDef.h'],
