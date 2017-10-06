@@ -5,8 +5,9 @@ def generate(env, **kw):
 	env.Tool('st_streamLib')
 	env.Tool('hoopsLib')
         env.Tool('embed_pythonLib')
-	env.Tool('addLibrary', library = env['rootLibs'])
-	env.Tool('addLibrary', library = env['rootGuiLibs'])
+	if env.get('CONTAINERNAME', '') != 'ScienceTools_User':
+		env.Tool('addLibrary', library = env['rootLibs'])
+		env.Tool('addLibrary', library = env['rootGuiLibs'])
 
 def exists(env):
 	return 1

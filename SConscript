@@ -12,13 +12,22 @@ if baseEnv['PLATFORM'] == "posix":
 
 includeFiles = listFiles(["st_graph/*"], recursive=True)
 
-st_graphRootcint = libEnv.Rootcint('st_graph/st_graph_rootcint',
-                                   ['st_graph/RootFrame.h',
-                                    'st_graph/LinkDef.h'],
-                                   includes = ['.', 'src'],
-                                   localIncludes=includeFiles,
-                                   packageName='st_graph')
-st_graphLib = libEnv.StaticLibrary('st_graph', listFiles(['src/*.cxx']) + ['st_graph/st_graph_rootcint.cxx'] + ['src/EmbedPython.cpp'])
+if libEnv.get('CONTAINERNAME', '') != 'ScienceTools_User':
+    st_graphRootcint = libEnv.Rootcint('st_graph/st_graph_rootcint',
+                                       ['st_graph/RootFrame.h',
+                                        'st_graph/LinkDef.h'],
+                                       includes = ['.', 'src'],
+                                       localIncludes=includeFiles,
+                                       packageName='st_graph')
+    st_graphLib = libEnv.StaticLibrary('st_graph', listFiles(['src/*.cxx']) + ['st_graph/st_graph_rootcint.cxx'] + ['src/EmbedPython.cpp'])
+else:
+    st_graphLib = libEnv.StaticLibrary('st_graph', 
+                                       listFiles(['src/Axis.cxx', 
+                                                  'src/EmbedPython.cpp',
+                                                  'src/Engine.cxx', 
+                                                  'src/IPlot.cxx',
+                                                  'src/MP*.cxx', 
+                                                  'src/StGui.cxx']))
 
 progEnv.Tool('st_graphLib')
 if baseEnv['PLATFORM'] == "posix":
