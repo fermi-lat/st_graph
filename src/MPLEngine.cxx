@@ -60,8 +60,8 @@ namespace st_graph {
 	  Py_Initialize();
 	  // Populate sys.argv[] with
 	  // dummy command line values
-	  char const *dummy_argv[] = {""};
-	  char const **argv = dummy_argv;
+	  char *dummy_argv[] = {""};
+	  char **argv = dummy_argv;
 	  PySys_SetArgvEx(0,argv,0);
       m_init_succeeded = true;
   }
