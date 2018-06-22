@@ -4,7 +4,7 @@
 */
 #include <stdexcept>
 
-#ifndef BUILD_WITHOUT_ROOT
+#ifdef ROOT_PLOTTING
 #include "RootEngine.h"
 #else
 #include "MPLEngine.h"
@@ -15,7 +15,7 @@
 namespace {
   using namespace st_graph;
 
-#ifdef BUILD_WITHOUT_ROOT
+#ifndef ROOT_PLOTTING
   class NoOpEngine : public Engine {
     public:
       /// \brief Run the graphics engine, displaying all graphical objects currently constructed.
@@ -164,7 +164,7 @@ namespace st_graph {
   Engine::~Engine() {}
 
   Engine & Engine::instance() {
-#ifndef BUILD_WITHOUT_ROOT
+#ifdef ROOT_PLOTTING
     static RootEngine s_engine;
 #else
 //    static NoOpEngine s_engine;
