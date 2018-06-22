@@ -401,7 +401,7 @@ namespace st_graph {
 	  // Link this to the root Python Tk() frame object
 //	  m_frame = EP_CreateObject("Tkinter","Tk","({})","baseName","st_graph.app");
 //	  m_frame = EP_CreateObject("Tkinter","Tk","(ss)","st_graph","st_graph");
-	  m_frame = EP_CreateObject("Tkinter","Tk","()");
+	  m_frame = EP_CreateObject("Tkinter","Tk","()", "baseName=''");
 	  EP_CallMethod(m_frame,"withdraw","()");
 //	  m_frame = EP_CreateObject("Tkinter","Toplevel","()");
 //	  m_frame = Py_None;
