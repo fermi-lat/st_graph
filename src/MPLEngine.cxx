@@ -58,6 +58,11 @@ namespace st_graph {
   MPLEngine::MPLEngine(): m_init_succeeded(false) {
 	  // Let's get Python initialized
 	  Py_Initialize();
+	  // Populate sys.argv[] with
+	  // dummy command line values
+	  char const *dummy_argv[] = "";
+	  char const **argv = dummy_argv;
+	  PySys_SetArgvEx(0,argv,0);
       m_init_succeeded = true;
   }
 
