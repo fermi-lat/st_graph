@@ -1,0 +1,8 @@
+get_filename_component(st_graph_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include(CMakeFindDependencyMacro)
+
+if(NOT TARGET ST::graph)
+    include("${st_graph_CMAKE_DIR}/st_graphTargets.cmake")
+endif()
+
+set(st_graph_LIBRARIES ST::graph)
