@@ -53,6 +53,7 @@ add_library(st_graph STATIC
   src/MPLPlot.cxx
   src/MPLPlotFrame.cxx
   src/MPLTabFolder.cxx
+  src/StGui.cxx
 )
 add_library(ST::graph ALIAS st_graph)
 target_include_directories(st_graph
