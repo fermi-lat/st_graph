@@ -5,7 +5,7 @@ include(FetchContent)
 project(st_graph
   VERSION 0.0.0
   LANGUAGES CXX
-  )
+)
 
 ###############################################################################
 #
@@ -15,29 +15,26 @@ project(st_graph
 
 fetchcontent_declare(st_stream
   GIT_REPOSITORY https://github.com/fermi-lat/st_stream.git
-  GIT_TAG standalone
-)
-
+  GIT_TAG standalone)
 fetchcontent_getproperties(st_stream)
 if(NOT st_stream_POPULATED)
   fetchcontent_populate(st_stream)
   add_subdirectory(${st_stream_SOURCE_DIR} ${st_stream_BINARY_DIR})
 endif()
 
+
 fetchcontent_declare(hoops
   GIT_REPOSITORY https://github.com/fermi-lat/hoops.git
-  GIT_TAG standalone
-)
-
+  GIT_TAG standalone)
 fetchcontent_getproperties(hoops)
 if(NOT hoops_POPULATED)
   fetchcontent_populate(hoops)
   add_subdirectory(${hoops_SOURCE_DIR} ${hoops_BINARY_DIR})
 endif()
 
-find_package(Python2 COMPONENTS Development)
-
 ###############################################################################
+
+find_package(Python2 COMPONENTS Development)
 
 
 ###############################################################################
@@ -48,6 +45,7 @@ find_package(Python2 COMPONENTS Development)
 
 add_library(st_graph STATIC
   src/Axis.cxx
+  src/EmbedPython.cpp
   src/Engine.cxx
   src/IPlot.cxx
   src/MPLEngine.cxx
@@ -55,7 +53,6 @@ add_library(st_graph STATIC
   src/MPLPlot.cxx
   src/MPLPlotFrame.cxx
   src/MPLTabFolder.cxx
-  src/StGui.cxx
 )
 add_library(ST::graph ALIAS st_graph)
 target_include_directories(st_graph
