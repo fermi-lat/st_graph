@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.1)
 include(GNUInstallDirs)
 include(FetchContent)
 
@@ -34,7 +34,11 @@ endif()
 
 ###############################################################################
 
-find_package(Python2 COMPONENTS Development)
+# find_package(Python2 COMPONENTS Development)
+
+set(Python_ADDITIONAL_VERSIONS 2.7)
+
+find_package(PythonLibs)
 
 
 ###############################################################################
@@ -61,12 +65,15 @@ target_include_directories(st_graph
     $<INSTALL_INTERFACE:include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  PRIVATE
+    $<BUILD_INTERFACE:${PYTHON_INCLUDE_DIR}>
 )
 target_link_libraries(st_graph
   PRIVATE
     ST::hoops
     ST::stream
-    Python2::Python
+    # Python2::Python
+    ${PYTHON_LIBRARY}
 )
 
 
