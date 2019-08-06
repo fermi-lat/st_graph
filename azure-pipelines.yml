@@ -9,9 +9,9 @@ trigger:
 
 resources:
   repositories:
-    - repository: azuretemplates
+    - repository: ci
       type: github
-      name: fermi-lat/ci
+      name: Github/fermi-lat
 
 variables:
 - group: DevOps Access Keys
@@ -28,7 +28,7 @@ stages:
 - stage: linux_build_stage
   displayName: 'Building package on Ubuntu-16.04'
   jobs:
-  - template: azure-buildrepo-template.yml@azuretemplates
+  - template: azure-buildrepo-template.yml@ci
     parameters:
       repo: 'st_graph'
 
@@ -36,6 +36,6 @@ stages:
   displayName: 'Launch Fermitools CI Pipeline'
   condition: succeeded('linux_build_stage')
   jobs:
-  - template: azure-fermitoolsupdate-template@azuretemplates
+  - template: azure-fermitoolsupdate-template@ci
     parameters:
       repo: 'st_graph'
