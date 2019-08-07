@@ -46,6 +46,7 @@ stages:
   ### MacOS Build Stage ###
 - stage: macos_build_stage
   displayName: 'Building package on MacOS'
+  dependsOn: []
   jobs:
   - template: azure-buildrepo-template.yml@ci
     parameters:
