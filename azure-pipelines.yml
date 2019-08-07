@@ -17,7 +17,7 @@ resources:
 variables:
 - group: DevOps Access Keys
 - name: repo
-  value: tip
+  value: st_graph
 
 stages:
 
@@ -31,7 +31,7 @@ stages:
   jobs:
   - template: azure-buildrepo-template.yml@ci
     parameters:
-      repo: 'st_graph'
+      repo: '$(repo)'
 
 - stage: pipeline_launch_stage
   displayName: 'Launch Fermitools CI Pipeline'
@@ -39,4 +39,4 @@ stages:
   jobs:
   - template: azure-fermitoolsupdate-template@ci
     parameters:
-      repo: 'st_graph'
+      repo: '$(repo)'
