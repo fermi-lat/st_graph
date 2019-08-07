@@ -32,11 +32,12 @@ stages:
   ### Linux Build Stage ###
 - stage: linux_build_stage
   displayName: 'Building package on Ubuntu'
+  pool:
+    vmImage: $(linuximage)
   jobs:
   - template: azure-buildrepo-template.yml@ci
     parameters:
       repo: '$(repo)'
-      vmimage: '$(linuximage)'
 #####################################
 
 #####################################
@@ -47,11 +48,12 @@ stages:
 - stage: macos_build_stage
   displayName: 'Building package on MacOS'
   dependsOn: []
+  pool:
+    vmImage: $(macosimage)
   jobs:
   - template: azure-buildrepo-template.yml@ci
     parameters:
       repo: '$(repo)'
-      vmimage: '$(macosimage)'
 #####################################
 
 #####################################
