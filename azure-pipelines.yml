@@ -44,7 +44,7 @@ stages:
   dependsOn: []
 
   jobs:
-  - template: azure-buildrepomacos-template.yml.yml@ci
+  - template: azure-buildrepomacos-template.yml@ci
     parameters:
       repo: '$(repo)'
 #####################################
