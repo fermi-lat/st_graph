@@ -18,24 +18,48 @@ variables:
 - group: DevOps Access Keys
 - name: repo
   value: st_graph
+- name: linuximage
+  value: ubuntu-16.04
+- name: macosimage
+  value: macOS-10.13
 
 stages:
 
 #####################################
-# Linux Stages - Microsoft Hosted VMs
+# Linux Stage - Microsoft Hosted VMs
 #####################################
 
   ### Linux Build Stage ###
 - stage: linux_build_stage
-  displayName: 'Building package on Ubuntu-16.04'
+  displayName: 'Building package on Ubuntu'
   jobs:
   - template: azure-buildrepo-template.yml@ci
     parameters:
       repo: '$(repo)'
+      vmimage: '$(linuximage)'
+#####################################
+
+#####################################
+# MacOS Stage - Microsoft Hosted VMs
+#####################################
+
+  ### MacOS Build Stage ###
+- stage: macos_build_stage
+  displayName: 'Building package on MacOS'
+  jobs:
+  - template: azure-buildrepo-template.yml@ci
+    parameters:
+      repo: '$(repo)'
+      vmimage: '$(macosimage)'
+#####################################
+
+#####################################
+# Fermitools-Conda Update Stage
+#####################################
 
 - stage: pipeline_launch_stage
   displayName: 'Launch Fermitools CI Pipeline'
-  condition: succeeded('linux_build_stage')
+  condition: and(succeeded('linux_build_stage'), succeeded('macos_build_stage'))
   jobs:
   - template: azure-fermitoolsupdate-template.yml@ci
     parameters:
