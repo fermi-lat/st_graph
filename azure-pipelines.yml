@@ -11,7 +11,7 @@ resources:
   repositories:
     - repository: ci
       type: github
-      name: Github/fermi-lat
+      name: fermi-lat
 
 variables:
 - group: DevOps Access Keys
