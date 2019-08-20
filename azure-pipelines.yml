@@ -20,7 +20,7 @@ resources:
 variables:
 - group: DevOps Access Keys
 - name: repo
-  value: $f st_graph
+  value: $(f)
 
 #########################################
 
@@ -90,3 +90,5 @@ stages:
   - template: azure_templates/azure-fermitoolsupdate-template.yml@ci
     parameters:
       repo: '$(repo)'
+
+#Add test comment for testing purposes
