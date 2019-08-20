@@ -20,7 +20,7 @@ resources:
 variables:
 - group: DevOps Access Keys
 - name: repo
-  value: st_graph
+  value: $f st_graph
 
 #########################################
 
