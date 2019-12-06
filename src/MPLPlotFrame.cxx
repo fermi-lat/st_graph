@@ -46,8 +46,8 @@ namespace st_graph {
 
     // Create the matplotlib figure
   	PyObject *kwargs = PyDict_New();
-  	PyDict_SetItemString(kwargs,"facecolor",PyString_FromString("w"));
-  	PyDict_SetItemString(kwargs,"edgecolor",PyString_FromString("w"));
+  	PyDict_SetItemString(kwargs,"facecolor",PyUnicode_FromString("w"));
+  	PyDict_SetItemString(kwargs,"edgecolor",PyUnicode_FromString("w"));
   	PyDict_SetItemString(kwargs,"subplotpars",subPlotPars);
     PyObject * fig = EP_CreateKWObject("matplotlib.figure","Figure",kwargs,"((OO)i)",w,h,100);
     Py_DECREF(kwargs);
@@ -206,9 +206,9 @@ namespace st_graph {
   	EP_CallMethod(axes,"set_autoscale_on","(O)",Py_False); // turn off autoscaling so the plot doesn't change size
   	EP_CallMethod(axes,"scatter","([d][d]iss)",marker.m_x,marker.m_y,20,getColorString(marker.m_color).c_str(),"v");
   	PyObject *kwargs = PyDict_New();
-  	PyDict_SetItemString(kwargs,"color",PyString_FromString(getColorString(marker.m_color).c_str()));
+  	PyDict_SetItemString(kwargs,"color",PyUnicode_FromString(getColorString(marker.m_color).c_str()));
   	PyDict_SetItemString(kwargs,"rotation",PyFloat_FromDouble(45));
-  	PyDict_SetItemString(kwargs,"verticalalignment",PyString_FromString("bottom"));
+  	PyDict_SetItemString(kwargs,"verticalalignment",PyUnicode_FromString("bottom"));
   	EP_CallKWMethod(axes,"annotate",kwargs,"(s(dd))",marker.m_text.c_str(),marker.m_x,marker.m_y);
   	Py_DECREF(kwargs);
   	Py_DECREF(axes);
@@ -493,17 +493,17 @@ namespace st_graph {
 
     EP_LoadModule("mpl_toolkits.mplot3d.axes3d");
 	PyObject *kwargs = PyDict_New();
-	PyDict_SetItemString(kwargs,"projection",PyString_FromString("3d"));
+	PyDict_SetItemString(kwargs,"projection",PyUnicode_FromString("3d"));
 	PyObject * axes = EP_CallKWMethod(m_frame,"gca",kwargs,"()");
     Py_DECREF(kwargs);
 	EP_CallMethod(m_frame,"subplots_adjust","(ffff)",0.05,0.05,0.95,1.0);
 
     // Now lets set up some keyword arguments for the plot
 	kwargs = PyDict_New();
-	PyDict_SetItemString(kwargs,"rstride",PyInt_FromLong(2));
-	PyDict_SetItemString(kwargs,"cstride",PyInt_FromLong(2));
-	PyDict_SetItemString(kwargs,"color",PyString_FromString("w")); // white/gray histograms
-	PyDict_SetItemString(kwargs,"edgecolors",PyString_FromString("k"));  // black edges
+	PyDict_SetItemString(kwargs,"rstride",PyLong_FromLong(2));
+	PyDict_SetItemString(kwargs,"cstride",PyLong_FromLong(2));
+	PyDict_SetItemString(kwargs,"color",PyUnicode_FromString("w")); // white/gray histograms
+	PyDict_SetItemString(kwargs,"edgecolors",PyUnicode_FromString("k"));  // black edges
 	PyDict_SetItemString(kwargs,"linewidths",PyFloat_FromDouble(0.5));
 	// Now we actually make the plot
 	PyObject *hist = EP_CallKWMethod(axes,"plot_surface",kwargs,"O",pres);
