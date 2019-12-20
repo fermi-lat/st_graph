@@ -12,9 +12,9 @@ def makeVectorRedundant(xs, repeat):
     return t
 
 def printVals(X,Y,Z):
-    print X,"\n"
-    print Y,"\n"
-    print Z,"\n"
+    print (X,"\n")
+    print (Y,"\n")
+    print (Z,"\n")
 
 
 def prepareLegoData(xlims, ylims, zvals):
@@ -84,9 +84,9 @@ def test_lego():
     nx, ny = 10, 8
     z = numpy.random.rand(nx, ny)
 #    X, Y, Z = prepareLegoData(numpy.arange(nx + 1), numpy.arange(ny + 1), z)
-#    print X,"\n"
-#    print Y,"\n"
-#    print Z,"\n"
+#    print (X,"\n")
+#    print (Y,"\n")
+#    print (Z,"\n")
     ax = axes3d.Axes3D(pylab.figure())
     #ax.plot_surface(X, Y, Z, rstride=2, cstride=2)
     ax.plot_surface(X, Y, Z, rstride=2, cstride=2, color='w', edgecolors='k')
