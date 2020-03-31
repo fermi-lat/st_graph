@@ -184,12 +184,12 @@ namespace st_graph {
     // The first time this is called, create a temporary gui with text entries corresponding to the sizes of parameters.
     static std::map<std::string, long> s_width;
     if (s_width.empty()) {
-      std::auto_ptr<IFrame> mf(m_engine.createMainFrame(0, 100, 100, "sizer"));
-      std::auto_ptr<IFrame> bool_pw(m_engine.createTextEntry(mf.get(), 0, "false"));
-      std::auto_ptr<IFrame> int_pw(m_engine.createTextEntry(mf.get(), 0, "+1234567890"));
-      std::auto_ptr<IFrame> float_pw(m_engine.createTextEntry(mf.get(), 0, "1.2345678901234E+123"));
-      std::auto_ptr<IFrame> string_pw(m_engine.createTextEntry(mf.get(), 0, "1234567890123456789012345678901234567890"));
-      //std::auto_ptr<IFrame> string_pw(m_engine.createTextEntry(mf.get(), 0, "123456789012345678901234"));
+      std::unique_ptr<IFrame> mf(m_engine.createMainFrame(0, 100, 100, "sizer"));
+      std::unique_ptr<IFrame> bool_pw(m_engine.createTextEntry(mf.get(), 0, "false"));
+      std::unique_ptr<IFrame> int_pw(m_engine.createTextEntry(mf.get(), 0, "+1234567890"));
+      std::unique_ptr<IFrame> float_pw(m_engine.createTextEntry(mf.get(), 0, "1.2345678901234E+123"));
+      std::unique_ptr<IFrame> string_pw(m_engine.createTextEntry(mf.get(), 0, "1234567890123456789012345678901234567890"));
+      //std::unique_ptr<IFrame> string_pw(m_engine.createTextEntry(mf.get(), 0, "123456789012345678901234"));
       // Store sizes of text entry boxes for each parameter type.
       s_width.insert(std::make_pair(std::string("b"), bool_pw->getWidth()));
       s_width.insert(std::make_pair(std::string("i"), int_pw->getWidth()));
