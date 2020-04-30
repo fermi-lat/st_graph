@@ -82,7 +82,7 @@ namespace st_graph {
     for (std::list<MPLFrame *>::iterator itor = m_subframes.begin(); itor != m_subframes.end(); ++itor)
       (*itor)->display();
     if (0 != m_frame) {
-    	bool test = EP_IsType(m_frame,"Tkinter","Tk") || EP_IsType(m_frame,"Tkinter","Toplevel");
+    	bool test = EP_IsType(m_frame,"tkinter","Tk") || EP_IsType(m_frame,"tkinter","Toplevel");
     	if (false == test){
     		EP_CallMethod(m_frame,"place","()");
     		EP_CallMethod(m_frame,"pack","()");
@@ -93,7 +93,7 @@ namespace st_graph {
 
   void MPLFrame::unDisplay() {
     if (0 != m_frame){
-    	bool test = EP_IsType(m_frame,"Tkinter","Tk") || EP_IsType(m_frame,"Tkinter","Toplevel") || m_frame == Py_None;
+    	bool test = EP_IsType(m_frame,"tkinter","Tk") || EP_IsType(m_frame,"tkinter","Toplevel") || m_frame == Py_None;
     	if (false == test){
     		// These are causing failures somewhere
 //			EP_CallMethod(m_frame,"pack_forget","()");
@@ -121,7 +121,7 @@ namespace st_graph {
       // This linkage needs to be done then the Python frame is created before it is passed in.
       // It doesn't seem possible to do after the fact.
 //      // Check that the contained frame for this object is a Python frame
-//      bool correctType = EP_IsType(m_frame,"Tkinter","Frame");
+//      bool correctType = EP_IsType(m_frame,"tkinter","Frame");
 //      // Make this contained frame the parent of the contained frame in the passed in object
 //      if (correctType && NULL != child_f) {
 //    	  EP_CallMethod(child_f,"__setitem__","(sO)","master",m_frame);
@@ -148,7 +148,7 @@ namespace st_graph {
       f->m_parent = 0;
 
 //      // Check that the contained frame for this object is a Python frame
-//      bool correctType = EP_IsType(m_frame,"Tkinter","Frame");
+//      bool correctType = EP_IsType(m_frame,"tkinter","Frame");
 //      // Make this contained frame the parent of the contained frame in the passed in object
 //      if (correctType && NULL != child_f) {
 //    	  EP_CallMethod(child_f,"__setitem__","(ss)","master","None");
@@ -163,21 +163,21 @@ namespace st_graph {
   const std::string & MPLFrame::getState() const {
     for (bool one_time_only = true; one_time_only ; one_time_only = false) {
       m_state.clear();
-        if (EP_IsType(m_frame,"Tkinter","Button")){
+        if (EP_IsType(m_frame,"tkinter","Button")){
 			// need to figure out state for a regular Python button.  I don't think it can be done but since
 			// I don't think you can read the state while it is actually being pressed, at all other times it is up
 			// so we'll just return that.
         	m_state = "up";
         	continue;
         }
-        if (EP_IsType(m_frame,"Tkinter","CheckButton")){
+        if (EP_IsType(m_frame,"tkinter","CheckButton")){
         	// in python we have to associate the state with a variable to read it.
         	// not sure how to implement this in the C++ crossover.  Requires a bit of thinking
         	// For now we'll just pass through with an up state
         	m_state = "up";
         	continue;
         }
-        if (EP_IsType(m_frame,"Tkinter","Entry")){
+        if (EP_IsType(m_frame,"tkinter","Entry")){
         	PyObject *pRes = EP_CallMethod(m_frame,"get","()");
         	char * state;
         	PyArg_Parse(pRes,"(s)",&state);
@@ -399,11 +399,11 @@ namespace st_graph {
 
   MPLFrame::MPLFrame(): m_subframes(), m_parent(0), m_frame(0), m_receiver(0) {
 	  // Link this to the root Python Tk() frame object
-//	  m_frame = EP_CreateObject("Tkinter","Tk","({})","baseName","st_graph.app");
-//	  m_frame = EP_CreateObject("Tkinter","Tk","(ss)","st_graph","st_graph");
-	  m_frame = EP_CreateObject("Tkinter","Tk","()");
+//	  m_frame = EP_CreateObject("tkinter","Tk","({})","baseName","st_graph.app");
+//	  m_frame = EP_CreateObject("tkinter","Tk","(ss)","st_graph","st_graph");
+	  m_frame = EP_CreateObject("tkinter","Tk","()");
 	  EP_CallMethod(m_frame,"withdraw","()");
-//	  m_frame = EP_CreateObject("Tkinter","Toplevel","()");
+//	  m_frame = EP_CreateObject("tkinter","Toplevel","()");
 //	  m_frame = Py_None;
 
   }

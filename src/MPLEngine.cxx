@@ -103,7 +103,7 @@ namespace st_graph {
     // Create the main Python frame.
     // Note:  Due to the way Python widgets are created, their parent has to be declared at time of creation
     //        Since this is a main frame, we're linking it to the ancestor object
-//    PyObject * p_widget = EP_CreateObject("Tkinter","Toplevel","(O)", MPLFrame::ancestor()->getPythonFrame());
+//    PyObject * p_widget = EP_CreateObject("tkinter","Toplevel","(O)", MPLFrame::ancestor()->getPythonFrame());
     PyObject * p_widget = EP_CreateObject("STTopLevel","STToplevel","(O)", MPLFrame::ancestor()->getPythonFrame());
     EP_CallMethod(p_widget,"__setitem__","(si)","width",width);
     EP_CallMethod(p_widget,"__setitem__","(si)","height",height);

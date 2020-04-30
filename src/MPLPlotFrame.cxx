@@ -34,7 +34,7 @@ namespace st_graph {
     EP_CallMethod(root_frame,"title","(s)",title.c_str());
 
     // make a subframe to hold the plot and toolbar
-    PyObject * subFrame = EP_CallMethod("Tkinter","Frame","(O)",root_frame);
+    PyObject * subFrame = EP_CallMethod("tkinter","Frame","(O)",root_frame);
     EP_CallMethod(subFrame,"pack","()");
 
     //convert width and height to inches at 100 dpi
