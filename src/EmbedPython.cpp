@@ -83,7 +83,7 @@ PyObject * EP_CallMethod(PyObject * obj, std::string funcName, std::string argTy
 
 	pfunc = PyObject_GetAttrString(obj, funcName.c_str());
 	if (NULL == pfunc)
-		error("Cant' fetch " + funcName + " method");
+		error("Can't fetch " + funcName + " method");
 
 	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
 	if (NULL == pargs){
@@ -110,7 +110,7 @@ PyObject * EP_CallMethod(std::string moduleName, std::string funcName, std::stri
 
 	pfunc = PyObject_GetAttrString(pmod, funcName.c_str());
 	if (NULL == pfunc)
-		error("Cant' fetch " + funcName + " method");
+		error("Can't fetch " + funcName + " method");
 
 	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
 	if (NULL == pargs){
@@ -146,7 +146,7 @@ bool EP_IsType(PyObject *obj, std::string moduleName, std::string className){
 PyObject * EP_GetMethod(PyObject * obj, std::string funcName){
 	PyObject * pfunc = PyObject_GetAttrString(obj, funcName.c_str());
 	if (NULL == pfunc)
-		error("Cant' fetch " + funcName + " method");
+		error("Can't fetch " + funcName + " method");
 	return pfunc;
 }
 
@@ -157,7 +157,7 @@ PyObject * EP_CallKWMethod(PyObject * obj, std::string funcName, PyObject *kwarg
 
 	pfunc = PyObject_GetAttrString(obj, funcName.c_str());
 	if (NULL == pfunc)
-		error("Cant' fetch " + funcName + " method");
+		error("Can't fetch " + funcName + " method");
 
 	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
 	if (NULL == pargs){
@@ -184,7 +184,7 @@ PyObject * EP_CallMethod(std::string moduleName, std::string funcName, PyObject 
 
 	pfunc = PyObject_GetAttrString(pmod, funcName.c_str());
 	if (NULL == pfunc)
-		error("Cant' fetch " + funcName + " method");
+		error("Can't fetch " + funcName + " method");
 
 	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
 	if (NULL == pargs){
