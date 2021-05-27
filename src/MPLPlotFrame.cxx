@@ -23,7 +23,7 @@ namespace st_graph {
   MPLPlotFrame::MPLPlotFrame(IFrame * parent, const std::string & title, unsigned int width, unsigned int height,
     bool delete_parent): MPLFrame(parent, 0, 0, delete_parent), m_axes(3), m_plots(), m_graphs(), m_title(title), m_canvas(0),
     m_multi_graph(0), m_th2d(Py_None), m_dimensionality(0) {
-    
+
     // Send event messages back to parent.
     m_receiver = m_parent->getReceiver();
 
@@ -56,13 +56,13 @@ namespace st_graph {
     Py_DECREF(h);
     Py_DECREF(w);
     PyObject *canvas =  EP_CallMethod("matplotlib.backends.backend_tkagg","FigureCanvasTkAgg","(OO)",fig,subFrame);
-    EP_CallMethod(canvas,"show","()");
+    EP_CallMethod(canvas,"draw","()");
     PyObject *pwidget = EP_CallMethod(canvas,"get_tk_widget","()");
     EP_CallMethod(pwidget,"pack","()");
     Py_DECREF(pwidget);
 
     // add the toolbar
-    PyObject *toolbar = EP_CallMethod("matplotlib.backends.backend_tkagg", "NavigationToolbar2TkAgg","(OO)",canvas,subFrame);
+    PyObject *toolbar = EP_CallMethod("matplotlib.backends.backend_tkagg", "NavigationToolbar2Tk","(OO)",canvas,subFrame);
     EP_CallMethod(toolbar,"update","()");
     pwidget = EP_GetMethod(canvas,"_tkcanvas");
     EP_CallMethod(pwidget,"pack","()");
@@ -131,7 +131,7 @@ namespace st_graph {
     }
 
     // Force complete update of the display.
-    EP_CallMethod(m_canvas,"show","()");
+    EP_CallMethod(m_canvas,"draw","()");
 //    EP_CallMethod(m_canvas,"draw","()");
     // @todo call figure.canvas.draw() to redraw final plot?
   }
