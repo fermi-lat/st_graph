@@ -3,7 +3,6 @@
     \author Tom Stephens, HEASARC/GSSC
 */
 
-#include <EmbedPython.h>
 #include <algorithm>
 #include <cctype>
 #include <list>
@@ -13,6 +12,7 @@
 #include <utility>
 #include <iostream>
 
+#include "EmbedPython.h"
 #include "MPLPlot.h"
 #include "MPLPlotFrame.h"
 

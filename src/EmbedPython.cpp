@@ -5,9 +5,10 @@
 // Copyright   : Your copyright notice
 // Description : Embedded Python helper functions
 //============================================================================
-#include <EmbedPython.h>
 #include <iostream>
 #include <cstdarg>
+
+#include "EmbedPython.h"
 
 #define error(msg) do {std::cout << msg << std::endl; exit(1); } while (1)
 

@@ -2,7 +2,7 @@
     \brief Implementation of class which encapsulates the matplotlib graphics implementation.
     \author Tom Stephens, HEASARC/GSSC
 */
-#include <EmbedPython.h>
+#include "EmbedPython.h"
 
 //#include <cctype>
 //#include <cstdlib>

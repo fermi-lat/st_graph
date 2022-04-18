@@ -2,7 +2,7 @@
     \brief Implementation of MPLFrame class.
     \author Tom Stephens, HEASARC/GSSC
 */
-#include <EmbedPython.h>
+#include "EmbedPython.h"
 
 #include <algorithm>
 #include <stdexcept>
