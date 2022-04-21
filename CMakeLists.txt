@@ -20,11 +20,11 @@ target_include_directories(
 
 target_link_libraries(
   st_graph
-  PRIVATE embed_python hoops
-  PUBLIC st_stream
+  PRIVATE embed_python Python3::Python
+  PUBLIC hoops st_stream
 )
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(NOT APPLE)
   target_compile_definitions(st_graph PRIVATE TRAP_FPE)
 endif()
 
