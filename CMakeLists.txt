@@ -36,6 +36,7 @@ target_link_libraries(test_st_graph PRIVATE st_graph hoops)
 ###############################################################
 install(DIRECTORY st_graph DESTINATION ${FERMI_INSTALL_INCLUDEDIR})
 install(DIRECTORY pfiles/ DESTINATION ${FERMI_INSTALL_PFILESDIR})
+install(FILES src/STTopLevel.py src/Lego.py DESTINATION ${FERMI_INSTALL_PYTHON})
 
 install(
   TARGETS st_graph test_st_graph
