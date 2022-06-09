@@ -1,5 +1,5 @@
 add_library(
-  st_graph STATIC
+  st_graph 
   src/Axis.cxx
   src/EmbedPython.cpp
   src/Engine.cxx
