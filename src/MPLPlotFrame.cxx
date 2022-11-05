@@ -12,6 +12,7 @@
 #include <utility>
 #include <iostream>
 
+#include "matplotlibcpp.h"
 #include "EmbedPython.h"
 #include "MPLPlot.h"
 #include "MPLPlotFrame.h"
@@ -19,62 +20,71 @@
 #include "st_graph/IEventReceiver.h"
 
 namespace st_graph {
-
+  namespace plt = matplotlibcpp;
+  
   MPLPlotFrame::MPLPlotFrame(IFrame * parent, const std::string & title, unsigned int width, unsigned int height,
     bool delete_parent): MPLFrame(parent, 0, 0, delete_parent), m_axes(3), m_plots(), m_graphs(), m_title(title), m_canvas(0),
     m_multi_graph(0), m_th2d(Py_None), m_dimensionality(0) {
 
-    // Send event messages back to parent.
+    // Start by instantiating the referenced figure
+    long fig = plt::figure();
+
+      // Send event messages back to parent.
     m_receiver = m_parent->getReceiver();
 
     // Hook together MPL primitives.
-    PyObject * root_frame = m_parent->getPythonFrame();
-    if (0 == root_frame)
-      throw std::logic_error("MPLPlotFrame constructor was passed a parent frame which cannot contain other MPL frames");
-    EP_CallMethod(root_frame,"title","(s)",title.c_str());
-
+    //PyObject * root_frame = m_parent->getPythonFrame();
+    //if (0 == root_frame)
+    //  throw std::logic_error("MPLPlotFrame constructor was passed a parent frame which cannot contain other MPL frames");
+    //EP_CallMethod(root_frame,"title","(s)",title.c_str());
+    plt::title(title.c_str());
+    
     // make a subframe to hold the plot and toolbar
-    PyObject * subFrame = EP_CallMethod("tkinter","Frame","(O)",root_frame);
-    EP_CallMethod(subFrame,"pack","()");
+    //PyObject * subFrame = EP_CallMethod("tkinter","Frame","(O)",root_frame);
+    //EP_CallMethod(subFrame,"pack","()");
 
     //convert width and height to inches at 100 dpi
-    PyObject *h = PyFloat_FromDouble((double)height/100);
-    PyObject *w = PyFloat_FromDouble((double)width/100);
-
+    //PyObject *h = PyFloat_FromDouble((double)height/100);
+    //PyObject *w = PyFloat_FromDouble((double)width/100);
+    size_t h = (double)height/100;
+    size_t w = (double)width/100;
+    
     // define the sub-plot parameters
-    PyObject *subPlotPars = EP_CreateObject("matplotlib.figure","SubplotParams","(ffff)",0.125,0.15,0.9,0.9);  // parameters are left,bottom,right,top
-
+    //PyObject *subPlotPars = EP_CreateObject("matplotlib.figure","SubplotParams","(ffff)",0.125,0.15,0.9,0.9);  // parameters are left,bottom,right,top
+    
+    plt::figure_size(w, h);
     // Create the matplotlib figure
-  	PyObject *kwargs = PyDict_New();
-  	PyDict_SetItemString(kwargs,"facecolor",PyUnicode_FromString("w"));
-  	PyDict_SetItemString(kwargs,"edgecolor",PyUnicode_FromString("w"));
-  	PyDict_SetItemString(kwargs,"subplotpars",subPlotPars);
-    PyObject * fig = EP_CreateKWObject("matplotlib.figure","Figure",kwargs,"((OO)i)",w,h,100);
-    Py_DECREF(kwargs);
+    // PyObject *kwargs = PyDict_New();
+    // PyDict_SetItemString(kwargs,"facecolor",PyUnicode_FromString("w"));
+    // PyDict_SetItemString(kwargs,"edgecolor",PyUnicode_FromString("w"));
+    // PyDict_SetItemString(kwargs,"subplotpars",subPlotPars);
+    // PyObject * fig = EP_CreateKWObject("matplotlib.figure","Figure",kwargs,"((OO)i)",w,h,100);
+    // Py_DECREF(kwargs);
 
 //    PyObject * fig = EP_CreateObject("matplotlib.figure","Figure","((OO)i)",w,h,100);
-    Py_DECREF(h);
-    Py_DECREF(w);
-    PyObject *canvas =  EP_CallMethod("matplotlib.backends.backend_tkagg","FigureCanvasTkAgg","(OO)",fig,subFrame);
-    EP_CallMethod(canvas,"draw","()");
-    PyObject *pwidget = EP_CallMethod(canvas,"get_tk_widget","()");
-    EP_CallMethod(pwidget,"pack","()");
-    Py_DECREF(pwidget);
+      //Py_DECREF(h);
+      //Py_DECREF(w);
+      //PyObject *canvas =  EP_CallMethod("matplotlib.backends.backend_tkagg","FigureCanvasTkAgg","(OO)",fig,subFrame);
+      //EP_CallMethod(canvas,"draw","()");
+      //PyObject *pwidget = EP_CallMethod(canvas,"get_tk_widget","()");
+      //EP_CallMethod(pwidget,"pack","()");
+      //Py_DECREF(pwidget);
+    plt::draw();
 
     // add the toolbar
-    PyObject *toolbar = EP_CallMethod("matplotlib.backends.backend_tkagg", "NavigationToolbar2Tk","(OO)",canvas,subFrame);
-    EP_CallMethod(toolbar,"update","()");
-    pwidget = EP_GetMethod(canvas,"_tkcanvas");
-    EP_CallMethod(pwidget,"pack","()");
-    Py_DECREF(pwidget);
-    Py_DECREF(toolbar);
+    // PyObject *toolbar = EP_CallMethod("matplotlib.backends.backend_tkagg", "NavigationToolbar2Tk","(OO)",canvas,subFrame);
+    // EP_CallMethod(toolbar,"update","()");
+    // pwidget = EP_GetMethod(canvas,"_tkcanvas");
+    // EP_CallMethod(pwidget,"pack","()");
+    // Py_DECREF(pwidget);
+    // Py_DECREF(toolbar);
 
-    // creating the figure creates an axis that we need to turn off as we can't seem to access it properly later
-	PyObject * axes = EP_CallMethod(fig,"gca","()");
-	EP_CallMethod(axes,"set_visible","(O)",Py_False);
-	Py_DECREF(axes);
+    // // creating the figure creates an axis that we need to turn off as we can't seem to access it properly later
+    //     PyObject * axes = EP_CallMethod(fig,"gca","()");
+    //     EP_CallMethod(axes,"set_visible","(O)",Py_False);
+    //     Py_DECREF(axes);
 
-    m_canvas = canvas;
+    //m_canvas = canvas;
 
     m_frame = fig;
   }
@@ -82,8 +92,8 @@ namespace st_graph {
   MPLPlotFrame::~MPLPlotFrame() {
 
 	reset();
-    Py_DECREF(m_th2d);
-	Py_DECREF(m_frame);
+        //Py_DECREF(m_th2d);
+	//Py_DECREF(m_frame);
 //    std::cout <<"Called MPLPlotFrame::~MPLPlotFrame()" << std::endl;
 
   }
@@ -104,18 +114,24 @@ namespace st_graph {
       if (2 < m_dimensionality) EP_CallMethod(axes,"set_zscale","(s)",(Axis::eLog == m_axes[1].getScaleMode() ? "log" : "linear"));
 
 //      EP_CallMethod(axes,"set_adjustable","(s)","datalim");
-      EP_CallMethod(axes,"set_title","(s)",m_title.c_str());
+      //EP_CallMethod(axes,"set_title","(s)",m_title.c_str());
+      plt::title(m_title.c_str());
       // Set axis labels
       if (m_dimensionality == 2){
-    	  EP_CallMethod(axes,"set_xlabel","(sOO)",m_axes[0].getTitle().c_str(),Py_None,Py_None);
-    	  EP_CallMethod(axes,"set_ylabel","(sOO)",m_axes[1].getTitle().c_str(),Py_None,Py_None);
+        //EP_CallMethod(axes,"set_xlabel","(sOO)",m_axes[0].getTitle().c_str(),Py_None,Py_None);
+        plt::xlabel(m_axes[0].getTitle().c_str());
+        //EP_CallMethod(axes,"set_ylabel","(sOO)",m_axes[1].getTitle().c_str(),Py_None,Py_None);
+        plt::ylabel(m_axes[1].getTitle().c_str());
       } else if (m_dimensionality == 3){
-    	  axes = EP_CallMethod(m_frame,"gca","()");
-    	  EP_CallMethod(axes,"set_xlabel","(sOO)",m_axes[0].getTitle().c_str(),Py_None,Py_None);
-    	  EP_CallMethod(axes,"set_ylabel","(sOO)",m_axes[1].getTitle().c_str(),Py_None,Py_None);
-    	  EP_CallMethod(axes,"set_zlabel","(sOO)",m_axes[2].getTitle().c_str(),Py_None,Py_None);
+        //axes = EP_CallMethod(m_frame,"gca","()");
+    	  //EP_CallMethod(axes,"set_xlabel","(sOO)",m_axes[0].getTitle().c_str(),Py_None,Py_None);
+          plt::xlabel(m_axes[0].getTitle().c_str());
+    	  //EP_CallMethod(axes,"set_ylabel","(sOO)",m_axes[1].getTitle().c_str(),Py_None,Py_None);
+          plt::ylabel(m_axes[1].getTitle().c_str());
+    	  //EP_CallMethod(axes,"set_zlabel","(sOO)",m_axes[2].getTitle().c_str(),Py_None,Py_None);
+          plt::set_zlabel(m_axes[2].getTitle().c_str());
       }
-      Py_DECREF(axes);
+      //Py_DECREF(axes);
 
       // Get labels/markers from IPlots.
       for (std::list<MPLPlot *>::iterator itor = m_plots.begin(); itor != m_plots.end(); ++itor) {
@@ -131,7 +147,8 @@ namespace st_graph {
     }
 
     // Force complete update of the display.
-    EP_CallMethod(m_canvas,"draw","()");
+    plt::draw();
+    //EP_CallMethod(m_canvas,"draw","()");
 //    EP_CallMethod(m_canvas,"draw","()");
     // @todo call figure.canvas.draw() to redraw final plot?
   }
@@ -354,6 +371,7 @@ namespace st_graph {
     PyObject * axes = EP_CallMethod(m_frame,"add_subplot","(s)","111");
 //    PyObject * axes = EP_CallMethod(m_frame,"gca","()");
     retval =  EP_CallKWMethod(axes,"plot",kwargs,"(OOs)",pyX,pyY,format.c_str());
+    //retval = plt::hist(y_vals, 
     Py_DECREF(kwargs);
 	Py_DECREF(pyX);
 	Py_DECREF(pyY);
