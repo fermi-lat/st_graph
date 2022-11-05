@@ -5,6 +5,7 @@
 #include "MPLPlotFrame.h" // this is first so that the <Python.h> header is included first as needed.
 #include "MPLPlot.h"
 
+
 //#include <algorithm>
 //#include <cctype>
 //#include <sstream>
@@ -16,6 +17,7 @@
 
 namespace st_graph {
 
+  //MPLPlot constructor: 2D
   MPLPlot::MPLPlot(IFrame * parent, const std::string & style, const ISequence & x, const ISequence & y, bool delete_parent):
     m_seq_cont(0), m_label(), m_style(), m_line_style("solid"), m_curve_type("line"), m_line_color(Color::eBlack), m_dimensionality(2),
     m_parent(0), m_z_data(0), m_delete_parent(delete_parent) {
@@ -35,6 +37,7 @@ namespace st_graph {
     m_seq_cont.push_back(y.clone());
   }
 
+  //MPLPlot constructor: 3D
   MPLPlot::MPLPlot(IFrame * parent, const std::string & style, const ISequence & x, const ISequence & y,
     const std::vector<std::vector<double> > & z, bool delete_parent): m_seq_cont(0), m_label(), m_style(),
     m_line_style("solid"), m_curve_type("line"), m_line_color(Color::eBlack), m_dimensionality(3), m_parent(0),
@@ -120,6 +123,7 @@ namespace st_graph {
 
   const std::string & MPLPlot::getStyle() const { return m_style; }
 
+  //MPLCPP API
   void MPLPlot::setStyle(const std::string & style) {
     m_style = style;
 
