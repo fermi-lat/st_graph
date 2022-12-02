@@ -134,12 +134,12 @@ namespace st_graph {
       //Py_DECREF(axes);
 
       // Get labels/markers from IPlots.
-      for (std::list<MPLPlot *>::iterator itor = m_plots.begin(); itor != m_plots.end(); ++itor) {
+      //for (std::list<MPLPlot *>::iterator itor = m_plots.begin(); itor != m_plots.end(); ++itor) {
         // Loop over plots, displaying each one's labels.
-        std::vector<Marker> & marker((*itor)->getMarkers());
-        for (std::vector<Marker>::iterator itor = marker.begin(); itor != marker.end(); ++itor) {
-          addMarker(*itor);
-        }
+        //std::vector<Marker> & marker((*itor)->getMarkers());
+        //for (std::vector<Marker>::iterator itor = marker.begin(); itor != marker.end(); ++itor) {
+      //addMarker(*itor);
+      //}
       }
 
     } catch (...) {
