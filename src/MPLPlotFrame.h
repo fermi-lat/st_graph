@@ -6,7 +6,7 @@
 #define st_graph_MPLPlotFrame_h
 
 #include "st_graph/MPLFrame.h"
-
+#include "numpy/arrayobject.h"
 #include <list>
 #include <string>
 #include <vector>

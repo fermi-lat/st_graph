@@ -16,6 +16,7 @@
 #include "EmbedPython.h"
 #include "MPLPlot.h"
 #include "MPLPlotFrame.h"
+#include "numpy/arrayobject.h"
 
 #include "st_graph/IEventReceiver.h"
 
@@ -86,7 +87,7 @@ namespace st_graph {
 
     //m_canvas = canvas;
 
-    m_frame = fig;
+    int m_frame = fig;
   }
 
   MPLPlotFrame::~MPLPlotFrame() {
@@ -99,145 +100,147 @@ namespace st_graph {
   }
 
   void MPLPlotFrame::display() {
+    plt::show(); // All plot information should alreay be embeded in the matplotlibcpp figure object
+      
 //    MPLFrame::display();
 //	  std::cout << "Displaying " << m_title << std::endl;
 
-    try {
-      // Display plot correctly for the current dimensionality. Get Root axes objects.
-      if (m_dimensionality == 2) display2d();
-      else if (m_dimensionality == 3) display3d();
+//     try {
+//       // Display plot correctly for the current dimensionality. Get Root axes objects.
+//       if (m_dimensionality == 2) display2d();
+//       else if (m_dimensionality == 3) display3d();
 
-      // Handle log/linear scaling.
-      PyObject *axes = EP_CallMethod(m_frame,"gca","()");
-      if (0 < m_dimensionality) EP_CallMethod(axes,"set_xscale","(s)",(Axis::eLog == m_axes[0].getScaleMode() ? "log" : "linear"));
-      if (1 < m_dimensionality) EP_CallMethod(axes,"set_yscale","(s)",(Axis::eLog == m_axes[1].getScaleMode() ? "log" : "linear"));
-      if (2 < m_dimensionality) EP_CallMethod(axes,"set_zscale","(s)",(Axis::eLog == m_axes[1].getScaleMode() ? "log" : "linear"));
+//       // Handle log/linear scaling.
+//       PyObject *axes = EP_CallMethod(m_frame,"gca","()");
+//       if (0 < m_dimensionality) EP_CallMethod(axes,"set_xscale","(s)",(Axis::eLog == m_axes[0].getScaleMode() ? "log" : "linear"));
+//       if (1 < m_dimensionality) EP_CallMethod(axes,"set_yscale","(s)",(Axis::eLog == m_axes[1].getScaleMode() ? "log" : "linear"));
+//       if (2 < m_dimensionality) EP_CallMethod(axes,"set_zscale","(s)",(Axis::eLog == m_axes[1].getScaleMode() ? "log" : "linear"));
 
-//      EP_CallMethod(axes,"set_adjustable","(s)","datalim");
-      //EP_CallMethod(axes,"set_title","(s)",m_title.c_str());
-      plt::title(m_title.c_str());
-      // Set axis labels
-      if (m_dimensionality == 2){
-        //EP_CallMethod(axes,"set_xlabel","(sOO)",m_axes[0].getTitle().c_str(),Py_None,Py_None);
-        plt::xlabel(m_axes[0].getTitle().c_str());
-        //EP_CallMethod(axes,"set_ylabel","(sOO)",m_axes[1].getTitle().c_str(),Py_None,Py_None);
-        plt::ylabel(m_axes[1].getTitle().c_str());
-      } else if (m_dimensionality == 3){
-        //axes = EP_CallMethod(m_frame,"gca","()");
-    	  //EP_CallMethod(axes,"set_xlabel","(sOO)",m_axes[0].getTitle().c_str(),Py_None,Py_None);
-          plt::xlabel(m_axes[0].getTitle().c_str());
-    	  //EP_CallMethod(axes,"set_ylabel","(sOO)",m_axes[1].getTitle().c_str(),Py_None,Py_None);
-          plt::ylabel(m_axes[1].getTitle().c_str());
-    	  //EP_CallMethod(axes,"set_zlabel","(sOO)",m_axes[2].getTitle().c_str(),Py_None,Py_None);
-          plt::set_zlabel(m_axes[2].getTitle().c_str());
-      }
-      //Py_DECREF(axes);
+// //      EP_CallMethod(axes,"set_adjustable","(s)","datalim");
+//       //EP_CallMethod(axes,"set_title","(s)",m_title.c_str());
+//       plt::title(m_title.c_str());
+//       // Set axis labels
+//       if (m_dimensionality == 2){
+//         //EP_CallMethod(axes,"set_xlabel","(sOO)",m_axes[0].getTitle().c_str(),Py_None,Py_None);
+//         plt::xlabel(m_axes[0].getTitle().c_str());
+//         //EP_CallMethod(axes,"set_ylabel","(sOO)",m_axes[1].getTitle().c_str(),Py_None,Py_None);
+//         plt::ylabel(m_axes[1].getTitle().c_str());
+//       } else if (m_dimensionality == 3){
+//         //axes = EP_CallMethod(m_frame,"gca","()");
+//     	  //EP_CallMethod(axes,"set_xlabel","(sOO)",m_axes[0].getTitle().c_str(),Py_None,Py_None);
+//           plt::xlabel(m_axes[0].getTitle().c_str());
+//     	  //EP_CallMethod(axes,"set_ylabel","(sOO)",m_axes[1].getTitle().c_str(),Py_None,Py_None);
+//           plt::ylabel(m_axes[1].getTitle().c_str());
+//     	  //EP_CallMethod(axes,"set_zlabel","(sOO)",m_axes[2].getTitle().c_str(),Py_None,Py_None);
+//           plt::set_zlabel(m_axes[2].getTitle().c_str());
+//       }
+//       //Py_DECREF(axes);
 
-      // Get labels/markers from IPlots.
-      //for (std::list<MPLPlot *>::iterator itor = m_plots.begin(); itor != m_plots.end(); ++itor) {
-        // Loop over plots, displaying each one's labels.
-        //std::vector<Marker> & marker((*itor)->getMarkers());
-        //for (std::vector<Marker>::iterator itor = marker.begin(); itor != marker.end(); ++itor) {
-      //addMarker(*itor);
-      //}
-      }
+//       // Get labels/markers from IPlots.
+//       //for (std::list<MPLPlot *>::iterator itor = m_plots.begin(); itor != m_plots.end(); ++itor) {
+//         // Loop over plots, displaying each one's labels.
+//         //std::vector<Marker> & marker((*itor)->getMarkers());
+//         //for (std::vector<Marker>::iterator itor = marker.begin(); itor != marker.end(); ++itor) {
+//       //addMarker(*itor);
+//       //}
+//       }
 
-    } catch (...) {
-      throw;
-    }
+//     } catch (...) {
+//       throw;
+//     }
 
-    // Force complete update of the display.
-    plt::draw();
-    //EP_CallMethod(m_canvas,"draw","()");
-//    EP_CallMethod(m_canvas,"draw","()");
-    // @todo call figure.canvas.draw() to redraw final plot?
-  }
+//     // Force complete update of the display.
+//     plt::draw();
+//     //EP_CallMethod(m_canvas,"draw","()");
+// //    EP_CallMethod(m_canvas,"draw","()");
+//     // @todo call figure.canvas.draw() to redraw final plot?
+   }
 
-  void MPLPlotFrame::unDisplay() {
-    // Delete all child graphs.
-    for (std::list<PyObject *>::reverse_iterator itor = m_graphs.rbegin(); itor != m_graphs.rend(); ++itor) {
-    	Py_DECREF(*itor);
-    }
-//    m_graphs.clear();
-    MPLFrame::unDisplay();
-  }
+//   void MPLPlotFrame::unDisplay() {
+//     // Delete all child graphs.
+//     for (std::list<PyObject *>::reverse_iterator itor = m_graphs.rbegin(); itor != m_graphs.rend(); ++itor) {
+//     	Py_DECREF(*itor);
+//     }
+// //    m_graphs.clear();
+//     MPLFrame::unDisplay();
+//   }
 
-  void MPLPlotFrame::reset() {
-    // Reset canvas.
-	PyObject *pwidget = EP_CallMethod(m_canvas,"get_tk_widget","()");
-	EP_CallMethod(pwidget,"destroy","()");
-	Py_DECREF(pwidget);
-    if (0 != m_canvas) {
-    	Py_DECREF(m_canvas);
-    	m_canvas = 0;
-    }
+  // void MPLPlotFrame::reset() {
+  //   // Reset canvas.
+  //       PyObject *pwidget = EP_CallMethod(m_canvas,"get_tk_widget","()");
+  //       EP_CallMethod(pwidget,"destroy","()");
+  //       Py_DECREF(pwidget);
+  //   if (0 != m_canvas) {
+  //   	Py_DECREF(m_canvas);
+  //   	m_canvas = 0;
+  //   }
 
-    // Delete children.
-    while (!m_plots.empty()) {
-      // Find last child.
-      std::list<MPLPlot *>::iterator itor = --m_plots.end();
+  //   // Delete children.
+  //   while (!m_plots.empty()) {
+  //     // Find last child.
+  //     std::list<MPLPlot *>::iterator itor = --m_plots.end();
 
-      // Get pointer to the plot.
-      MPLPlot * plot = *itor;
+  //     // Get pointer to the plot.
+  //     MPLPlot * plot = *itor;
 
-      // Break links between this and the child plot.
-      removePlot(*itor);
+  //     // Break links between this and the child plot.
+  //     removePlot(*itor);
 
-      // Delete the child plot.
-      delete plot;
-    }
+  //     // Delete the child plot.
+  //     delete plot;
+  //   }
 
-    unDisplay();
-  }
+  //   unDisplay();
+  // }
 
   void MPLPlotFrame::addPlot(IPlot * plot) {
-    MPLPlot * mpl_plot = dynamic_cast<MPLPlot *>(plot);
-    if (0 == mpl_plot) throw std::logic_error("MPLPlotFrame::addPlot cannot add a non-MPL plot");
+    // MPLPlot * mpl_plot = dynamic_cast<MPLPlot *>(plot);
+    // if (0 == mpl_plot) throw std::logic_error("MPLPlotFrame::addPlot cannot add a non-MPL plot");
 
-    if (m_plots.empty()) m_dimensionality = mpl_plot->getDimensionality();
-    else if (m_dimensionality != mpl_plot->getDimensionality())
-      throw std::logic_error("MPLPlotFrame::addPlot cannot overlay plots with different numbers of dimensions");
-    else if (m_dimensionality > 2)
-      throw std::logic_error("MPLPlotFrame::addPlot cannot overlay 3d plots");
+    // if (m_plots.empty()) m_dimensionality = mpl_plot->getDimensionality();
+    // else if (m_dimensionality != mpl_plot->getDimensionality())
+    //   throw std::logic_error("MPLPlotFrame::addPlot cannot overlay plots with different numbers of dimensions");
+    // else if (m_dimensionality > 2)
+    //   throw std::logic_error("MPLPlotFrame::addPlot cannot overlay 3d plots");
 
-    // Make certain plot is not added more than once.
-    if (m_plots.end() == std::find(m_plots.begin(), m_plots.end(), mpl_plot)) {
-      m_plots.push_back(mpl_plot);
-      mpl_plot->setParent(this);
-    }
+    // // Make certain plot is not added more than once.
+    // if (m_plots.end() == std::find(m_plots.begin(), m_plots.end(), mpl_plot)) {
+    //   m_plots.push_back(mpl_plot);
+    //   mpl_plot->setParent(this);
+    // }
   }
 
   void MPLPlotFrame::removePlot(IPlot * plot) {
-    std::list<MPLPlot *>::iterator itor = std::find(m_plots.begin(), m_plots.end(), plot);
-    if (m_plots.end() != itor) {
-      MPLPlot * mpl_plot = dynamic_cast<MPLPlot *>(plot);
-      if (0 != mpl_plot) mpl_plot->setParent(0);
-      m_plots.erase(itor);
-    }
+    // std::list<MPLPlot *>::iterator itor = std::find(m_plots.begin(), m_plots.end(), plot);
+    // if (m_plots.end() != itor) {
+    //   MPLPlot * mpl_plot = dynamic_cast<MPLPlot *>(plot);
+    //   if (0 != mpl_plot) mpl_plot->setParent(0);
+    //   m_plots.erase(itor);
+    // }
   }
 
   void MPLPlotFrame::addMarker(Marker & marker) {
-  	// Draw the point.  Python doesn't have a way to add just a point so you have to draw a scatter plot overlay
-	PyObject * axes = EP_CallMethod(m_frame,"gca","()");
-	//PyObject * axes = EP_CallMethod(m_frame,"add_subplot","(s)","111");  	// Draw the point.  Python doesn't have a way to add just a point so you have to draw a scatter plot overlay
-  	EP_CallMethod(axes,"set_autoscale_on","(O)",Py_False); // turn off autoscaling so the plot doesn't change size
-  	EP_CallMethod(axes,"scatter","([d][d]iss)",marker.m_x,marker.m_y,20,getColorString(marker.m_color).c_str(),"v");
-  	PyObject *kwargs = PyDict_New();
-  	PyDict_SetItemString(kwargs,"color",PyUnicode_FromString(getColorString(marker.m_color).c_str()));
-  	PyDict_SetItemString(kwargs,"rotation",PyFloat_FromDouble(45));
-  	PyDict_SetItemString(kwargs,"verticalalignment",PyUnicode_FromString("bottom"));
-  	EP_CallKWMethod(axes,"annotate",kwargs,"(s(dd))",marker.m_text.c_str(),marker.m_x,marker.m_y);
-  	Py_DECREF(kwargs);
-  	Py_DECREF(axes);
+  	// // Draw the point.  Python doesn't have a way to add just a point so you have to draw a scatter plot overlay
+	// PyObject * axes = EP_CallMethod(m_frame,"gca","()");
+	// //PyObject * axes = EP_CallMethod(m_frame,"add_subplot","(s)","111");  	// Draw the point.  Python doesn't have a way to add just a point so you have to draw a scatter plot overlay
+  	// EP_CallMethod(axes,"set_autoscale_on","(O)",Py_False); // turn off autoscaling so the plot doesn't change size
+  	// EP_CallMethod(axes,"scatter","([d][d]iss)",marker.m_x,marker.m_y,20,getColorString(marker.m_color).c_str(),"v");
+  	// PyObject *kwargs = PyDict_New();
+  	// PyDict_SetItemString(kwargs,"color",PyUnicode_FromString(getColorString(marker.m_color).c_str()));
+  	// PyDict_SetItemString(kwargs,"rotation",PyFloat_FromDouble(45));
+  	// PyDict_SetItemString(kwargs,"verticalalignment",PyUnicode_FromString("bottom"));
+  	// EP_CallKWMethod(axes,"annotate",kwargs,"(s(dd))",marker.m_text.c_str(),marker.m_x,marker.m_y);
+  	// Py_DECREF(kwargs);
+  	// Py_DECREF(axes);
   }
 
   const std::string & MPLPlotFrame::getTitle() const {
-    return m_title;
+    //  return m_title;
   }
 
-  std::vector<Axis> & MPLPlotFrame::getAxes() { return m_axes; }
+  std::vector<Axis> & MPLPlotFrame::getAxes() { } //return m_axes; }
 
-  const std::vector<Axis> & MPLPlotFrame::getAxes() const { return m_axes; }
+  const std::vector<Axis> & MPLPlotFrame::getAxes() const { }//return m_axes; }
 
   void MPLPlotFrame::display2d() {
 //	  std::cout << "display2D() for " << m_title << std::endl;
