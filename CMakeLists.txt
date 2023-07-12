@@ -20,7 +20,7 @@ target_include_directories(
 
 target_link_libraries(
   st_graph
-  PRIVATE embed_python Python3::Python
+  PRIVATE embed_python Python3::Python Python3::NumPy
   PUBLIC hoops st_stream
 )
 
