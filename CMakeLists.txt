@@ -28,6 +28,8 @@ if(NOT APPLE)
   target_compile_definitions(st_graph PRIVATE TRAP_FPE)
 endif()
 
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 add_executable(test_st_graph src/test/test_st_graph.cxx)
 target_link_libraries(test_st_graph PRIVATE st_graph hoops)
 
