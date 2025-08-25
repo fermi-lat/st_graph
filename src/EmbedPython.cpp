@@ -92,7 +92,7 @@ PyObject * EP_CallMethod(PyObject * obj, std::string funcName, std::string argTy
 		error("Can't build arguments list");
 	}
 
-	pres = PyEval_CallObject(pfunc, pargs);
+	pres = PyObject_CallObject(pfunc, pargs);
 	Py_DECREF(pfunc);
 	Py_DECREF(pargs);
 	if(NULL == pres)
@@ -119,7 +119,7 @@ PyObject * EP_CallMethod(std::string moduleName, std::string funcName, std::stri
 		error("Can't build arguments list");
 	}
 
-	pres = PyEval_CallObject(pfunc, pargs);
+	pres = PyObject_CallObject(pfunc, pargs);
 	Py_DECREF(pfunc);
 	Py_DECREF(pargs);
 	if(NULL == pres) {
