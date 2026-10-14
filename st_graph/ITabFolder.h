@@ -17,6 +17,8 @@ namespace st_graph {
   */
   class ITabFolder {
     public:
+      virtual ~ITabFolder() {}
+
       /** \brief Add a new tabbed folder sheet, which is owned by the ITabFolder object. The corresponding IFrame,
                  which may be used to add widgets to the folder sheet, is returned.
           \param label The label to place on the tab.

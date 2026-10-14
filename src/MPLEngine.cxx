@@ -4,26 +4,17 @@
 */
 #include "EmbedPython.h"
 
-//#include <cctype>
-//#include <cstdlib>
-//#include <csignal>
-#include <cstring>
+#include <cctype>
 #include <stdexcept>
-//#include <vector>
-
-//typedef void (*root_signal_handler_t) (int);
 
 #include "st_graph/IEventReceiver.h"
 #include "st_graph/IFrame.h"
 #include "st_graph/MPLFrame.h"
-//#include "st_app/StApp.h"
 
 #include "MPLEngine.h"
 #include "MPLPlot.h"
 #include "MPLPlotFrame.h"
 #include "MPLTabFolder.h"
-//#include "STGLayoutManager.h"
-//#include "STGMainFrame.h"
 
 namespace {
 
@@ -32,14 +23,10 @@ namespace {
     public:
       DefaultReceiver(): m_engine(st_graph::Engine::instance()), m_exit_on_close(true) {}
 
-      // General behavior when closing window is to close the matplotlib window.
+      // General behavior when closing window is to hide the window.
       virtual void closeWindow(st_graph::IFrame * f) {
-//        st_graph::MPLFrame * rf = dynamic_cast<st_graph::MPLFrame *>(f);
-//        if (0 != rf) {
-//          TGFrame * tgf = rf->getTGFrame();
-//          if (0 != tgf) tgf->UnmapWindow();
-//        }
-//        if (m_exit_on_close) m_engine.stop();
+        if (0 != f) f->unDisplay();
+        if (m_exit_on_close) m_engine.stop();
       }
 
       void setExitOnClose(bool exit_on_close) { m_exit_on_close = exit_on_close; }
@@ -51,19 +38,50 @@ namespace {
 
   DefaultReceiver * s_default_receiver = 0;
 
+  // Get the MPL frame of a parent frame, checking that it is valid.
+  st_graph::MPLFrame * getParent(st_graph::IFrame * parent, const std::string & method) {
+    st_graph::MPLFrame * mpl_frame = dynamic_cast<st_graph::MPLFrame *>(parent);
+    if (0 == mpl_frame || 0 == mpl_frame->getPythonFrame())
+      throw std::logic_error("MPLEngine::" + method + " was passed an invalid parent frame pointer");
+    return mpl_frame;
+  }
+
+  // Create a widget using the named class from the st_graph_tk module. The class is constructed with the parent's
+  // Python object, a text string and the callback which reports events to the new frame.
+  st_graph::IFrame * createWidget(st_graph::IFrame * parent, st_graph::IEventReceiver * receiver,
+    const std::string & method, const char * python_class, const std::string & text, const std::string & name,
+    bool container = false) {
+    using namespace st_graph;
+    MPLFrame * mpl_parent = getParent(parent, method);
+
+    MPLFrame * frame = new MPLFrame(mpl_parent, receiver, 0);
+    try {
+      PyRef callback(frame->createCallback());
+      frame->setPythonFrame(EP_CallHelper(python_class, "(OsO)", mpl_parent->getPythonFrame(), text.c_str(),
+        callback.get()));
+    } catch (...) {
+      delete frame;
+      throw;
+    }
+    frame->setName(name);
+    frame->setContainer(container);
+    return frame;
+  }
+
 }
 
 namespace st_graph {
 
   MPLEngine::MPLEngine(): m_init_succeeded(false) {
-	  // Let's get Python initialized
-	  Py_Initialize();
-	  // Populate sys.argv[] with
-	  // dummy command line values
-	  wchar_t *dummy_argv[] = {L""};
-	  wchar_t **argv = dummy_argv;
-	  PySys_SetArgvEx(0,argv,0);
+    try {
+      // Start Python, import the helper module and create the Tk root window. This fails if no display is available,
+      // in which case all methods which create graphical objects will throw.
+      EP_Init();
+      MPLFrame::ancestor();
       m_init_succeeded = true;
+    } catch (const std::exception &) {
+      m_init_succeeded = false;
+    }
   }
 
   void MPLEngine::run() {
@@ -75,9 +93,8 @@ namespace st_graph {
     // Hide all frames which need to be hidden at the outset.
     hideHidden(MPLFrame::ancestor());
 
-    // Fire off the ancestor object's mainloop() to handle the graphical displays.
-    //@todo  This needs to change to fire off all the subframe mainloop() methods instead of the top Tk object's method
-    EP_CallMethod(MPLFrame::ancestor()->getPythonFrame(),"mainloop","()");
+    // Run the Tk event loop to handle the graphical displays. This returns when stop() is called.
+    PyRef result(EP_CallHelper("mainloop", "()"));
   }
 
   void MPLEngine::stop() {
@@ -86,8 +103,8 @@ namespace st_graph {
     // Hide all frames currently linked to the top-level frame.
     MPLFrame::ancestor()->unDisplay();
 
-    //@todo  This needs to change to fire off all the subframe destroy methods instead of the top Tk object's method
-    EP_CallMethod(MPLFrame::ancestor()->getPythonFrame(),"destroy","()");
+    // Cause the event loop started by run() to return.
+    PyRef result(EP_CallHelper("quit", "()"));
   }
 
   IFrame * MPLEngine::createMainFrame(IEventReceiver * receiver, unsigned int width, unsigned int height,
@@ -100,27 +117,19 @@ namespace st_graph {
       receiver = s_default_receiver;
     }
 
-    // Create the main Python frame.
-    // Note:  Due to the way Python widgets are created, their parent has to be declared at time of creation
-    //        Since this is a main frame, we're linking it to the ancestor object
-//    PyObject * p_widget = EP_CreateObject("tkinter","Toplevel","(O)", MPLFrame::ancestor()->getPythonFrame());
-    PyObject * p_widget = EP_CreateObject("STTopLevel","STToplevel","(O)", MPLFrame::ancestor()->getPythonFrame());
-    EP_CallMethod(p_widget,"__setitem__","(si)","width",width);
-    EP_CallMethod(p_widget,"__setitem__","(si)","height",height);
-//    PyObject *pfunc = EP_GetMethod(p_widget,"quit");  // get the function that stops the mainloop() for this window
-    PyObject *pfunc = EP_GetMethod(p_widget,"stop");  // get the function that stops the mainloop() for this window
-    EP_CallMethod(p_widget,"protocol","(sO)","WM_DELETE_WINDOW", pfunc);  // assign that function as the callback for closing the window.
-
-    // To set the main frame title we actually set the title of the ancestor window
-    EP_CallMethod(p_widget,"title","(s)",title.c_str());
-
-    // Give window manager a hint about where to display it. (again this get's applied to the ancestor object)
-    EP_CallMethod(p_widget,"geometry","(s)","+100+50");
-
-    // Create the IFrame which refers to it.
-    MPLFrame * frame = new MPLFrame(receiver, p_widget);
+    // Create the IFrame which refers to the window.
+    MPLFrame * frame = new MPLFrame(receiver, 0);
+    try {
+      PyRef callback(frame->createCallback());
+      frame->setPythonFrame(EP_CallHelper("MainFrame", "(OiisO)", MPLFrame::ancestor()->getPythonFrame(), int(width),
+        int(height), title.c_str(), callback.get()));
+    } catch (...) {
+      delete frame;
+      throw;
+    }
 
     frame->setName("main");
+    frame->setContainer();
     return frame;
   }
 
@@ -129,7 +138,7 @@ namespace st_graph {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createPlot: graphical environment not initialized");
 
     // Create parent main frame.
-    IFrame * mf = createMainFrame(0, width, height);
+    IFrame * mf = createMainFrame(0, width, height, title);
 
     // Create frame to hold plot. This frame owns and will delete its parent.
     IFrame * pf = new MPLPlotFrame(mf, title, width, height, true);
@@ -143,7 +152,7 @@ namespace st_graph {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createPlot: graphical environment not initialized");
 
     // Create parent main frame.
-    IFrame * mf = createMainFrame(0, width, height);
+    IFrame * mf = createMainFrame(0, width, height, title);
 
     // Create frame to hold plot. This frame owns and will delete its parent.
     IFrame * pf = new MPLPlotFrame(mf, title, width, height, true);
@@ -173,184 +182,83 @@ namespace st_graph {
 
   IFrame * MPLEngine::createButton(IFrame * parent, IEventReceiver * receiver, const std::string & style,
     const std::string & label) {
-	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
-	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
-//    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createButton: graphical environment not initialized");
-//
-//    // Need the Root frame of the parent object.
-//    MPLFrame * rf = dynamic_cast<MPLFrame *>(parent);
-//    if (0 == rf) throw std::logic_error("MPLEngine::createButton was passed an invalid parent frame pointer");
-//
-//    // Make style check case insensitive.
-//    std::string lc_style = style;
-//    for (std::string::iterator itor = lc_style.begin(); itor != lc_style.end(); ++itor) *itor = tolower(*itor);
-//
-//    TGButton * tg_widget = 0;
-//    if (std::string::npos != lc_style.find("check")) {
-//      // Create the Root widget.
-//      tg_widget = new TGCheckButton(rf->getTGFrame(), label.c_str());
-//    } else if (std::string::npos != lc_style.find("text")) {
-//      // Create the Root widget.
-//      tg_widget = new TGTextButton(rf->getTGFrame(), label.c_str());
-//    } else {
-//      throw std::logic_error("MPLEngine::createButton cannot create a button with style " + style);
-//    }
-//
-//    // Create the IFrame which refers to it.
-//    IFrame * frame = new MPLFrame(parent, receiver, tg_widget);
-//
-//    frame->setName("button " + label);
-//
-//    // Connect appropriate Root Qt signals to this object's slot.
-//    tg_widget->Connect("Clicked()", "st_graph::MPLFrame", frame, "clicked()");
-//
-    return NULL;//frame;
+    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createButton: graphical environment not initialized");
+
+    // Make style check case insensitive.
+    std::string lc_style = style;
+    for (std::string::iterator itor = lc_style.begin(); itor != lc_style.end(); ++itor) *itor = tolower(*itor);
+
+    const char * python_class = 0;
+    if (std::string::npos != lc_style.find("check")) {
+      python_class = "CheckButton";
+    } else if (std::string::npos != lc_style.find("text")) {
+      python_class = "Button";
+    } else {
+      throw std::logic_error("MPLEngine::createButton cannot create a button with style " + style);
+    }
+
+    return createWidget(parent, receiver, "createButton", python_class, label, "button " + label);
   }
 
   IFrame * MPLEngine::createLabel(IFrame * parent, IEventReceiver * receiver, const std::string & text) {
-	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
-	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
-//    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createLabel: graphical environment not initialized");
-//
-//    // Need the Root frame of the parent object.
-//    MPLFrame * rf = dynamic_cast<MPLFrame *>(parent);
-//    if (0 == rf) throw std::logic_error("MPLEngine::createLabel was passed an invalid parent frame pointer");
-//
-//    TGLabel * tg_widget  = new TGLabel(rf->getTGFrame(), text.c_str());
-//
-//    tg_widget->SetTextJustify(kTextRight);
-//
-//    IFrame * frame = new MPLFrame(parent, receiver, tg_widget);
-//
-//    frame->setName("label " + text);
-//
-    return NULL;//frame;
+    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createLabel: graphical environment not initialized");
+
+    return createWidget(parent, receiver, "createLabel", "Label", text, "label " + text);
   }
 
   IFrame * MPLEngine::createTextEntry(IFrame * parent, IEventReceiver * receiver, const std::string & content) {
-	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
-	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
-//    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createTextEntry: graphical environment not initialized");
-//
-//    // Need the Root frame of the parent object.
-//    MPLFrame * rf = dynamic_cast<MPLFrame *>(parent);
-//    if (0 == rf) throw std::logic_error("MPLEngine::createTextEntry was passed an invalid parent frame pointer");
-//
-//    TGTextEntry * tg_widget  = new TGTextEntry(rf->getTGFrame(), content.c_str());
-//
-//    IFrame * frame = new MPLFrame(parent, receiver, tg_widget);
-//
-//    frame->setName("text entry " + content);
-//
-//    // Whenever text is changed, send the changes back to root frame.
-//    tg_widget->Connect("TextChanged(char *)", "st_graph::MPLFrame", frame, "modified(const char *)");
-//
-    return NULL;// frame;
+    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createTextEntry: graphical environment not initialized");
+
+    return createWidget(parent, receiver, "createTextEntry", "TextEntry", content, "text entry " + content);
   }
 
   IFrame * MPLEngine::createComposite(IFrame * parent, IEventReceiver * receiver) {
-	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
-	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
-//    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createComposite: graphical environment not initialized");
-//
-//    // Need the Root frame of the parent object.
-//    MPLFrame * rf = dynamic_cast<MPLFrame *>(parent);
-//    if (0 == rf) throw std::logic_error("MPLEngine::createComposite was passed an invalid parent frame pointer");
-//
-//    TGCompositeFrame * tg_widget  = new TGCompositeFrame(rf->getTGFrame(), 20, 20);
-//
-//    MPLFrame * frame = new MPLFrame(parent, receiver, tg_widget);
-//
-//    frame->setName("composite frame inside " + parent->getName());
-//
-//    // Create a layout manager for the Root widget which uses the receiver to manage the layout.
-//    tg_widget->SetLayoutManager(new STGLayoutManager(receiver, frame, tg_widget));
-//
-    return NULL;// frame;
+    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createComposite: graphical environment not initialized");
+
+    std::string name = "composite frame inside " + (0 != parent ? parent->getName() : std::string());
+    return createWidget(parent, receiver, "createComposite", "Composite", "", name, true);
   }
 
   IFrame * MPLEngine::createGroupFrame(IFrame * parent, IEventReceiver * receiver, const std::string & label) {
-	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
-	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
-//    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createGroupFrame: graphical environment not initialized");
-//
-//    // Need the Root frame of the parent object.
-//    MPLFrame * rf = dynamic_cast<MPLFrame *>(parent);
-//    if (0 == rf) throw std::logic_error("MPLEngine::createGroupFrame was passed an invalid parent frame pointer");
-//
-//    TGGroupFrame * tg_widget  = new TGGroupFrame(rf->getTGFrame(), label.c_str());
-//
-//    MPLFrame * frame = new MPLFrame(parent, receiver, tg_widget);
-//
-//    frame->setName("group frame " + label);
-//
-//    // Create a layout manager for the Root widget which uses the receiver to manage the layout.
-//    tg_widget->SetLayoutManager(new STGLayoutManager(receiver, frame, tg_widget));
-//
-    return NULL;//frame;
+    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createGroupFrame: graphical environment not initialized");
+
+    return createWidget(parent, receiver, "createGroupFrame", "GroupFrame", label, "group frame " + label, true);
   }
 
   ITabFolder * MPLEngine::createTabFolder(IFrame * parent, IEventReceiver * receiver) {
-	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
-	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createTabFolder: graphical environment not initialized");
 
-    // Need the Root frame of the parent object.
-    MPLFrame * rf = dynamic_cast<MPLFrame *>(parent);
-    if (0 == rf) throw std::logic_error("MPLEngine::createTabFolder was passed an invalid parent frame pointer");
-
-    MPLTabFolder * folder = new MPLTabFolder(rf, receiver);
-
-    return folder;
+    return new MPLTabFolder(getParent(parent, "createTabFolder"), receiver);
   }
 
-  std::string MPLEngine::fileDialog(IFrame *, const std::string & initial_file_name, const std::string & style) {
+  std::string MPLEngine::fileDialog(IFrame * parent, const std::string & initial_file_name, const std::string & style) {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::fileDialog: graphical environment not initialized");
-	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
-	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
 
-//    std::string dir;
-//    std::string file;
-//
-//    // Split input file name into directory and file.
-//    std::string::size_type delim_pos = initial_file_name.find_last_of("/\\");
-//    if (std::string::npos == delim_pos) {
-//      // No delimiter: assume directory only was supplied.
-//      dir = initial_file_name;
-//    } else {
-//      // Delimiter found: split into before/after delimiter.
-//      dir = initial_file_name.substr(0, delim_pos);
-//      file = initial_file_name.substr(delim_pos + 1, std::string::npos);
-//    }
-//
-//    // Create structure to hold the details.
-//    TGFileInfo * info = new TGFileInfo;
-//
-//    // Set the widget's initial directory.
-//    info->fIniDir = new char[dir.size() + 1];
-//    strcpy(info->fIniDir, dir.c_str());
-//
-//    // Set the widget's initial file name.
-//    char * buf = new char[file.size() + 1];
-//    info->fFilename = buf;
-//    strcpy(info->fFilename, file.c_str());
-//
-//    // Set up style.
-//    EFileDialogMode mode = kFDOpen;
-//    if (style != "open") mode = kFDSave;
-//
-//    // Create the dialog box. This will run the inner event loop until user closes the dialog box one way or another.
-//    // At that point the dialog box will be automatically deleted.
-//    new TGFileDialog(gClient->GetRoot(), gClient->GetRoot(), mode, info);
-//
-//    // Get the file name.
-    std::string file_name = initial_file_name;
-//    if (0 != info->fFilename) file_name = info->fFilename;
-//
-//    // Clean up.
-//    delete info;
-//    delete [] buf;
-//
+    std::string dir;
+    std::string file;
+
+    // Split input file name into directory and file.
+    std::string::size_type delim_pos = initial_file_name.find_last_of("/\\");
+    if (std::string::npos == delim_pos) {
+      // No delimiter: assume directory only was supplied.
+      dir = initial_file_name;
+    } else {
+      // Delimiter found: split into before/after delimiter.
+      dir = initial_file_name.substr(0, delim_pos);
+      file = initial_file_name.substr(delim_pos + 1, std::string::npos);
+    }
+
+    MPLFrame * mpl_parent = dynamic_cast<MPLFrame *>(parent);
+    PyObject * py_parent = (0 != mpl_parent && 0 != mpl_parent->getPythonFrame()) ? mpl_parent->getPythonFrame() : Py_None;
+
+    // Display the dialog box. This runs an inner event loop until the user closes the dialog box one way or another.
+    PyRef result(EP_CallHelper("file_dialog", "(Osss)", py_parent, dir.c_str(), file.c_str(),
+      ("open" == style ? "open" : "save")));
+
+    // If the dialog was canceled, return the original file name.
+    std::string file_name = EP_AsString(result.get());
+    if (file_name.empty()) file_name = initial_file_name;
+
     return file_name;
   }
 

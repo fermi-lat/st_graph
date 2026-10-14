@@ -5,36 +5,88 @@
 #include "EmbedPython.h"
 
 #include <algorithm>
+#include <map>
 #include <stdexcept>
-#include <iostream>
 
 #include "st_graph/IEventReceiver.h"
 #include "st_graph/MPLFrame.h"
 
-//ClassImp(st_graph::MPLFrame)
+namespace {
+  using st_graph::MPLFrame;
+
+  // Frames which currently exist, indexed by a unique id. Events which arrive for an id not in this map are ignored.
+  // Ids rather than pointers identify frames so that a stale callback can never reach a new frame which happens
+  // to occupy the same address. The map is never deleted, so it outlives frames destroyed during static destruction.
+  std::map<unsigned long, MPLFrame *> & liveFrames() {
+    static std::map<unsigned long, MPLFrame *> * s_live_frames = new std::map<unsigned long, MPLFrame *>;
+    return *s_live_frames;
+  }
+
+  unsigned long nextFrameId() {
+    static unsigned long s_next_id = 0;
+    return ++s_next_id;
+  }
+
+  // Function called by Python wrappers to report an event. The self argument is the id of the frame.
+  PyObject * dispatchEvent(PyObject * self, PyObject * args) {
+    unsigned long id = PyLong_AsUnsignedLong(self);
+    if (0 != PyErr_Occurred()) return 0;
+    std::map<unsigned long, MPLFrame *>::iterator found = liveFrames().find(id);
+    if (liveFrames().end() == found) Py_RETURN_NONE;
+    MPLFrame * frame = found->second;
+
+    if (!PyTuple_Check(args) || PyTuple_Size(args) < 1 || !PyUnicode_Check(PyTuple_GetItem(args, 0))) {
+      PyErr_SetString(PyExc_TypeError, "st_graph event callback requires an event name");
+      return 0;
+    }
+    std::string event = PyUnicode_AsUTF8(PyTuple_GetItem(args, 0));
+
+    try {
+      // Application code runs here, so give it back its own floating point environment (and traps).
+      st_graph::ApplicationFpeScope fpe_scope;
+      frame->handleEvent(event, args);
+    } catch (const std::exception & x) {
+      if (0 == PyErr_Occurred()) PyErr_SetString(PyExc_RuntimeError, x.what());
+      return 0;
+    } catch (...) {
+      if (0 == PyErr_Occurred()) PyErr_SetString(PyExc_RuntimeError, "unknown C++ exception in st_graph event handler");
+      return 0;
+    }
+    if (0 != PyErr_Occurred()) return 0;
+    Py_RETURN_NONE;
+  }
+
+  PyMethodDef s_dispatch_def = { "st_graph_dispatch", dispatchEvent, METH_VARARGS,
+    "Forward a GUI event to an st_graph::MPLFrame." };
+}
 
 namespace st_graph {
 
   MPLFrame * MPLFrame::ancestor() {
     static MPLFrame s_ancestor;
+    // Create the Python object (and with it the Tk root window) on first use. If this fails, e.g. because no
+    // display is available, an exception is thrown and creation will be attempted again next time.
+    if (0 == s_ancestor.m_frame) s_ancestor.m_frame = EP_CallHelper("Ancestor", "()");
     return &s_ancestor;
   }
 
   MPLFrame::MPLFrame(IFrame * parent, IEventReceiver * receiver, PyObject * frame, bool delete_parent): m_state(), m_name(),
     m_subframes(), m_parent(0), m_frame(frame), m_receiver(receiver), m_delete_parent(delete_parent), m_minimum_width(0),
-    m_minimum_height(0), m_hidden(false) {
+    m_minimum_height(0), m_hidden(false), m_container(false), m_id(nextFrameId()) {
     // Make sure the parent is a MPL parent.
     m_parent = dynamic_cast<MPLFrame *>(parent);
     if (0 == m_parent)
       throw std::logic_error("MPLFrame constructor was passed a parent IFrame which is not a MPLFrame");
 
     m_parent->addFrame(this);
+    liveFrames()[m_id] = this;
   }
 
   MPLFrame::MPLFrame(IEventReceiver * receiver, PyObject * frame, bool delete_parent): m_state(), m_name(), m_subframes(),
     m_parent(MPLFrame::ancestor()), m_frame(frame), m_receiver(receiver), m_delete_parent(delete_parent),
-    m_minimum_width(0), m_minimum_height(0), m_hidden(false) {
+    m_minimum_width(0), m_minimum_height(0), m_hidden(false), m_container(false), m_id(nextFrameId()) {
     m_parent->addFrame(this);
+    liveFrames()[m_id] = this;
   }
 
   MPLFrame::~MPLFrame() {
@@ -42,7 +94,9 @@ namespace st_graph {
     // a MPLFrame needs to delete its parent, but the parent will always attempt to delete the MPLFrame in the
     // process. Thus it is important to ensure the child is detached at the right times to prevent deleting
     // the parent and/or the child twice.
-//	std::cout <<"Called MPLFrame::~MPLFrame()" << std::endl;
+
+    // Stop handling events for this frame.
+    liveFrames().erase(m_id);
 
     // Save pointer to parent in case delete parent was selected.
     MPLFrame * parent = m_parent;
@@ -60,15 +114,13 @@ namespace st_graph {
       delete *itor;
     }
 
-    // Delete the Python frame.
-    if(EP_IsType(m_frame,"STTopLevel","STToplevel"))
-    	EP_CallMethod(m_frame,"destroy","()");
-    Py_DECREF(m_frame);
-    m_frame = NULL;
-
-//    if (this == ancestor()){
-//    	std::cout << "Destructor called on base object" << std::endl;
-//    }
+    // Destroy the Python wrapper and the widget it holds.
+    if (0 != m_frame && Py_IsInitialized()) {
+      EP_CallMethodNoThrow(m_frame, "destroy");
+      PythonFpeGuard guard;
+      Py_DECREF(m_frame);
+    }
+    m_frame = 0;
 
     // In special case where the frame owns its parent frame, delete that as well.
     if (m_delete_parent) delete parent;
@@ -82,24 +134,13 @@ namespace st_graph {
     for (std::list<MPLFrame *>::iterator itor = m_subframes.begin(); itor != m_subframes.end(); ++itor)
       (*itor)->display();
     if (0 != m_frame) {
-    	bool test = EP_IsType(m_frame,"tkinter","Tk") || EP_IsType(m_frame,"tkinter","Toplevel");
-    	if (false == test){
-    		EP_CallMethod(m_frame,"place","()");
-    		EP_CallMethod(m_frame,"pack","()");
-    	}
-    	EP_CallMethod(m_frame,"update","()");
+      if (m_container) layout();
+      PyRef result(EP_CallMethod(m_frame, "show", "()"));
     }
   }
 
   void MPLFrame::unDisplay() {
-    if (0 != m_frame){
-    	bool test = EP_IsType(m_frame,"tkinter","Tk") || EP_IsType(m_frame,"tkinter","Toplevel") || m_frame == Py_None;
-    	if (false == test){
-    		// These are causing failures somewhere
-//			EP_CallMethod(m_frame,"pack_forget","()");
-//			EP_CallMethod(m_frame,"place_forget","()");
-    	}
-    }
+    if (0 != m_frame) PyRef result(EP_CallMethod(m_frame, "hide", "()"));
     for (std::list<MPLFrame *>::reverse_iterator itor = m_subframes.rbegin(); itor != m_subframes.rend(); ++itor)
       (*itor)->unDisplay();
   }
@@ -116,16 +157,9 @@ namespace st_graph {
     if (m_subframes.end() == std::find(m_subframes.begin(), m_subframes.end(), frame)) {
       MPLFrame * f = dynamic_cast<MPLFrame *>(frame);
       if (0 == f) throw std::logic_error("MPLFrame::addFrame was passed an invalid child frame");
-//      PyObject *child_f = f->getPythonFrame();
 
-      // This linkage needs to be done then the Python frame is created before it is passed in.
-      // It doesn't seem possible to do after the fact.
-//      // Check that the contained frame for this object is a Python frame
-//      bool correctType = EP_IsType(m_frame,"tkinter","Frame");
-//      // Make this contained frame the parent of the contained frame in the passed in object
-//      if (correctType && NULL != child_f) {
-//    	  EP_CallMethod(child_f,"__setitem__","(sO)","master",m_frame);
-//      }
+      // Note that Tk widgets are linked to their parent widgets when they are created, so there is nothing
+      // to do here with the Python objects.
 
       // Connect this parent to the child.
       f->m_parent = this;
@@ -142,17 +176,9 @@ namespace st_graph {
       m_subframes.erase(itor);
       MPLFrame * f = dynamic_cast<MPLFrame *>(frame);
       if (0 == f) throw std::logic_error("MPLFrame::removeFrame was passed an invalid child frame");
-//      PyObject * child_f = f->getPythonFrame();
 
       // Disconnect parent from child.
       f->m_parent = 0;
-
-//      // Check that the contained frame for this object is a Python frame
-//      bool correctType = EP_IsType(m_frame,"tkinter","Frame");
-//      // Make this contained frame the parent of the contained frame in the passed in object
-//      if (correctType && NULL != child_f) {
-//    	  EP_CallMethod(child_f,"__setitem__","(ss)","master","None");
-//      }
     }
   }
 
@@ -161,203 +187,112 @@ namespace st_graph {
   }
 
   const std::string & MPLFrame::getState() const {
-    for (bool one_time_only = true; one_time_only ; one_time_only = false) {
-      m_state.clear();
-        if (EP_IsType(m_frame,"tkinter","Button")){
-			// need to figure out state for a regular Python button.  I don't think it can be done but since
-			// I don't think you can read the state while it is actually being pressed, at all other times it is up
-			// so we'll just return that.
-        	m_state = "up";
-        	continue;
-        }
-        if (EP_IsType(m_frame,"tkinter","CheckButton")){
-        	// in python we have to associate the state with a variable to read it.
-        	// not sure how to implement this in the C++ crossover.  Requires a bit of thinking
-        	// For now we'll just pass through with an up state
-        	m_state = "up";
-        	continue;
-        }
-        if (EP_IsType(m_frame,"tkinter","Entry")){
-        	PyObject *pRes = EP_CallMethod(m_frame,"get","()");
-        	char * state;
-        	PyArg_Parse(pRes,"(s)",&state);
-        	m_state = state;
-            continue;
-        }
+    m_state.clear();
+    if (0 != m_frame) {
+      PyRef state(EP_CallMethod(m_frame, "get_state", "()"));
+      m_state = EP_AsString(state.get());
     }
     return m_state;
   }
 
   void MPLFrame::setState(const std::string & state) {
-//    for (bool one_time_only = true; one_time_only ; one_time_only = false) {
-//      TGButton * button = dynamic_cast<TGButton *>(m_frame);
-//      if (0 != button) {
-//        if (state == "down") button->SetState(kButtonDown);
-//        else if (state == "up") button->SetState(kButtonUp);
-//        // else // TODO issue debug warning.
-//        continue;
-//      }
-//      TGTextEntry * text = dynamic_cast<TGTextEntry *>(m_frame);
-//      if (0 != text) {
-//        // Only set the text in the entry widget if it has changed. This prevents flicker and moving
-//        // the cursor to the end of the line each time a character is typed.
-//        std::string current_text = text->GetText();
-//        if (current_text != state)
-//          text->SetText(state.c_str());
-//        continue;
-//      }
-//    }
+    if (0 != m_frame) PyRef result(EP_CallMethod(m_frame, "set_state", "(s)", state.c_str()));
   }
 
   void MPLFrame::setToolTipText(const std::string & text) {
-//    // TODO: generalize this to support tool tips for every type of widget.
-//    TGButton * button = dynamic_cast<TGButton *>(m_frame);
-//    if (0 != button) button->SetToolTipText(text.c_str());
+    if (0 != m_frame) PyRef result(EP_CallMethod(m_frame, "set_tooltip", "(s)", text.c_str()));
   }
 
   void MPLFrame::setNaturalSize() {
-//    if (0 != m_frame) m_frame->SetSize(m_frame->GetDefaultSize());
+    if (0 != m_frame) PyRef result(EP_CallMethod(m_frame, "set_natural_size", "()"));
   }
 
-  void MPLFrame::layout(bool force_layout) {
-//    if (force_layout) setLayoutBroken(m_frame);
-//    if (0 != m_receiver) m_receiver->layout(this);
+  void MPLFrame::layout(bool) {
+    if (0 != m_receiver) m_receiver->layout(this);
+    else if (m_container) stackSubframes();
   }
 
-  /// \brief Get the horizontal center of the frame.
   long MPLFrame::getHCenter() const {
-    long center = 0;
-//    if (0 != m_frame) {
-//      // Computation designed to minimize round-off error.
-//      long left = m_frame->GetX();
-//      // center = left + .5 * width = .5 * (2. * left + width) = (left + left + width) / 2
-//      center = (left + left + m_frame->GetWidth()) / 2;
-//    }
-    return center;
+    // Computation designed to minimize round-off error.
+    // center = left + .5 * width = .5 * (2. * left + width) = (left + left + width) / 2
+    long left = getL();
+    return (left + left + getWidth()) / 2;
   }
 
-  /// \brief Set the horizontal center of the frame.
   void MPLFrame::setHCenter(long center) {
-//    if (0 != m_frame) {
-//      // Computation designed to minimize round-off error.
-//      long width = m_frame->GetWidth();
-//      // left = center - .5 * width = .5 * (2. * center - width) = (center + center - width) / 2
-//      long left = (center + center - width) / 2;
-//      left = left > 0 ? left : 0;
-//      m_frame->Move(left, m_frame->GetY());
-//    }
+    // left = center - .5 * width = .5 * (2. * center - width) = (center + center - width) / 2
+    setL((center + center - getWidth()) / 2);
   }
 
   long MPLFrame::getVCenter() const {
-    long center = 0;
-//    if (0 != m_frame) {
-//      // Computation designed to minimize round-off error.
-//      long top = m_frame->GetY();
-//      if (0 != m_parent) top += m_parent->getT(); // Convert to absolute coordinates.
-//      // center = top + .5 * height = .5 * (2. * top + height) = (top + top + width) / 2
-//      center = (top + top + m_frame->GetHeight()) / 2;
-//    }
-    return center;
+    long top = getT();
+    return (top + top + getHeight()) / 2;
   }
 
   void MPLFrame::setVCenter(long center) {
-//    if (0 != m_frame) {
-//      // Computation designed to minimize round-off error.
-//      long height = m_frame->GetHeight();
-//      // top = center - .5 * height = .5 * (2. * center - height) = (center + center - height) / 2
-//      long top = (center + center - height) / 2;
-//      if (0 != m_parent) top -= m_parent->getT(); // Convert to relative coordinates.
-//      top = top > 0 ? top: 0;
-//      m_frame->Move(m_frame->GetX(), top);
-//    }
+    setT((center + center - getHeight()) / 2);
   }
 
   long MPLFrame::getL() const {
-    long l = 0;
-//    if (0 != m_frame) l = m_frame->GetX();
-//    if (0 != m_parent) l += m_parent->getL(); // Convert to absolute coordinates.
-    return l;
+    long x, y, width, height;
+    getGeometry(x, y, width, height);
+    if (0 != m_parent) x += m_parent->getL(); // Convert to absolute coordinates.
+    return x;
   }
 
   void MPLFrame::setL(long l) {
-//    if (0 != m_frame) {
-//      if (0 != m_parent) l -= m_parent->getL(); // Convert to relative coordinates.
-//      l = l > 0 ? l : 0;
-//      m_frame->Move(l, m_frame->GetY());
-//    }
+    if (0 != m_parent) l -= m_parent->getL(); // Convert to relative coordinates.
+    setRelativeX(l);
   }
 
   long MPLFrame::getR() const {
-    long r = 0;
-//    if (0 != m_frame) r = m_frame->GetX() + m_frame->GetWidth();
-//    if (0 != m_parent) r += m_parent->getL(); // Convert to absolute coordinates.
-    return r;
+    return getL() + getWidth();
   }
 
   void MPLFrame::setR(long r) {
-//    if (0 != m_frame) {
-//      long l = r - m_frame->GetWidth();
-//      if (0 != m_parent) l -= m_parent->getL(); // Convert to relative coordinates.
-//      l = l > 0 ? l : 0;
-//      m_frame->Move(l, m_frame->GetY());
-//    }
+    setL(r - getWidth());
   }
 
   long MPLFrame::getT() const {
-    long t = 0;
-//    if (0 != m_frame) t = m_frame->GetY();
-//    if (0 != m_parent) t += m_parent->getT(); // Convert to absolute coordinates.
-    return t;
+    long x, y, width, height;
+    getGeometry(x, y, width, height);
+    if (0 != m_parent) y += m_parent->getT(); // Convert to absolute coordinates.
+    return y;
   }
 
   void MPLFrame::setT(long t) {
-//    if (0 != m_frame) {
-//      if (0 != m_parent) t -= m_parent->getT(); // Convert to relative coordinates.
-//      t = t > 0 ? t : 0;
-//      m_frame->Move(m_frame->GetX(), t);
-//    }
+    if (0 != m_parent) t -= m_parent->getT(); // Convert to relative coordinates.
+    setRelativeY(t);
   }
 
   long MPLFrame::getB() const {
-    long b = 0;
-//    if (0 != m_frame) b = m_frame->GetY() + m_frame->GetHeight();
-//    if (0 != m_parent) b += m_parent->getT(); // Convert to absolute coordinates.
-    return b;
+    return getT() + getHeight();
   }
 
   void MPLFrame::setB(long b) {
-//    if (0 != m_frame) {
-//      long t = b - m_frame->GetHeight();
-//      if (0 != m_parent) t -= m_parent->getT(); // Convert to relative coordinates.
-//      t = t > 0 ? t : 0;
-//      m_frame->Move(m_frame->GetX(), t);
-//    }
+    setT(b - getHeight());
   }
 
   long MPLFrame::getWidth() const {
-    long width = 0;
-//    if (0 != m_frame) width = m_frame->GetWidth();
+    long x, y, width, height;
+    getGeometry(x, y, width, height);
     return width;
   }
 
   void MPLFrame::setWidth(long width) {
     width = (m_minimum_width < width) ? width : m_minimum_width;
-    if (0 != m_frame){
-    	//@todo Set frame width
-    }
+    if (0 != m_frame) PyRef result(EP_CallMethod(m_frame, "set_width", "(l)", width));
   }
 
   long MPLFrame::getHeight() const {
-    long height = 0;
-//    if (0 != m_frame) height = m_frame->GetHeight();
+    long x, y, width, height;
+    getGeometry(x, y, width, height);
     return height;
   }
 
   void MPLFrame::setHeight(long height) {
     height = (m_minimum_height < height) ? height : m_minimum_height;
-    if (0 != m_frame){
-    	//@todo Set frame height
-    }
+    if (0 != m_frame) PyRef result(EP_CallMethod(m_frame, "set_height", "(l)", height));
   }
 
   long MPLFrame::getMinimumWidth() const { return m_minimum_width; }
@@ -368,45 +303,85 @@ namespace st_graph {
 
   void MPLFrame::setMinimumHeight(long height) { m_minimum_height = height > 0 ? height : 0; }
 
-//  void MPLFrame::clicked() {
-//    if (0 != m_receiver) m_receiver->clicked(this);
-//  }
-//
-//  void MPLFrame::closeWindow() {
-//    if (0 != m_receiver) m_receiver->closeWindow(this);
-//  }
-//
-//  void MPLFrame::modified(const char * text) {
-//    if (0 != m_receiver) m_receiver->modified(this, text);
-//  }
-
   PyObject * MPLFrame::getPythonFrame() { return m_frame; }
 
-//  void MPLFrame::setTGFrame(TGFrame * frame) { m_frame = frame; }
+  void MPLFrame::setPythonFrame(PyObject * frame) {
+    if (0 != m_frame) {
+      EP_CallMethodNoThrow(m_frame, "destroy");
+      PythonFpeGuard guard;
+      Py_DECREF(m_frame);
+    }
+    m_frame = frame;
+  }
 
   IEventReceiver * MPLFrame::getReceiver() { return m_receiver; }
 
-//  void MPLFrame::setLayoutBroken(TGFrame * frame) {
-//    frame->SetLayoutBroken(kFALSE);
-//    TGCompositeFrame * cf = dynamic_cast<TGCompositeFrame *>(frame);
-//    if (0 != cf) {
-//      TIter next(cf->GetList());
-//      while(TGFrameElement * el = dynamic_cast<TGFrameElement *>(next())) {
-//        setLayoutBroken(el->fFrame);
-//      }
-//    }
-//  }
+  void MPLFrame::setContainer(bool container) { m_container = container; }
 
-  MPLFrame::MPLFrame(): m_subframes(), m_parent(0), m_frame(0), m_receiver(0) {
-	  // Link this to the root Python Tk() frame object
-//	  m_frame = EP_CreateObject("tkinter","Tk","({})","baseName","st_graph.app");
-//	  m_frame = EP_CreateObject("tkinter","Tk","(ss)","st_graph","st_graph");
-	  m_frame = EP_CreateObject("tkinter","Tk","()");
-	  EP_CallMethod(m_frame,"withdraw","()");
-//	  m_frame = EP_CreateObject("tkinter","Toplevel","()");
-//	  m_frame = Py_None;
-
+  PyObject * MPLFrame::createCallback() {
+    PyRef id(PyLong_FromUnsignedLong(m_id));
+    if (0 == id.get()) throw std::runtime_error("MPLFrame::createCallback: " + EP_ErrorMessage());
+    PyObject * callback = PyCFunction_New(&s_dispatch_def, id.get());
+    if (0 == callback) throw std::runtime_error("MPLFrame::createCallback: " + EP_ErrorMessage());
+    return callback;
   }
-//  MPLFrame::MPLFrame() {}
+
+  void MPLFrame::handleEvent(const std::string & event, PyObject * args) {
+    if ("layout" == event) {
+      layout();
+    } else if (0 == m_receiver) {
+      return;
+    } else if ("clicked" == event) {
+      m_receiver->clicked(this);
+    } else if ("close" == event) {
+      m_receiver->closeWindow(this);
+    } else if ("modified" == event) {
+      const char * name = 0;
+      const char * text = 0;
+      if (!PyArg_ParseTuple(args, "ss", &name, &text)) return;
+      m_receiver->modified(this, text);
+    } else if ("rightClicked" == event) {
+      const char * name = 0;
+      double x = 0.;
+      double y = 0.;
+      if (!PyArg_ParseTuple(args, "sdd", &name, &x, &y)) return;
+      m_receiver->rightClicked(this, x, y);
+    }
+  }
+
+  void MPLFrame::getGeometry(long & x, long & y, long & width, long & height) const {
+    x = y = width = height = 0;
+    if (0 == m_frame) return;
+    PyRef geometry(EP_CallMethod(m_frame, "geometry", "()"));
+    if (!PyArg_ParseTuple(geometry.get(), "llll", &x, &y, &width, &height))
+      throw std::runtime_error("MPLFrame::getGeometry: " + EP_ErrorMessage());
+  }
+
+  void MPLFrame::setRelativeX(long x) {
+    if (0 != m_frame) PyRef result(EP_CallMethod(m_frame, "set_x", "(l)", x > 0 ? x : 0));
+  }
+
+  void MPLFrame::setRelativeY(long y) {
+    if (0 != m_frame) PyRef result(EP_CallMethod(m_frame, "set_y", "(l)", y > 0 ? y : 0));
+  }
+
+  void MPLFrame::stackSubframes() {
+    long top = 0;
+    long width = 0;
+    for (FrameCont::iterator itor = m_subframes.begin(); itor != m_subframes.end(); ++itor) {
+      if ((*itor)->isHidden()) continue;
+      (*itor)->setRelativeX(0);
+      (*itor)->setRelativeY(top);
+      top += (*itor)->getHeight();
+      width = std::max(width, (*itor)->getWidth());
+    }
+    if (0 != top) {
+      setWidth(width);
+      setHeight(top);
+    }
+  }
+
+  MPLFrame::MPLFrame(): m_state(), m_name("ancestor"), m_subframes(), m_parent(0), m_frame(0), m_receiver(0),
+    m_delete_parent(false), m_minimum_width(0), m_minimum_height(0), m_hidden(false), m_container(false), m_id(0) {}
 
 }

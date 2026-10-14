@@ -5,30 +5,25 @@
 #ifndef st_graph_MPLPlotFrame_h
 #define st_graph_MPLPlotFrame_h
 
-#include "st_graph/MPLFrame.h"
-
 #include <list>
 #include <string>
 #include <vector>
 
 #include "st_graph/Axis.h"
-
-//class TAxis;
-//class TGraph;
-//class TH2D;
-//class TMultiGraph;
+#include "st_graph/IPlot.h"
+#include "st_graph/MPLFrame.h"
 
 namespace st_graph {
 
   class IFrame;
   class IPlot;
   class ISequence;
-  class Marker;
   class MPLPlot;
-//  class StEmbeddedCanvas;
 
   /** \class MPLPlotFrame
-      \brief A MPL frame which is suitable for displaying plots.
+      \brief A MPL frame which is suitable for displaying plots. The frame holds a matplotlib figure with a
+             navigation toolbar. For 2d plots, the mouse may be used to drag markers, to zoom the X axis
+             (left-drag; double-click restores the range), and to send rightClicked events to the receiver.
   */
   class MPLPlotFrame : public MPLFrame {
     public:
@@ -42,13 +37,10 @@ namespace st_graph {
       MPLPlotFrame(IFrame * parent, const std::string & title, unsigned int width, unsigned int height,
         bool delete_parent = false);
 
-      /// \brief Destruct the frame.
       virtual ~MPLPlotFrame();
 
-      /// \brief Display this frame and all it contains.
       virtual void display();
 
-      /// \brief Hide this frame and all it contains.
       virtual void unDisplay();
 
       virtual void reset();
@@ -63,7 +55,11 @@ namespace st_graph {
       */
       virtual void removePlot(IPlot * plot);
 
-      virtual void addMarker(Marker & marker);
+      /** \brief Draw a marker which was just added to one of the plots in this frame.
+          \param plot The plot which owns the marker.
+          \param index The index of the marker in the plot's marker container.
+      */
+      virtual void addMarker(MPLPlot * plot, std::vector<Marker>::size_type index);
 
       /** \brief Get the title of the frame.
       */
@@ -72,6 +68,9 @@ namespace st_graph {
       std::vector<Axis> & getAxes();
 
       const std::vector<Axis> & getAxes() const;
+
+      /// \brief Handle events from the plot: markers being dragged, in addition to the standard events.
+      virtual void handleEvent(const std::string & event, PyObject * args);
 
     protected:
       /** \brief Internal helper method which correctly displays 2d plots.
@@ -82,59 +81,24 @@ namespace st_graph {
       */
       virtual void display3d();
 
-      /** \brief Internal helper method which creates histogram plot as a MPL object.
-          \param x The first dimension.
-          \param y The second dimension.
-          \param format matplotlib format string for line/marker type and color
+      /** \brief Draw one marker in the current axes.
+          \param plot_index The position of the plot in this frame's container of plots.
+          \param marker_index The position of the marker in the plot's container of markers.
+          \param marker The marker.
       */
-      virtual PyObject * createHistPlot(const ISequence & x, const ISequence & y,std::string format);
+      void drawMarker(long plot_index, long marker_index, const Marker & marker);
 
-      /** \brief Internal helper method which creates scatter plot as a MPL object.
-          \param x The first dimension.
-          \param y The second dimension.
-          \param format matplotlib format string for line/marker type and color
+      /** \brief Generate matplotlib color string for the specified color.
+          \param color The Color enum value of the color desired
       */
-      virtual PyObject * createScatterPlot(const ISequence & x, const ISequence & y,std::string format);
-
-      /** \brief Internal helper method which creates 2d plot as a MPL object.
-          \param root_name The name given to the created MPL object. Should be unique to avoid warnings from MPL.
-          \param x The first dimension.
-          \param y The second dimension.
-	  \param z The third dimension.
-      */
-      virtual PyObject * createHistPlot2D(const std::string & root_name, const ISequence & x, const ISequence & y,
-        const std::vector<std::vector<double> > & z);
-
-      /** \brief Internal helper method which creates a name for MPL objects from the given prefix and a pointer.
-          \param prefix String prefix for the MPL object.
-	  \param ptr A pointer which will be concatenated with the prefix to form the name.
-      */
-      virtual std::string createRootName(const std::string & prefix, void * ptr) const;
-
-      /// \brief Get the underlying MPL graphical object; create it if it does not yet exist.
-//      virtual PyObject * getMultiGraph();
-
-      /** \brief Generate a matplotlib format string for the line color, style and markers
-       *
-       *  \param plot The plot to work with
-       */
-      virtual std::string generateFormatString(MPLPlot * plot) const;
-
-      /** \brief Generate matplotlib format color string for the specified colors
-       *
-       *  \param the Color enum value of the color desired
-       */
       std::string getColorString(int color) const;
 
     private:
       std::vector<Axis> m_axes;
       std::list<MPLPlot *> m_plots;
-      std::list<PyObject *> m_graphs;
       std::string m_title;
-      PyObject * m_canvas;
-      PyObject * m_multi_graph;
-      PyObject * m_th2d;
       unsigned int m_dimensionality;
+      bool m_drawn;
   };
 
 }

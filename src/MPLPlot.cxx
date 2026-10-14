@@ -2,14 +2,11 @@
     \brief Implementation of MPLPlot class.
     \author Tom Stephens, HEASARC/GSSC
 */
-#include "MPLPlotFrame.h" // this is first so that the <Python.h> header is included first as needed.
+#include "MPLPlotFrame.h"
 #include "MPLPlot.h"
 
-//#include <algorithm>
-//#include <cctype>
-//#include <sstream>
+#include <cctype>
 #include <stdexcept>
-//#include <vector>
 
 #include "st_graph/IFrame.h"
 #include "st_graph/Sequence.h"
@@ -97,7 +94,7 @@ namespace st_graph {
 
   void MPLPlot::addMarker(double x, double y, const std::string & text, int color) {
     m_label.push_back(Marker(x, y, text, color));
-    m_parent->addMarker(m_label.back());
+    if (0 != m_parent) m_parent->addMarker(this, m_label.size() - 1);
   }
 
   void MPLPlot::getMarkers(std::vector<Marker> & labels) const {

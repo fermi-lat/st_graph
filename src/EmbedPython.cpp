@@ -1,238 +1,181 @@
-//============================================================================
-// Name        : EmbedPython.cpp
-// Author      : Tom Stephens
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Embedded Python helper functions
-//============================================================================
-#include <iostream>
-#include <cstdarg>
-
+/** \file EmbedPython.cpp
+    \brief Helper functions for calling the embedded Python interpreter from st_graph.
+    \author Tom Stephens, HEASARC/GSSC
+*/
 #include "EmbedPython.h"
 
-#define error(msg) do {std::cout << msg << std::endl; exit(1); } while (1)
+#include <cstdarg>
+#include <stdexcept>
 
-int EP_Init(){
-	return 0;
+namespace {
+  using namespace st_graph;
+
+  // Number of PythonFpeGuard objects currently in scope, and the floating point environment of the application
+  // which was in effect when the outermost guard was created.
+  int s_guard_depth = 0;
+  std::fenv_t s_application_env;
+
+  // Build an argument tuple from a Py_BuildValue format, making sure the result is always a tuple.
+  PyObject * buildArgs(const char * format, va_list args) {
+    PyObject * built = Py_VaBuildValue(format, args);
+    if (0 == built) return 0;
+    if (PyTuple_Check(built)) return built;
+    PyObject * tuple = PyTuple_Pack(1, built);
+    Py_DECREF(built);
+    return tuple;
+  }
+
+  PyObject * callMethod(PyObject * obj, const char * method, const char * format, va_list args) {
+    if (0 == obj) throw std::logic_error(std::string("st_graph: cannot call ") + method + " on a null Python object");
+    PythonFpeGuard guard;
+    PyRef func(PyObject_GetAttrString(obj, method));
+    if (0 == func.get())
+      throw std::runtime_error(std::string("st_graph: cannot find Python method ") + method + ": " + EP_ErrorMessage());
+    PyRef py_args(buildArgs(format, args));
+    if (0 == py_args.get())
+      throw std::runtime_error(std::string("st_graph: cannot build arguments for ") + method + ": " + EP_ErrorMessage());
+    PyObject * result = PyObject_CallObject(func.get(), py_args.get());
+    if (0 == result)
+      throw std::runtime_error(std::string("st_graph: Python call to ") + method + " failed: " + EP_ErrorMessage());
+    return result;
+  }
 }
 
-PyObject * EP_LoadModule(std::string name){
-	PyObject *pmod;
-	Py_Initialize();
-	pmod = PyImport_ImportModule(name.c_str());
-	if (NULL == pmod){
-		std::string msg = "Can't load module " + name;
-		error(msg);
-	}
-	return pmod;
+namespace st_graph {
+
+  PythonFpeGuard::PythonFpeGuard() {
+    if (0 == s_guard_depth) std::fegetenv(&s_application_env);
+    ++s_guard_depth;
+    // Save the current environment, clear the exception flags and switch to non-stop (no traps) mode.
+    std::feholdexcept(&m_env);
+  }
+
+  PythonFpeGuard::~PythonFpeGuard() {
+    // Discard exceptions raised by Python code, which are expected, before restoring traps; otherwise restoring
+    // the environment could raise them.
+    std::feclearexcept(FE_ALL_EXCEPT);
+    std::fesetenv(&m_env);
+    --s_guard_depth;
+  }
+
+  ApplicationFpeScope::ApplicationFpeScope(): m_env(), m_depth(s_guard_depth) {
+    if (0 == m_depth) return;
+    std::fegetenv(&m_env);
+    // Nested guards created by application code must save the application's environment, not this one.
+    s_guard_depth = 0;
+    std::feclearexcept(FE_ALL_EXCEPT);
+    std::fesetenv(&s_application_env);
+  }
+
+  ApplicationFpeScope::~ApplicationFpeScope() {
+    if (0 == m_depth) return;
+    std::feclearexcept(FE_ALL_EXCEPT);
+    std::fesetenv(&m_env);
+    s_guard_depth = m_depth;
+  }
+
+  void EP_Init() {
+    PythonFpeGuard guard;
+    if (!Py_IsInitialized()) {
+      // Do not install Python's signal handlers; the host application owns signal handling.
+      Py_InitializeEx(0);
+    }
+    // tkinter needs sys.argv, which is not set up when Python is embedded.
+    if (0 == PySys_GetObject("argv")) {
+      PyRef argv(Py_BuildValue("[s]", "st_graph"));
+      if (0 != argv.get()) PySys_SetObject("argv", argv.get());
+    }
+  }
+
+  PyObject * EP_Helper() {
+    static PyObject * s_helper = 0;
+    if (0 == s_helper) {
+      EP_Init();
+      PythonFpeGuard guard;
+      s_helper = PyImport_ImportModule("st_graph_tk");
+      if (0 == s_helper)
+        throw std::runtime_error("st_graph: cannot import Python module st_graph_tk: " + EP_ErrorMessage());
+    }
+    return s_helper;
+  }
+
+  PyObject * EP_CallHelper(const char * function, const char * format, ...) {
+    PyObject * helper = EP_Helper();
+    va_list args;
+    va_start(args, format);
+    try {
+      PyObject * result = callMethod(helper, function, format, args);
+      va_end(args);
+      return result;
+    } catch (...) {
+      va_end(args);
+      throw;
+    }
+  }
+
+  PyObject * EP_CallMethod(PyObject * obj, const char * method, const char * format, ...) {
+    va_list args;
+    va_start(args, format);
+    try {
+      PyObject * result = callMethod(obj, method, format, args);
+      va_end(args);
+      return result;
+    } catch (...) {
+      va_end(args);
+      throw;
+    }
+  }
+
+  void EP_CallMethodNoThrow(PyObject * obj, const char * method) {
+    if (0 == obj || !Py_IsInitialized()) return;
+    PythonFpeGuard guard;
+    PyObject * result = PyObject_CallMethod(obj, method, 0);
+    if (0 == result) PyErr_Clear();
+    else Py_DECREF(result);
+  }
+
+  PyObject * EP_FromVector(const std::vector<double> & vec) {
+    PyObject * list = PyList_New(vec.size());
+    if (0 == list) throw std::runtime_error("st_graph: cannot create Python list: " + EP_ErrorMessage());
+    for (std::vector<double>::size_type index = 0; index != vec.size(); ++index) {
+      // PyList_SET_ITEM steals the reference to the new float.
+      PyList_SET_ITEM(list, index, PyFloat_FromDouble(vec[index]));
+    }
+    return list;
+  }
+
+  std::string EP_AsString(PyObject * obj) {
+    const char * text = (0 != obj && PyUnicode_Check(obj)) ? PyUnicode_AsUTF8(obj) : 0;
+    if (0 == text) {
+      PyErr_Clear();
+      throw std::runtime_error("st_graph: Python object is not a string");
+    }
+    return text;
+  }
+
+  std::string EP_ErrorMessage() {
+    if (0 == PyErr_Occurred()) return "unknown error";
+    PythonFpeGuard guard;
+    PyObject * type = 0;
+    PyObject * value = 0;
+    PyObject * traceback = 0;
+    PyErr_Fetch(&type, &value, &traceback);
+    PyErr_NormalizeException(&type, &value, &traceback);
+    std::string msg;
+    if (0 != type) {
+      PyRef name(PyObject_GetAttrString(type, "__name__"));
+      if (0 != name.get() && PyUnicode_Check(name.get())) msg = PyUnicode_AsUTF8(name.get());
+    }
+    if (0 != value) {
+      PyRef text(PyObject_Str(value));
+      if (0 != text.get() && PyUnicode_Check(text.get()))
+        msg += std::string(msg.empty() ? "" : ": ") + PyUnicode_AsUTF8(text.get());
+    }
+    Py_XDECREF(type);
+    Py_XDECREF(value);
+    Py_XDECREF(traceback);
+    PyErr_Clear();
+    return msg.empty() ? std::string("unknown error") : msg;
+  }
+
 }
-
-PyObject * EP_CreateObject(PyObject * module, std::string className, std::string argTypes, va_list argsList){
-//    va_list argsList;
-//    va_start(argsList, argTypes);
-    PyObject *pclass, *pargs, *pinst;
-
-	pclass = PyObject_GetAttrString(module, className.c_str());
-	if (NULL == pclass){
-		std::string msg = "Can't get class " + className + " from module ";// + module->
-		error(msg);
-	}
-	pargs = Py_VaBuildValue(argTypes.c_str(),argsList);
-	if (NULL == pargs){
-		Py_DECREF(pclass);
-		error("Can't build argument list");
-	}
-
-	pinst = PyObject_CallObject(pclass,pargs);
-	Py_DECREF(pclass);
-	Py_DECREF(pargs);
-	if (NULL == pinst){
-		PyErr_Print();
-		std::string msg = "Error creating " + className + " object";
-		error(msg);
-	}
-	va_end(argsList);
-	return pinst;
-}
-
-PyObject * EP_CreateObject(PyObject * module, std::string className, std::string argTypes, ...){
-    va_list argsList;
-    va_start(argsList, argTypes);
-    PyObject *pinst;
-
-    pinst =  EP_CreateObject(module,className,argTypes,argsList);
-	va_end(argsList);
-	return pinst;
-}
-
-PyObject * EP_CreateObject(std::string moduleName, std::string className, std::string argTypes, ...){
-    va_list argsList;
-    va_start(argsList, argTypes);
-    PyObject *pmod, *pinst;
-
-    pmod = EP_LoadModule(moduleName);
-    pinst = EP_CreateObject(pmod,className,argTypes,argsList);
-
-	va_end(argsList);
-	return pinst;
-}
-
-PyObject * EP_CallMethod(PyObject * obj, std::string funcName, std::string argTypes, ...){
-    va_list argsList;
-    va_start(argsList, argTypes);
-    PyObject *pfunc, *pargs, *pres;
-
-	pfunc = PyObject_GetAttrString(obj, funcName.c_str());
-	if (NULL == pfunc)
-		error("Can't fetch " + funcName + " method");
-
-	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
-	if (NULL == pargs){
-		Py_DECREF(pfunc);
-		error("Can't build arguments list");
-	}
-
-	pres = PyObject_CallObject(pfunc, pargs);
-	Py_DECREF(pfunc);
-	Py_DECREF(pargs);
-	if(NULL == pres)
-		error("Error calling " + funcName + " method");
-
-    va_end(argsList);
-	return pres;
-}
-
-PyObject * EP_CallMethod(std::string moduleName, std::string funcName, std::string argTypes, ...){
-    va_list argsList;
-    va_start(argsList, argTypes);
-    PyObject *pfunc, *pargs, *pres;
-
-    PyObject * pmod = EP_LoadModule(moduleName);
-
-	pfunc = PyObject_GetAttrString(pmod, funcName.c_str());
-	if (NULL == pfunc)
-		error("Can't fetch " + funcName + " method");
-
-	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
-	if (NULL == pargs){
-		Py_DECREF(pfunc);
-		error("Can't build arguments list");
-	}
-
-	pres = PyObject_CallObject(pfunc, pargs);
-	Py_DECREF(pfunc);
-	Py_DECREF(pargs);
-	if(NULL == pres) {
-		PyErr_Print();
-		error("Error calling " + funcName + " method");
-	}
-
-    va_end(argsList);
-	return pres;
-}
-
-bool EP_IsType(PyObject *obj, std::string moduleName, std::string className){
-	PyObject *pmod, *pclass;
-
-	pmod = EP_LoadModule(moduleName);
-	pclass = PyObject_GetAttrString(pmod, className.c_str());
-	Py_DECREF(pmod);
-	if (NULL == pclass)
-		error("Can't get class from module");
-	bool result = PyObject_IsInstance(obj,pclass);
-	Py_DECREF(pclass);
-	return result;
-}
-
-PyObject * EP_GetMethod(PyObject * obj, std::string funcName){
-	PyObject * pfunc = PyObject_GetAttrString(obj, funcName.c_str());
-	if (NULL == pfunc)
-		error("Can't fetch " + funcName + " method");
-	return pfunc;
-}
-
-PyObject * EP_CallKWMethod(PyObject * obj, std::string funcName, PyObject *kwargs, std::string argTypes, ...){
-    va_list argsList;
-    va_start(argsList, argTypes);
-    PyObject *pfunc, *pargs, *pres;
-
-	pfunc = PyObject_GetAttrString(obj, funcName.c_str());
-	if (NULL == pfunc)
-		error("Can't fetch " + funcName + " method");
-
-	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
-	if (NULL == pargs){
-		Py_DECREF(pfunc);
-		error("Can't build arguments list");
-	}
-
-	pres = PyObject_Call(pfunc, pargs, kwargs);
-	Py_DECREF(pfunc);
-	Py_DECREF(pargs);
-	if(NULL == pres)
-		error("Error calling " + funcName + " method");
-
-    va_end(argsList);
-	return pres;
-}
-
-PyObject * EP_CallMethod(std::string moduleName, std::string funcName, PyObject *kwargs, std::string argTypes, ...){
-    va_list argsList;
-    va_start(argsList, argTypes);
-    PyObject *pfunc, *pargs, *pres;
-
-    PyObject * pmod = EP_LoadModule(moduleName);
-
-	pfunc = PyObject_GetAttrString(pmod, funcName.c_str());
-	if (NULL == pfunc)
-		error("Can't fetch " + funcName + " method");
-
-	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
-	if (NULL == pargs){
-		Py_DECREF(pfunc);
-		error("Can't build arguments list");
-	}
-
-	pres = PyObject_Call(pfunc, pargs, kwargs);
-	Py_DECREF(pfunc);
-	Py_DECREF(pargs);
-	if(NULL == pres) {
-		PyErr_Print();
-		error("Error calling " + funcName + " method");
-	}
-
-    va_end(argsList);
-	return pres;
-}
-
-PyObject * EP_CreateKWObject(std::string moduleName, std::string className, PyObject *kwargs, std::string argTypes, ...){
-    va_list argsList;
-    va_start(argsList, argTypes);
-    PyObject *pmod, *pclass, *pargs, *pinst;
-
-    pmod = EP_LoadModule(moduleName);
-	pclass = PyObject_GetAttrString(pmod, className.c_str());
-	if (NULL == pclass){
-		std::string msg = "Can't get class " + className + " from module ";// + module->
-		error(msg);
-	}
-	Py_DECREF(pmod);
-
-	pargs = Py_VaBuildValue(argTypes.c_str(),argsList);
-	if (NULL == pargs){
-		Py_DECREF(pclass);
-		error("Can't build argument list");
-	}
-
-	pinst = PyObject_Call(pclass,pargs,kwargs);
-	Py_DECREF(pclass);
-	Py_DECREF(pargs);
-	if (NULL == pinst){
-		PyErr_Print();
-		std::string msg = "Error creating " + className + " object";
-		error(msg);
-	}
-	va_end(argsList);
-	return pinst;
-}
-

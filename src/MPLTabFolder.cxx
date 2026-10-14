@@ -2,26 +2,28 @@
     \brief Implementation for MPLTabFolder class.
     \author Tom Stephens, HEASARC/GSSC
 */
-//#include <utility>
+#include "EmbedPython.h"
 
-//#include "TGFrame.h"
-//#include "TGTab.h"
+#include <utility>
 
 #include "MPLTabFolder.h"
-//#include "STGLayoutManager.h"
 
 #include "st_graph/Engine.h"
 #include "st_graph/MPLFrame.h"
 
 namespace st_graph {
 
-  MPLTabFolder::MPLTabFolder(MPLFrame * parent, IEventReceiver * receiver): m_tab(), m_frame(0),// m_tg_tab(0),
-    m_receiver(receiver) {
-//    TGFrame * tg_parent = parent->getTGFrame();
-//    m_tg_tab = new TGTab(tg_parent, 10, 10);
-//
-//    m_frame = new RootFrame(parent, 0, m_tg_tab);
-//    m_frame->setName("tab folder");
+  MPLTabFolder::MPLTabFolder(MPLFrame * parent, IEventReceiver * receiver): m_tab(), m_frame(0), m_receiver(receiver) {
+    // The frame is owned by the parent, which will delete it.
+    m_frame = new MPLFrame(parent, 0, 0);
+    m_frame->setName("tab folder");
+    try {
+      PyRef callback(m_frame->createCallback());
+      m_frame->setPythonFrame(EP_CallHelper("TabFolder", "(OO)", parent->getPythonFrame(), callback.get()));
+    } catch (...) {
+      delete m_frame;
+      throw;
+    }
   }
 
   MPLTabFolder::~MPLTabFolder() {}
@@ -29,59 +31,53 @@ namespace st_graph {
   IFrame * MPLTabFolder::addTab(const std::string & label) {
     IFrame * frame = getTab(label);
 
-//    if (0 == frame) {
-//      // Use AddTab to create a new tab area. This connects the Root TGFrame objects correctly.
-//      TGCompositeFrame * tab = m_tg_tab->AddTab(label.c_str());
-//
-//      // Create a RootFrame with NULL TGFrame pointer, to prevent calling parent->addFrame().
-//      // The tab above will be assigned to the RootFrame below.
-//      RootFrame * root_frame = new RootFrame(m_frame, m_receiver, 0);
-//
-//      root_frame->setName("tab " + label);
-//
-//      // Give tab_frame possession of the Root TGTab widget. This simply assigns the pointer.
-//      root_frame->setTGFrame(tab);
-//
-//      // Have composite frame use the event receiver for all layouts.
-//      if (0 != m_receiver) tab->SetLayoutManager(new STGLayoutManager(m_receiver, root_frame, tab));
-//
-//      // Keep track of tabs so that they can be obtained again later.
-//      m_tab.insert(std::make_pair(label, root_frame));
-//
-//      frame = root_frame;
-//    }
-//
+    if (0 == frame) {
+      // Create a frame for the new tabbed sheet; it is owned by the tab folder frame.
+      MPLFrame * tab_frame = new MPLFrame(m_frame, m_receiver, 0);
+      tab_frame->setName("tab " + label);
+      tab_frame->setContainer();
+      try {
+        PyRef callback(tab_frame->createCallback());
+        tab_frame->setPythonFrame(EP_CallMethod(m_frame->getPythonFrame(), "add_page", "(sO)", label.c_str(),
+          callback.get()));
+      } catch (...) {
+        delete tab_frame;
+        throw;
+      }
+
+      // Keep track of tabs so that they can be obtained again later.
+      m_tab.insert(std::make_pair(label, tab_frame));
+
+      frame = tab_frame;
+    }
+
     return frame;
   }
 
   IFrame * MPLTabFolder::getTab(const std::string & label) {
     IFrame * frame = 0;
-//    std::map<std::string, IFrame *>::iterator itor = m_tab.find(label);
-//    if (m_tab.end() != itor) frame = itor->second;
+    std::map<std::string, IFrame *>::iterator itor = m_tab.find(label);
+    if (m_tab.end() != itor) frame = itor->second;
     return frame;
   }
 
   IFrame * MPLTabFolder::getFrame() { return m_frame; }
 
   std::string MPLTabFolder::getSelected() const {
-	return NULL;//m_tg_tab->GetCurrentTab()->GetString();
+    PyRef selected(EP_CallMethod(m_frame->getPythonFrame(), "selected", "()"));
+    return EP_AsString(selected.get());
   }
 
   void MPLTabFolder::select(IFrame * tab) {
-//    int num_tabs = m_tg_tab->GetNumberOfTabs();
-//    // Look through container for string associated with this tab.
-//    for (std::map<std::string, IFrame *>::iterator itor = m_tab.begin(); itor != m_tab.end(); ++itor) {
-//      if (itor->second == tab) {
-//        // Look through Root's set of tabs to find the number of the tab with this string.
-//        for (int idx = 0; idx != num_tabs; ++idx) {
-//          if (m_tg_tab->GetTabTab(idx)->GetString() == itor->first) {
-//            m_tg_tab->SetTab(idx);
-//            break;
-//          }
-//        }
-//        break;
-//      }
-//    }
+    // Make sure this tab belongs to this folder.
+    for (std::map<std::string, IFrame *>::iterator itor = m_tab.begin(); itor != m_tab.end(); ++itor) {
+      if (itor->second == tab) {
+        MPLFrame * tab_frame = dynamic_cast<MPLFrame *>(tab);
+        if (0 != tab_frame)
+          PyRef result(EP_CallMethod(m_frame->getPythonFrame(), "select_page", "(O)", tab_frame->getPythonFrame()));
+        break;
+      }
+    }
   }
 
   void MPLTabFolder::getTabCont(std::map<std::string, IFrame *> & tab_cont) {
