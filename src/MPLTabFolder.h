@@ -58,7 +58,6 @@ namespace st_graph {
     private:
       std::map<std::string, IFrame *> m_tab;
       MPLFrame * m_frame;
-//      TGTab * m_tg_tab;
       IEventReceiver * m_receiver;
   };
 

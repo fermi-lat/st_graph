@@ -5,16 +5,28 @@
 
     \section intro Introduction
     The st_graph package provides rudimentary plotting capabilities
-    using Root for its underlying graphics engine. The first version
-    of st_graph is deliberately underpowered and oversimplified. The
-    hope is to get developers started with plotting so that actual
-    use cases can drive further development.
+    and simple GUI widgets. The graphics engine (MPLEngine) is
+    implemented with matplotlib and Tk, through an embedded Python
+    interpreter; the Python side lives in the st_graph_tk module.
+    The original Root implementation (RootEngine and related classes)
+    remains in the source tree but is no longer built.
 
     \section info Information For Clients
     Basically two steps are needed to produce a plot using st_graph.
-    First, a graphics engine which encapsulates Root's main application
+    First, a graphics engine which encapsulates the main application
     event loop is created. This engine also functions as an abstract
     factory for the creation of plots.
+
+    In 2d plots, markers may be dragged with the mouse (the new positions
+    are available from IPlot::getMarkers), dragging with the left button
+    zooms the X axis (double-click restores it), and the right button
+    sends IEventReceiver::rightClicked with the data coordinates.
+
+    If no display is available the engine cannot be initialized, and
+    methods which create graphical objects throw std::runtime_error.
+    For automated tests, setting ST_GRAPH_AUTO_CLOSE_MS makes each
+    Engine::run() return after that many milliseconds, and setting
+    ST_GRAPH_SNAPSHOT_DIR saves a PNG image of every plot drawn.
 
     \subsection sample Sample Code
     Note this example uses an older class (PlotHist) which is deprecated and
