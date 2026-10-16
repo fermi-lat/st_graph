@@ -32,8 +32,8 @@ namespace {
           \param x The first dimension being plotted, giving the bin definitions.
           \param y The second dimension being plotted, giving the bin values.
       */
-      virtual IPlot * createPlot(const std::string & title, unsigned int /* width */, unsigned int /* height */,
-        const std::string & /* style */, const ISequence & /* x */, const ISequence & /* y */) {
+      virtual auto createPlot(const std::string & title, unsigned int /* width */, unsigned int /* height */,
+        const std::string & /* style */, const ISequence & /* x */, const ISequence & /* y */) -> IPlot * {
         throw std::runtime_error("Cannot create plot " + title + "; graphical functions disabled.");
         return 0;
       }
@@ -47,9 +47,9 @@ namespace {
           \param y The second dimension being plotted, giving the y bin definitions.
           \param z The third dimension being plotted.
       */
-      virtual IPlot * createPlot(const std::string & title, unsigned int /* width */, unsigned int /* height */,
+      virtual auto createPlot(const std::string & title, unsigned int /* width */, unsigned int /* height */,
         const std::string & /* style */, const ISequence & /* x */, const ISequence & /* y */,
-        const std::vector<std::vector<double> > & /* z */) {
+        const std::vector<std::vector<double> > & /* z */) -> IPlot * {
         throw std::runtime_error("Cannot create plot " + title + "; graphical functions disabled.");
         return 0;
       }
@@ -60,8 +60,8 @@ namespace {
           \param height The height of the window.
           \param title The title to display on the window.
       */
-      virtual IFrame * createMainFrame(IEventReceiver * /* receiver */, unsigned int /* width */, unsigned int /* height */,
-        const std::string & title = "") {
+      virtual auto createMainFrame(IEventReceiver * /* receiver */, unsigned int /* width */, unsigned int /* height */,
+        const std::string & title = "") -> IFrame * {
         throw std::runtime_error("Cannot create graphical main frame; graphical functions disabled.");
         return 0;
       }
@@ -74,8 +74,8 @@ namespace {
           \param x The first dimension being plotted.
           \param y The second dimension being plotted.
       */
-      virtual IPlot * createPlot(IFrame * /* parent */, const std::string & style, const ISequence & /* x */,
-        const ISequence & /* y */) {
+      virtual auto createPlot(IFrame * /* parent */, const std::string & style, const ISequence & /* x */,
+        const ISequence & /* y */) -> IPlot * {
         throw std::runtime_error("Cannot create " + style + " plot; graphical functions disabled.");
         return 0;
       }
@@ -88,8 +88,8 @@ namespace {
           \param y The second dimension being plotted.
           \param z The third dimension being plotted.
       */
-      virtual IPlot * createPlot(IFrame * /* parent */, const std::string & style, const ISequence & /* x */,
-        const ISequence & /* y */, const std::vector<std::vector<double> > & /* z */) {
+      virtual auto createPlot(IFrame * /* parent */, const std::string & style, const ISequence & /* x */,
+        const ISequence & /* y */, const std::vector<std::vector<double> > & /* z */) -> IPlot * {
         throw std::runtime_error("Cannot create " + style + " plot; graphical functions disabled.");
         return 0;
       }
@@ -100,8 +100,8 @@ namespace {
           \param width The width of the frame in pixels.
           \param height The height of the frame in pixels.
       */
-      virtual IFrame * createPlotFrame(IFrame * /* parent */, const std::string & title, unsigned int /* width */,
-        unsigned int /* height */) {
+      virtual auto createPlotFrame(IFrame * /* parent */, const std::string & title, unsigned int /* width */,
+        unsigned int /* height */) -> IFrame * {
         throw std::runtime_error("Cannot create plotting frame " + title + "; graphical functions disabled.");
         return 0;
       }
@@ -112,39 +112,39 @@ namespace {
           \param style The style of button, e.g. text, radio, etc.
           \param label The label appearing on the button.
       */
-      virtual IFrame * createButton(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & style,
-        const std::string & /* text */) {
+      virtual auto createButton(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & style,
+        const std::string & /* text */) -> IFrame * {
         throw std::runtime_error("Cannot create " + style + " button; graphical functions disabled.");
         return 0;
       }
 
-      virtual IFrame * createLabel(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & label) {
+      virtual auto createLabel(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & label) -> IFrame * {
         throw std::runtime_error("Cannot create label " + label + "; graphical functions disabled.");
         return 0;
       }
 
-      virtual IFrame * createTextEntry(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & content) {
+      virtual auto createTextEntry(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & content) -> IFrame * {
         throw std::runtime_error("Cannot create text entry widget " + content + "; graphical functions disabled.");
         return 0;
       }
 
-      virtual IFrame * createComposite(IFrame * /* parent */, IEventReceiver * /* receiver */) {
+      virtual auto createComposite(IFrame * /* parent */, IEventReceiver * /* receiver */) -> IFrame * {
         throw std::runtime_error("Cannot create composite frame; graphical functions disabled.");
         return 0;
       }
 
-      virtual IFrame * createGroupFrame(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & label) {
+      virtual auto createGroupFrame(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & label) -> IFrame * {
         throw std::runtime_error("Cannot create group frame " + label + "; graphical functions disabled.");
         return 0;
       }
 
-      virtual ITabFolder * createTabFolder(IFrame * /* parent */, IEventReceiver * /* receiver */) {
+      virtual auto createTabFolder(IFrame * /* parent */, IEventReceiver * /* receiver */) -> ITabFolder * {
         throw std::runtime_error("Cannot create tab folder; graphical functions disabled.");
         return 0;
       }
 
-      virtual std::string fileDialog(IFrame * /* parent */, const std::string & /* initial_file_name */,
-        const std::string & style = "open") {
+      virtual auto fileDialog(IFrame * /* parent */, const std::string & /* initial_file_name */,
+        const std::string & style = "open") -> std::string {
         throw std::runtime_error("Cannot create file dialog box; graphical functions disabled.");
         return 0;
       }
@@ -163,7 +163,7 @@ namespace st_graph {
 
   Engine::~Engine() {}
 
-  Engine & Engine::instance() {
+  auto Engine::instance() -> Engine & {
 #ifdef ROOT_PLOTTING
     static RootEngine s_engine;
 #else

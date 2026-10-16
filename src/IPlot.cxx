@@ -6,7 +6,7 @@
 
 namespace st_graph {
 
-  int Color::nextColor(int current_color) {
+  auto Color::nextColor(int current_color) -> int {
     // Go to the next number in sequence.
     ++current_color;
 

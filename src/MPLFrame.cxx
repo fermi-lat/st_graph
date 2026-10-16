@@ -15,7 +15,7 @@
 
 namespace st_graph {
 
-  MPLFrame * MPLFrame::ancestor() {
+  auto MPLFrame::ancestor() -> MPLFrame * {
     static MPLFrame s_ancestor;
     return &s_ancestor;
   }
@@ -104,7 +104,7 @@ namespace st_graph {
       (*itor)->unDisplay();
   }
 
-  bool MPLFrame::isHidden() const { return m_hidden; }
+  auto MPLFrame::isHidden() const -> bool { return m_hidden; }
 
   void MPLFrame::setHidden(bool hidden) { m_hidden = hidden; }
 
@@ -160,7 +160,7 @@ namespace st_graph {
     frame_cont.assign(m_subframes.begin(), m_subframes.end());
   }
 
-  const std::string & MPLFrame::getState() const {
+  auto MPLFrame::getState() const -> const std::string & {
     for (bool one_time_only = true; one_time_only ; one_time_only = false) {
       m_state.clear();
         if (EP_IsType(m_frame,"tkinter","Button")){
@@ -225,7 +225,7 @@ namespace st_graph {
   }
 
   /// \brief Get the horizontal center of the frame.
-  long MPLFrame::getHCenter() const {
+  auto MPLFrame::getHCenter() const -> long {
     long center = 0;
 //    if (0 != m_frame) {
 //      // Computation designed to minimize round-off error.
@@ -248,7 +248,7 @@ namespace st_graph {
 //    }
   }
 
-  long MPLFrame::getVCenter() const {
+  auto MPLFrame::getVCenter() const -> long {
     long center = 0;
 //    if (0 != m_frame) {
 //      // Computation designed to minimize round-off error.
@@ -272,7 +272,7 @@ namespace st_graph {
 //    }
   }
 
-  long MPLFrame::getL() const {
+  auto MPLFrame::getL() const -> long {
     long l = 0;
 //    if (0 != m_frame) l = m_frame->GetX();
 //    if (0 != m_parent) l += m_parent->getL(); // Convert to absolute coordinates.
@@ -287,7 +287,7 @@ namespace st_graph {
 //    }
   }
 
-  long MPLFrame::getR() const {
+  auto MPLFrame::getR() const -> long {
     long r = 0;
 //    if (0 != m_frame) r = m_frame->GetX() + m_frame->GetWidth();
 //    if (0 != m_parent) r += m_parent->getL(); // Convert to absolute coordinates.
@@ -303,7 +303,7 @@ namespace st_graph {
 //    }
   }
 
-  long MPLFrame::getT() const {
+  auto MPLFrame::getT() const -> long {
     long t = 0;
 //    if (0 != m_frame) t = m_frame->GetY();
 //    if (0 != m_parent) t += m_parent->getT(); // Convert to absolute coordinates.
@@ -318,7 +318,7 @@ namespace st_graph {
 //    }
   }
 
-  long MPLFrame::getB() const {
+  auto MPLFrame::getB() const -> long {
     long b = 0;
 //    if (0 != m_frame) b = m_frame->GetY() + m_frame->GetHeight();
 //    if (0 != m_parent) b += m_parent->getT(); // Convert to absolute coordinates.
@@ -334,7 +334,7 @@ namespace st_graph {
 //    }
   }
 
-  long MPLFrame::getWidth() const {
+  auto MPLFrame::getWidth() const -> long {
     long width = 0;
 //    if (0 != m_frame) width = m_frame->GetWidth();
     return width;
@@ -347,7 +347,7 @@ namespace st_graph {
     }
   }
 
-  long MPLFrame::getHeight() const {
+  auto MPLFrame::getHeight() const -> long {
     long height = 0;
 //    if (0 != m_frame) height = m_frame->GetHeight();
     return height;
@@ -360,11 +360,11 @@ namespace st_graph {
     }
   }
 
-  long MPLFrame::getMinimumWidth() const { return m_minimum_width; }
+  auto MPLFrame::getMinimumWidth() const -> long { return m_minimum_width; }
 
   void MPLFrame::setMinimumWidth(long width) { m_minimum_width = width > 0 ? width : 0; }
 
-  long MPLFrame::getMinimumHeight() const { return m_minimum_height; }
+  auto MPLFrame::getMinimumHeight() const -> long { return m_minimum_height; }
 
   void MPLFrame::setMinimumHeight(long height) { m_minimum_height = height > 0 ? height : 0; }
 
@@ -380,11 +380,11 @@ namespace st_graph {
 //    if (0 != m_receiver) m_receiver->modified(this, text);
 //  }
 
-  PyObject * MPLFrame::getPythonFrame() { return m_frame; }
+  auto MPLFrame::getPythonFrame() -> PyObject * { return m_frame; }
 
 //  void MPLFrame::setTGFrame(TGFrame * frame) { m_frame = frame; }
 
-  IEventReceiver * MPLFrame::getReceiver() { return m_receiver; }
+  auto MPLFrame::getReceiver() -> IEventReceiver * { return m_receiver; }
 
 //  void MPLFrame::setLayoutBroken(TGFrame * frame) {
 //    frame->SetLayoutBroken(kFALSE);

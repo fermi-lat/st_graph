@@ -214,13 +214,13 @@ namespace st_graph {
   	Py_DECREF(axes);
   }
 
-  const std::string & MPLPlotFrame::getTitle() const {
+  auto MPLPlotFrame::getTitle() const -> const std::string & {
     return m_title;
   }
 
-  std::vector<Axis> & MPLPlotFrame::getAxes() { return m_axes; }
+  auto MPLPlotFrame::getAxes() -> std::vector<Axis> & { return m_axes; }
 
-  const std::vector<Axis> & MPLPlotFrame::getAxes() const { return m_axes; }
+  auto MPLPlotFrame::getAxes() const -> const std::vector<Axis> & { return m_axes; }
 
   void MPLPlotFrame::display2d() {
 //	  std::cout << "display2D() for " << m_title << std::endl;
@@ -275,7 +275,7 @@ namespace st_graph {
 
   }
 
-  PyObject * MPLPlotFrame::createHistPlot(const ISequence & x, const ISequence & y,std::string format) {
+  auto MPLPlotFrame::createHistPlot(const ISequence & x, const ISequence & y,std::string format) -> PyObject * {
     PyObject * retval = 0;
 //	std::cout << "createHistPlot() for " << m_title << std::endl;
 
@@ -362,7 +362,7 @@ namespace st_graph {
     return retval;
   }
 
-  PyObject * MPLPlotFrame::createScatterPlot(const ISequence & x, const ISequence & y,std::string format) {
+  auto MPLPlotFrame::createScatterPlot(const ISequence & x, const ISequence & y,std::string format) -> PyObject * {
     PyObject * retval = 0;
 //	std::cout << "createScatterPlot() for " << m_title << std::endl;
     // Get arrays of values.
@@ -430,8 +430,8 @@ namespace st_graph {
     return retval;
   }
 
-  PyObject * MPLPlotFrame::createHistPlot2D(const std::string & root_name, const ISequence & x, const ISequence & y,
-    const std::vector<std::vector<double> > & z) {
+  auto MPLPlotFrame::createHistPlot2D(const std::string & root_name, const ISequence & x, const ISequence & y,
+    const std::vector<std::vector<double> > & z) -> PyObject * {
 
     typedef std::vector<double> Vec_t;
 //	std::cout << "createHistPlot2D() for " << m_title << std::endl;
@@ -513,7 +513,7 @@ namespace st_graph {
     return hist;
   }
 
-  std::string MPLPlotFrame::createRootName(const std::string & prefix, void * ptr) const {
+  auto MPLPlotFrame::createRootName(const std::string & prefix, void * ptr) const -> std::string {
     // The root name of the object (by which it may be looked up) is its address, converted
     // to a string. This should prevent collisions.
     std::ostringstream os;
@@ -522,7 +522,7 @@ namespace st_graph {
   }
 
 
-  std::string MPLPlotFrame::generateFormatString(MPLPlot * plot) const {
+  auto MPLPlotFrame::generateFormatString(MPLPlot * plot) const -> std::string {
     std::ostringstream os;
 
     os << getColorString(plot->getLineColor());
@@ -547,7 +547,7 @@ namespace st_graph {
     return os.str();
   }
 
-  std::string MPLPlotFrame::getColorString(int color) const{
+  auto MPLPlotFrame::getColorString(int color) const -> std::string{
 	  std::ostringstream os;
 	  switch(color){
 	  case Color::eWhite:

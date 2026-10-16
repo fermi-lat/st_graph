@@ -78,20 +78,20 @@ namespace st_graph {
     if (m_delete_parent) delete parent;
   }
 
-  const std::vector<const ISequence *> MPLPlot::getSequences() const {
+  auto MPLPlot::getSequences() const -> const std::vector<const ISequence *> {
 	  return m_seq_cont;
   }
 
-  const std::vector<std::vector<double> > & MPLPlot::getZData() const {
+  auto MPLPlot::getZData() const -> const std::vector<std::vector<double> > & {
     if (0 == m_z_data) throw std::logic_error("MPLPlot::getZData() called for a plot which has null Z data");
     return *m_z_data;
   }
 
-  std::vector<Axis> & MPLPlot::getAxes() {
+  auto MPLPlot::getAxes() -> std::vector<Axis> & {
 	  return m_parent->getAxes();
   }
 
-  const std::vector<Axis> & MPLPlot::getAxes() const {
+  auto MPLPlot::getAxes() const -> const std::vector<Axis> & {
 	  return m_parent->getAxes();
   }
 
@@ -104,21 +104,21 @@ namespace st_graph {
     labels.assign(m_label.begin(), m_label.end());
   }
 
-  std::vector<Marker> & MPLPlot::getMarkers() { return m_label; }
+  auto MPLPlot::getMarkers() -> std::vector<Marker> & { return m_label; }
 
-  int MPLPlot::getLineColor() const { return m_line_color; }
+  auto MPLPlot::getLineColor() const -> int { return m_line_color; }
 
   void MPLPlot::setLineColor(int color) { m_line_color = color; }
 
-  std::string MPLPlot::getLineStyle() const { return m_line_style; }
+  auto MPLPlot::getLineStyle() const -> std::string { return m_line_style; }
 
   void MPLPlot::setLineStyle(const std::string & style) { m_line_style = style; }
 
-  std::string MPLPlot::getCurveType() const { return m_curve_type; }
+  auto MPLPlot::getCurveType() const -> std::string { return m_curve_type; }
 
   void MPLPlot::setCurveType(const std::string & type) { m_curve_type = type; }
 
-  const std::string & MPLPlot::getStyle() const { return m_style; }
+  auto MPLPlot::getStyle() const -> const std::string & { return m_style; }
 
   void MPLPlot::setStyle(const std::string & style) {
     m_style = style;

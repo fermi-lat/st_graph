@@ -62,7 +62,7 @@ class StGraphTestApp {
     void reportUnexpected(const std::string & text) const;
 
     /// \brief Return 0 if no errors occurred, 1 otherwise.
-    int status() const { return int(m_failed); }
+    auto status() const -> int { return int(m_failed); }
 
   protected:
     void testSequence(const st_graph::ISequence & iseq, const std::string & test_name, const double * value,
@@ -646,7 +646,7 @@ void StGraphTestApp::reportUnexpected(const std::string & text) const {
   std::cerr << "Unexpected: " << text << std::endl;
 }
 
-int main(int argc, char ** argv) {
+auto main(int argc, char ** argv) -> int {
 
 #ifdef BUILD_WITHOUT_ROOT
 	Py_Initialize();

@@ -12,11 +12,11 @@
 
 #define error(msg) do {std::cout << msg << std::endl; exit(1); } while (1)
 
-int EP_Init(){
+auto EP_Init() -> int{
 	return 0;
 }
 
-PyObject * EP_LoadModule(std::string name){
+auto EP_LoadModule(std::string name) -> PyObject *{
 	PyObject *pmod;
 	Py_Initialize();
 	pmod = PyImport_ImportModule(name.c_str());
@@ -27,7 +27,7 @@ PyObject * EP_LoadModule(std::string name){
 	return pmod;
 }
 
-PyObject * EP_CreateObject(PyObject * module, std::string className, std::string argTypes, va_list argsList){
+auto EP_CreateObject(PyObject * module, std::string className, std::string argTypes, va_list argsList) -> PyObject *{
 //    va_list argsList;
 //    va_start(argsList, argTypes);
     PyObject *pclass, *pargs, *pinst;
@@ -55,7 +55,7 @@ PyObject * EP_CreateObject(PyObject * module, std::string className, std::string
 	return pinst;
 }
 
-PyObject * EP_CreateObject(PyObject * module, std::string className, std::string argTypes, ...){
+auto EP_CreateObject(PyObject * module, std::string className, std::string argTypes, ...) -> PyObject *{
     va_list argsList;
     va_start(argsList, argTypes);
     PyObject *pinst;
@@ -65,7 +65,7 @@ PyObject * EP_CreateObject(PyObject * module, std::string className, std::string
 	return pinst;
 }
 
-PyObject * EP_CreateObject(std::string moduleName, std::string className, std::string argTypes, ...){
+auto EP_CreateObject(std::string moduleName, std::string className, std::string argTypes, ...) -> PyObject *{
     va_list argsList;
     va_start(argsList, argTypes);
     PyObject *pmod, *pinst;
@@ -77,7 +77,7 @@ PyObject * EP_CreateObject(std::string moduleName, std::string className, std::s
 	return pinst;
 }
 
-PyObject * EP_CallMethod(PyObject * obj, std::string funcName, std::string argTypes, ...){
+auto EP_CallMethod(PyObject * obj, std::string funcName, std::string argTypes, ...) -> PyObject *{
     va_list argsList;
     va_start(argsList, argTypes);
     PyObject *pfunc, *pargs, *pres;
@@ -102,7 +102,7 @@ PyObject * EP_CallMethod(PyObject * obj, std::string funcName, std::string argTy
 	return pres;
 }
 
-PyObject * EP_CallMethod(std::string moduleName, std::string funcName, std::string argTypes, ...){
+auto EP_CallMethod(std::string moduleName, std::string funcName, std::string argTypes, ...) -> PyObject *{
     va_list argsList;
     va_start(argsList, argTypes);
     PyObject *pfunc, *pargs, *pres;
@@ -131,7 +131,7 @@ PyObject * EP_CallMethod(std::string moduleName, std::string funcName, std::stri
 	return pres;
 }
 
-bool EP_IsType(PyObject *obj, std::string moduleName, std::string className){
+auto EP_IsType(PyObject *obj, std::string moduleName, std::string className) -> bool{
 	PyObject *pmod, *pclass;
 
 	pmod = EP_LoadModule(moduleName);
@@ -144,14 +144,14 @@ bool EP_IsType(PyObject *obj, std::string moduleName, std::string className){
 	return result;
 }
 
-PyObject * EP_GetMethod(PyObject * obj, std::string funcName){
+auto EP_GetMethod(PyObject * obj, std::string funcName) -> PyObject *{
 	PyObject * pfunc = PyObject_GetAttrString(obj, funcName.c_str());
 	if (NULL == pfunc)
 		error("Can't fetch " + funcName + " method");
 	return pfunc;
 }
 
-PyObject * EP_CallKWMethod(PyObject * obj, std::string funcName, PyObject *kwargs, std::string argTypes, ...){
+auto EP_CallKWMethod(PyObject * obj, std::string funcName, PyObject *kwargs, std::string argTypes, ...) -> PyObject *{
     va_list argsList;
     va_start(argsList, argTypes);
     PyObject *pfunc, *pargs, *pres;
@@ -176,7 +176,7 @@ PyObject * EP_CallKWMethod(PyObject * obj, std::string funcName, PyObject *kwarg
 	return pres;
 }
 
-PyObject * EP_CallMethod(std::string moduleName, std::string funcName, PyObject *kwargs, std::string argTypes, ...){
+auto EP_CallMethod(std::string moduleName, std::string funcName, PyObject *kwargs, std::string argTypes, ...) -> PyObject *{
     va_list argsList;
     va_start(argsList, argTypes);
     PyObject *pfunc, *pargs, *pres;
@@ -205,7 +205,7 @@ PyObject * EP_CallMethod(std::string moduleName, std::string funcName, PyObject 
 	return pres;
 }
 
-PyObject * EP_CreateKWObject(std::string moduleName, std::string className, PyObject *kwargs, std::string argTypes, ...){
+auto EP_CreateKWObject(std::string moduleName, std::string className, PyObject *kwargs, std::string argTypes, ...) -> PyObject *{
     va_list argsList;
     va_start(argsList, argTypes);
     PyObject *pmod, *pclass, *pargs, *pinst;

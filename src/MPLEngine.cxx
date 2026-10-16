@@ -90,8 +90,8 @@ namespace st_graph {
     EP_CallMethod(MPLFrame::ancestor()->getPythonFrame(),"destroy","()");
   }
 
-  IFrame * MPLEngine::createMainFrame(IEventReceiver * receiver, unsigned int width, unsigned int height,
-    const std::string & title) {
+  auto MPLEngine::createMainFrame(IEventReceiver * receiver, unsigned int width, unsigned int height,
+    const std::string & title) -> IFrame * {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createMainFrame: graphical environment not initialized");
 
     // If client did not supply a receiver, use the default one.
@@ -124,8 +124,8 @@ namespace st_graph {
     return frame;
   }
 
-  IPlot * MPLEngine::createPlot(const std::string & title, unsigned int width, unsigned int height, const std::string & style,
-    const ISequence & x, const ISequence & y) {
+  auto MPLEngine::createPlot(const std::string & title, unsigned int width, unsigned int height, const std::string & style,
+    const ISequence & x, const ISequence & y) -> IPlot * {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createPlot: graphical environment not initialized");
 
     // Create parent main frame.
@@ -138,8 +138,8 @@ namespace st_graph {
     return new MPLPlot(pf, style, x, y, true);
   }
 
-  IPlot * MPLEngine::createPlot(const std::string & title, unsigned int width, unsigned int height, const std::string & style,
-    const ISequence & x, const ISequence & y, const std::vector<std::vector<double> > & z) {
+  auto MPLEngine::createPlot(const std::string & title, unsigned int width, unsigned int height, const std::string & style,
+    const ISequence & x, const ISequence & y, const std::vector<std::vector<double> > & z) -> IPlot * {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createPlot: graphical environment not initialized");
 
     // Create parent main frame.
@@ -152,27 +152,27 @@ namespace st_graph {
     return new MPLPlot(pf, style, x, y, z, true);
   }
 
-  IPlot * MPLEngine::createPlot(IFrame * parent, const std::string & style, const ISequence & x, const ISequence & y) {
+  auto MPLEngine::createPlot(IFrame * parent, const std::string & style, const ISequence & x, const ISequence & y) -> IPlot * {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createPlot: graphical environment not initialized");
 
     return new MPLPlot(parent, style, x, y);
   }
 
-  IPlot * MPLEngine::createPlot(IFrame * parent, const std::string & style, const ISequence & x, const ISequence & y,
-    const std::vector<std::vector<double> > & z) {
+  auto MPLEngine::createPlot(IFrame * parent, const std::string & style, const ISequence & x, const ISequence & y,
+    const std::vector<std::vector<double> > & z) -> IPlot * {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createPlot: graphical environment not initialized");
 
     return new MPLPlot(parent, style, x, y, z);
   }
 
-  IFrame * MPLEngine::createPlotFrame(IFrame * parent, const std::string & title, unsigned int width, unsigned int height) {
+  auto MPLEngine::createPlotFrame(IFrame * parent, const std::string & title, unsigned int width, unsigned int height) -> IFrame * {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createPlotFrame: graphical environment not initialized");
 
     return new MPLPlotFrame(parent, title, width, height);
   }
 
-  IFrame * MPLEngine::createButton(IFrame * parent, IEventReceiver * receiver, const std::string & style,
-    const std::string & label) {
+  auto MPLEngine::createButton(IFrame * parent, IEventReceiver * receiver, const std::string & style,
+    const std::string & label) -> IFrame * {
 	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
 	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
 //    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createButton: graphical environment not initialized");
@@ -207,7 +207,7 @@ namespace st_graph {
     return NULL;//frame;
   }
 
-  IFrame * MPLEngine::createLabel(IFrame * parent, IEventReceiver * receiver, const std::string & text) {
+  auto MPLEngine::createLabel(IFrame * parent, IEventReceiver * receiver, const std::string & text) -> IFrame * {
 	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
 	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
 //    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createLabel: graphical environment not initialized");
@@ -227,7 +227,7 @@ namespace st_graph {
     return NULL;//frame;
   }
 
-  IFrame * MPLEngine::createTextEntry(IFrame * parent, IEventReceiver * receiver, const std::string & content) {
+  auto MPLEngine::createTextEntry(IFrame * parent, IEventReceiver * receiver, const std::string & content) -> IFrame * {
 	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
 	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
 //    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createTextEntry: graphical environment not initialized");
@@ -248,7 +248,7 @@ namespace st_graph {
     return NULL;// frame;
   }
 
-  IFrame * MPLEngine::createComposite(IFrame * parent, IEventReceiver * receiver) {
+  auto MPLEngine::createComposite(IFrame * parent, IEventReceiver * receiver) -> IFrame * {
 	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
 	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
 //    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createComposite: graphical environment not initialized");
@@ -269,7 +269,7 @@ namespace st_graph {
     return NULL;// frame;
   }
 
-  IFrame * MPLEngine::createGroupFrame(IFrame * parent, IEventReceiver * receiver, const std::string & label) {
+  auto MPLEngine::createGroupFrame(IFrame * parent, IEventReceiver * receiver, const std::string & label) -> IFrame * {
 	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
 	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
 //    if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createGroupFrame: graphical environment not initialized");
@@ -290,7 +290,7 @@ namespace st_graph {
     return NULL;//frame;
   }
 
-  ITabFolder * MPLEngine::createTabFolder(IFrame * parent, IEventReceiver * receiver) {
+  auto MPLEngine::createTabFolder(IFrame * parent, IEventReceiver * receiver) -> ITabFolder * {
 	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
 	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createTabFolder: graphical environment not initialized");
@@ -304,7 +304,7 @@ namespace st_graph {
     return folder;
   }
 
-  std::string MPLEngine::fileDialog(IFrame *, const std::string & initial_file_name, const std::string & style) {
+  auto MPLEngine::fileDialog(IFrame *, const std::string & initial_file_name, const std::string & style) -> std::string {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::fileDialog: graphical environment not initialized");
 	  // this is used for the GUI functionality which is not implemented in they Python version so let the user know
 	  throw std::runtime_error("GUI capabilities not implemented in this version of the Science Tools");

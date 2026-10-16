@@ -26,7 +26,7 @@ namespace st_graph {
 
   MPLTabFolder::~MPLTabFolder() {}
 
-  IFrame * MPLTabFolder::addTab(const std::string & label) {
+  auto MPLTabFolder::addTab(const std::string & label) -> IFrame * {
     IFrame * frame = getTab(label);
 
 //    if (0 == frame) {
@@ -54,16 +54,16 @@ namespace st_graph {
     return frame;
   }
 
-  IFrame * MPLTabFolder::getTab(const std::string & label) {
+  auto MPLTabFolder::getTab(const std::string & label) -> IFrame * {
     IFrame * frame = 0;
 //    std::map<std::string, IFrame *>::iterator itor = m_tab.find(label);
 //    if (m_tab.end() != itor) frame = itor->second;
     return frame;
   }
 
-  IFrame * MPLTabFolder::getFrame() { return m_frame; }
+  auto MPLTabFolder::getFrame() -> IFrame * { return m_frame; }
 
-  std::string MPLTabFolder::getSelected() const {
+  auto MPLTabFolder::getSelected() const -> std::string {
 	return NULL;//m_tg_tab->GetCurrentTab()->GetString();
   }
 

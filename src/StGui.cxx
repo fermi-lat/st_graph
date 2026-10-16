@@ -149,13 +149,13 @@ namespace st_graph {
 
   ParWidget::operator IFrame * () { return getFrame(); }
 
-  IFrame * ParWidget::getFrame () { return m_frame; }
+  auto ParWidget::getFrame () -> IFrame * { return m_frame; }
 
-  IFrame * ParWidget::getLabel() { return m_label; }
+  auto ParWidget::getLabel() -> IFrame * { return m_label; }
 
-  const std::string & ParWidget::getName() const { return m_par->Name(); }
+  auto ParWidget::getName() const -> const std::string & { return m_par->Name(); }
 
-  std::string ParWidget::getValue() const {
+  auto ParWidget::getValue() const -> std::string {
     if (m_bool) {
       if (m_value_string == "down") return "true";
       return "false";
@@ -180,7 +180,7 @@ namespace st_graph {
     }
   }
 
-  long ParWidget::entryWidth(hoops::IPar * par) const {
+  auto ParWidget::entryWidth(hoops::IPar * par) const -> long {
     // The first time this is called, create a temporary gui with text entries corresponding to the sizes of parameters.
     static std::map<std::string, long> s_width;
     if (s_width.empty()) {
@@ -208,7 +208,7 @@ namespace st_graph {
     return width;
   }
 
-  hoops::IParGroup & operator <<(hoops::IParGroup & group, const ParWidget & par) {
+  auto operator <<(hoops::IParGroup & group, const ParWidget & par) -> hoops::IParGroup & {
     group[par.getName()] = par.getValue();
     return group;
   }
@@ -462,7 +462,7 @@ namespace st_graph {
     //pars.setPromptMode(false);
   }
 
-  ParWidget * StGui::createParWidget(hoops::IPar * par, IFrame * parent) {
+  auto StGui::createParWidget(hoops::IPar * par, IFrame * parent) -> ParWidget * {
     return new ParWidget(m_engine, parent, par, this);
   }
 
@@ -478,11 +478,11 @@ namespace st_graph {
     m_plot_title = title;
   }
 
-  IFrame * StGui::getPlotFrame() { return m_plot_frame; }
+  auto StGui::getPlotFrame() -> IFrame * { return m_plot_frame; }
 
-  const IFrame * StGui::getPlotFrame() const { return m_plot_frame; }
+  auto StGui::getPlotFrame() const -> const IFrame * { return m_plot_frame; }
 
-  bool StGui::parseRange(const hoops::IPar * par, std::list<std::string> & range) {
+  auto StGui::parseRange(const hoops::IPar * par, std::list<std::string> & range) -> bool {
     range.clear();
 
     const std::string & par_min(par->Min());
