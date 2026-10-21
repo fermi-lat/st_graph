@@ -6,6 +6,7 @@
 #define st_graph_EmbedPython_h
 
 // Python.h must be included before any standard headers.
+#define Py_LIMITED_API 0x03080000
 #include <Python.h>
 
 #include <cfenv>
