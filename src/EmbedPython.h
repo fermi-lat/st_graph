@@ -6,7 +6,10 @@
 #define st_graph_EmbedPython_h
 
 // Python.h must be included before any standard headers.
+// Use only the Python stable ABI. The build normally defines this; keep a fallback for standalone builds.
+#ifndef Py_LIMITED_API
 #define Py_LIMITED_API 0x03080000
+#endif
 #include <Python.h>
 
 #include <cfenv>
