@@ -39,7 +39,7 @@ namespace {
       PyErr_SetString(PyExc_TypeError, "st_graph event callback requires an event name");
       return 0;
     }
-    std::string event = PyUnicode_AsUTF8(PyTuple_GetItem(args, 0));
+    std::string event = PyUnicode_AsUTF8AndSize(PyTuple_GetItem(args, 0), 0);
 
     try {
       // Application code runs here, so give it back its own floating point environment (and traps).

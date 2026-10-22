@@ -138,14 +138,14 @@ namespace st_graph {
     PyObject * list = PyList_New(vec.size());
     if (0 == list) throw std::runtime_error("st_graph: cannot create Python list: " + EP_ErrorMessage());
     for (std::vector<double>::size_type index = 0; index != vec.size(); ++index) {
-      // PyList_SET_ITEM steals the reference to the new float.
-      PyList_SET_ITEM(list, index, PyFloat_FromDouble(vec[index]));
+      // PyList_SetItem steals the reference to the new float.
+      PyList_SetItem(list, index, PyFloat_FromDouble(vec[index]));
     }
     return list;
   }
 
   std::string EP_AsString(PyObject * obj) {
-    const char * text = (0 != obj && PyUnicode_Check(obj)) ? PyUnicode_AsUTF8(obj) : 0;
+    const char * text = (0 != obj && PyUnicode_Check(obj)) ? PyUnicode_AsUTF8AndSize(obj, 0) : 0;
     if (0 == text) {
       PyErr_Clear();
       throw std::runtime_error("st_graph: Python object is not a string");
@@ -164,12 +164,12 @@ namespace st_graph {
     std::string msg;
     if (0 != type) {
       PyRef name(PyObject_GetAttrString(type, "__name__"));
-      if (0 != name.get() && PyUnicode_Check(name.get())) msg = PyUnicode_AsUTF8(name.get());
+      if (0 != name.get() && PyUnicode_Check(name.get())) msg = PyUnicode_AsUTF8AndSize(name.get(), 0);
     }
     if (0 != value) {
       PyRef text(PyObject_Str(value));
       if (0 != text.get() && PyUnicode_Check(text.get()))
-        msg += std::string(msg.empty() ? "" : ": ") + PyUnicode_AsUTF8(text.get());
+        msg += std::string(msg.empty() ? "" : ": ") + PyUnicode_AsUTF8AndSize(text.get(), 0);
     }
     Py_XDECREF(type);
     Py_XDECREF(value);
