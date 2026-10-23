@@ -198,11 +198,17 @@ None for users. `test_st_graph` is installed to `bin` (see below).
   (`site-packages/fermitools`). That directory is on `sys.path` through
   the `fermitools.pth` file written by the top-level `CMakeLists.txt`.
   It is an implementation module, not a user API.
-- Environment hooks read by `st_graph_tk`:
-  - `ST_GRAPH_AUTO_CLOSE_MS=<ms>` makes every `mainloop()` return after
-    that delay.
-  - `ST_GRAPH_SNAPSHOT_DIR=<dir>` saves `st_graph_NNN.png` each time a
-    plot is drawn.
+
+### Environment variables
+
+Read only by `st_graph_tk.py` (the C++ sources call no `getenv`):
+- `ST_GRAPH_AUTO_CLOSE_MS=<ms>` makes every `mainloop()` return after
+  that delay.
+- `ST_GRAPH_SNAPSHOT_DIR=<dir>` saves `st_graph_NNN.png` each time a
+  plot is drawn.
+
+Variables set by conda activation are described under "Runtime
+environment" in ScienceTools' `docs/architecture/README.md`.
 
 ### File formats
 
@@ -241,6 +247,13 @@ None, apart from the optional PNG snapshots.
     checked at runtime).
   - Running from a build tree (not installed), `st_graph_tk` is not on
     `sys.path`; add `src/st_graph/src` to `PYTHONPATH`.
+  - The default run of the project harness `recipe/tests/ST-unit-test`
+    (see "Testing" in ScienceTools' `docs/architecture/README.md`) lists
+    `test_st_graph` **with no arguments**, so it does nothing and always
+    passes. No output is compared and no st_graph reference data exists
+    anywhere. `test_burstFit`, also in the default run, draws with
+    st_graph only when `plot=yes`, so in practice CI does not exercise
+    st_graph.
 - **Legacy:** `SConscript`, `st_graphLib.py`, `LinkDef.h` and the ROOT
   sources belong to the old SCons/ROOT build. `BUILD_WITHOUT_ROOT` (in the
   test) is never defined by CMake.
