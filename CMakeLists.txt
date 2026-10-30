@@ -31,7 +31,7 @@ endif()
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 add_executable(test_st_graph src/test/test_st_graph.cxx)
-target_link_libraries(test_st_graph PRIVATE st_graph hoops)
+target_link_libraries(test_st_graph PRIVATE st_graph hoops Python3::Python)
 
 ###############################################################
 # Installation
