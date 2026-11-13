@@ -18,10 +18,10 @@ namespace st_graph {
 
   MPLPlot::MPLPlot(IFrame * parent, const std::string & style, const ISequence & x, const ISequence & y, bool delete_parent):
     m_seq_cont(0), m_label(), m_style(), m_line_style("solid"), m_curve_type("line"), m_line_color(Color::eBlack), m_dimensionality(2),
-    m_parent(0), m_z_data(0), m_delete_parent(delete_parent) {
+    m_parent(nullptr), m_z_data(nullptr), m_delete_parent(delete_parent) {
     // Get the parent multi frame so that the plot can be added with desired style.
     m_parent = dynamic_cast<MPLPlotFrame *>(parent);
-    if (0 == m_parent) throw std::logic_error("MPLPlot constructor: parent must be a valid MPLPlotFrame");
+    if (nullptr == m_parent) throw std::logic_error("MPLPlot constructor: parent must be a valid MPLPlotFrame");
 
     // Sanity check.
     if (x.size() != y.size()) throw std::logic_error("MPLPlot constructor: x and y sequence do not have same size");
@@ -37,11 +37,11 @@ namespace st_graph {
 
   MPLPlot::MPLPlot(IFrame * parent, const std::string & style, const ISequence & x, const ISequence & y,
     const std::vector<std::vector<double> > & z, bool delete_parent): m_seq_cont(0), m_label(), m_style(),
-    m_line_style("solid"), m_curve_type("line"), m_line_color(Color::eBlack), m_dimensionality(3), m_parent(0),
+    m_line_style("solid"), m_curve_type("line"), m_line_color(Color::eBlack), m_dimensionality(3), m_parent(nullptr),
     m_z_data(&z), m_delete_parent(delete_parent) {
     // Get the parent multi frame so that the plot can be added with desired style.
     m_parent = dynamic_cast<MPLPlotFrame *>(parent);
-    if (0 == m_parent) throw std::logic_error("MPLPlot constructor: parent must be a valid MPLPlotFrame");
+    if (nullptr == m_parent) throw std::logic_error("MPLPlot constructor: parent must be a valid MPLPlotFrame");
 
     // Sanity check.
     if (x.size() != z.size())
@@ -68,10 +68,10 @@ namespace st_graph {
     IFrame * parent = m_parent;
 
     // Break all links between this and its parent. After this, m_parent == 0.
-    if (0 != m_parent) m_parent->removePlot(this);
+    if (nullptr != m_parent) m_parent->removePlot(this);
 
     // Delete sequences.
-    for (std::vector<const ISequence *>::reverse_iterator itor = m_seq_cont.rbegin(); itor != m_seq_cont.rend(); ++itor)
+    for (auto itor = m_seq_cont.rbegin(); itor != m_seq_cont.rend(); ++itor)
       delete (*itor);
 
     // In special case where the plot owns its parent frame, delete that as well.
@@ -83,7 +83,7 @@ namespace st_graph {
   }
 
   auto MPLPlot::getZData() const -> const std::vector<std::vector<double> > & {
-    if (0 == m_z_data) throw std::logic_error("MPLPlot::getZData() called for a plot which has null Z data");
+    if (nullptr == m_z_data) throw std::logic_error("MPLPlot::getZData() called for a plot which has null Z data");
     return *m_z_data;
   }
 

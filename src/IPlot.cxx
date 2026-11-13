@@ -23,6 +23,6 @@ namespace st_graph {
 
   Marker::Marker(double x, double y, const std::string & text, int color): m_text(text), m_x(x), m_y(y), m_color(color) {}
 
-  IPlot::~IPlot() {}
+  IPlot::~IPlot() = default;
 
 }

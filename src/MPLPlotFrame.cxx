@@ -21,15 +21,15 @@
 namespace st_graph {
 
   MPLPlotFrame::MPLPlotFrame(IFrame * parent, const std::string & title, unsigned int width, unsigned int height,
-    bool delete_parent): MPLFrame(parent, 0, 0, delete_parent), m_axes(3), m_plots(), m_graphs(), m_title(title), m_canvas(0),
-    m_multi_graph(0), m_th2d(Py_None), m_dimensionality(0) {
+    bool delete_parent): MPLFrame(parent, nullptr, nullptr, delete_parent), m_axes(3), m_plots(), m_graphs(), m_title(title), m_canvas(nullptr),
+    m_multi_graph(nullptr), m_th2d(Py_None), m_dimensionality(0) {
 
     // Send event messages back to parent.
     m_receiver = m_parent->getReceiver();
 
     // Hook together MPL primitives.
     PyObject * root_frame = m_parent->getPythonFrame();
-    if (0 == root_frame)
+    if (nullptr == root_frame)
       throw std::logic_error("MPLPlotFrame constructor was passed a parent frame which cannot contain other MPL frames");
     EP_CallMethod(root_frame,"title","(s)",title.c_str());
 
@@ -118,10 +118,10 @@ namespace st_graph {
       Py_DECREF(axes);
 
       // Get labels/markers from IPlots.
-      for (std::list<MPLPlot *>::iterator itor = m_plots.begin(); itor != m_plots.end(); ++itor) {
+      for (auto itor = m_plots.begin(); itor != m_plots.end(); ++itor) {
         // Loop over plots, displaying each one's labels.
         std::vector<Marker> & marker((*itor)->getMarkers());
-        for (std::vector<Marker>::iterator itor = marker.begin(); itor != marker.end(); ++itor) {
+        for (auto itor = marker.begin(); itor != marker.end(); ++itor) {
           addMarker(*itor);
         }
       }
@@ -138,7 +138,7 @@ namespace st_graph {
 
   void MPLPlotFrame::unDisplay() {
     // Delete all child graphs.
-    for (std::list<PyObject *>::reverse_iterator itor = m_graphs.rbegin(); itor != m_graphs.rend(); ++itor) {
+    for (auto itor = m_graphs.rbegin(); itor != m_graphs.rend(); ++itor) {
     	Py_DECREF(*itor);
     }
 //    m_graphs.clear();
@@ -150,15 +150,15 @@ namespace st_graph {
 	PyObject *pwidget = EP_CallMethod(m_canvas,"get_tk_widget","()");
 	EP_CallMethod(pwidget,"destroy","()");
 	Py_DECREF(pwidget);
-    if (0 != m_canvas) {
+    if (nullptr != m_canvas) {
     	Py_DECREF(m_canvas);
-    	m_canvas = 0;
+    	m_canvas = nullptr;
     }
 
     // Delete children.
     while (!m_plots.empty()) {
       // Find last child.
-      std::list<MPLPlot *>::iterator itor = --m_plots.end();
+      auto itor = --m_plots.end();
 
       // Get pointer to the plot.
       MPLPlot * plot = *itor;
@@ -174,8 +174,8 @@ namespace st_graph {
   }
 
   void MPLPlotFrame::addPlot(IPlot * plot) {
-    MPLPlot * mpl_plot = dynamic_cast<MPLPlot *>(plot);
-    if (0 == mpl_plot) throw std::logic_error("MPLPlotFrame::addPlot cannot add a non-MPL plot");
+    auto * mpl_plot = dynamic_cast<MPLPlot *>(plot);
+    if (nullptr == mpl_plot) throw std::logic_error("MPLPlotFrame::addPlot cannot add a non-MPL plot");
 
     if (m_plots.empty()) m_dimensionality = mpl_plot->getDimensionality();
     else if (m_dimensionality != mpl_plot->getDimensionality())
@@ -191,10 +191,10 @@ namespace st_graph {
   }
 
   void MPLPlotFrame::removePlot(IPlot * plot) {
-    std::list<MPLPlot *>::iterator itor = std::find(m_plots.begin(), m_plots.end(), plot);
+    auto itor = std::find(m_plots.begin(), m_plots.end(), plot);
     if (m_plots.end() != itor) {
-      MPLPlot * mpl_plot = dynamic_cast<MPLPlot *>(plot);
-      if (0 != mpl_plot) mpl_plot->setParent(0);
+      auto * mpl_plot = dynamic_cast<MPLPlot *>(plot);
+      if (nullptr != mpl_plot) mpl_plot->setParent(nullptr);
       m_plots.erase(itor);
     }
   }
@@ -225,7 +225,7 @@ namespace st_graph {
   void MPLPlotFrame::display2d() {
 //	  std::cout << "display2D() for " << m_title << std::endl;
 
-    for (std::list<MPLPlot *>::iterator itor = m_plots.begin(); itor != m_plots.end(); ++itor) {
+    for (auto itor = m_plots.begin(); itor != m_plots.end(); ++itor) {
 
       // Get numeric sequences from data.
       const std::vector<const ISequence *> sequences((*itor)->getSequences());
@@ -242,7 +242,7 @@ namespace st_graph {
       std::string format = generateFormatString((*itor));
 
       // Depending on the style, create appropriate MPL plot object.
-      PyObject * graph = 0;
+      PyObject * graph = nullptr;
       if (style == "hist")
         graph = createHistPlot(*x, *y, format);
       else
@@ -258,7 +258,7 @@ namespace st_graph {
 //	  std::cout << "display3D() for " << m_title << std::endl;
 
     if (m_plots.empty()) return;
-    std::list<MPLPlot *>::iterator itor = m_plots.begin();
+    auto itor = m_plots.begin();
 
     // Get numeric sequences from data.
     const std::vector<const ISequence *> sequences((*itor)->getSequences());
@@ -276,7 +276,7 @@ namespace st_graph {
   }
 
   auto MPLPlotFrame::createHistPlot(const ISequence & x, const ISequence & y,std::string format) -> PyObject * {
-    PyObject * retval = 0;
+    PyObject * retval = nullptr;
 //	std::cout << "createHistPlot() for " << m_title << std::endl;
 
     // Get arrays of values.
@@ -363,7 +363,7 @@ namespace st_graph {
   }
 
   auto MPLPlotFrame::createScatterPlot(const ISequence & x, const ISequence & y,std::string format) -> PyObject * {
-    PyObject * retval = 0;
+    PyObject * retval = nullptr;
 //	std::cout << "createScatterPlot() for " << m_title << std::endl;
     // Get arrays of values.
     std::vector<double> x_pts;
@@ -433,7 +433,7 @@ namespace st_graph {
   auto MPLPlotFrame::createHistPlot2D(const std::string & root_name, const ISequence & x, const ISequence & y,
     const std::vector<std::vector<double> > & z) -> PyObject * {
 
-    typedef std::vector<double> Vec_t;
+    using Vec_t = std::vector<double>;
 //	std::cout << "createHistPlot2D() for " << m_title << std::endl;
 
     // Set up x bins. There is one extra for Root's upper cutoff.

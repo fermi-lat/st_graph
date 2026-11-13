@@ -20,7 +20,7 @@ auto EP_LoadModule(std::string name) -> PyObject *{
 	PyObject *pmod;
 	Py_Initialize();
 	pmod = PyImport_ImportModule(name.c_str());
-	if (NULL == pmod){
+	if (nullptr == pmod){
 		std::string msg = "Can't load module " + name;
 		error(msg);
 	}
@@ -33,12 +33,12 @@ auto EP_CreateObject(PyObject * module, std::string className, std::string argTy
     PyObject *pclass, *pargs, *pinst;
 
 	pclass = PyObject_GetAttrString(module, className.c_str());
-	if (NULL == pclass){
+	if (nullptr == pclass){
 		std::string msg = "Can't get class " + className + " from module ";// + module->
 		error(msg);
 	}
 	pargs = Py_VaBuildValue(argTypes.c_str(),argsList);
-	if (NULL == pargs){
+	if (nullptr == pargs){
 		Py_DECREF(pclass);
 		error("Can't build argument list");
 	}
@@ -46,7 +46,7 @@ auto EP_CreateObject(PyObject * module, std::string className, std::string argTy
 	pinst = PyObject_CallObject(pclass,pargs);
 	Py_DECREF(pclass);
 	Py_DECREF(pargs);
-	if (NULL == pinst){
+	if (nullptr == pinst){
 		PyErr_Print();
 		std::string msg = "Error creating " + className + " object";
 		error(msg);
@@ -83,11 +83,11 @@ auto EP_CallMethod(PyObject * obj, std::string funcName, std::string argTypes, .
     PyObject *pfunc, *pargs, *pres;
 
 	pfunc = PyObject_GetAttrString(obj, funcName.c_str());
-	if (NULL == pfunc)
+	if (nullptr == pfunc)
 		error("Can't fetch " + funcName + " method");
 
 	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
-	if (NULL == pargs){
+	if (nullptr == pargs){
 		Py_DECREF(pfunc);
 		error("Can't build arguments list");
 	}
@@ -95,7 +95,7 @@ auto EP_CallMethod(PyObject * obj, std::string funcName, std::string argTypes, .
 	pres = PyObject_CallObject(pfunc, pargs);
 	Py_DECREF(pfunc);
 	Py_DECREF(pargs);
-	if(NULL == pres)
+	if(nullptr == pres)
 		error("Error calling " + funcName + " method");
 
     va_end(argsList);
@@ -110,11 +110,11 @@ auto EP_CallMethod(std::string moduleName, std::string funcName, std::string arg
     PyObject * pmod = EP_LoadModule(moduleName);
 
 	pfunc = PyObject_GetAttrString(pmod, funcName.c_str());
-	if (NULL == pfunc)
+	if (nullptr == pfunc)
 		error("Can't fetch " + funcName + " method");
 
 	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
-	if (NULL == pargs){
+	if (nullptr == pargs){
 		Py_DECREF(pfunc);
 		error("Can't build arguments list");
 	}
@@ -122,7 +122,7 @@ auto EP_CallMethod(std::string moduleName, std::string funcName, std::string arg
 	pres = PyObject_CallObject(pfunc, pargs);
 	Py_DECREF(pfunc);
 	Py_DECREF(pargs);
-	if(NULL == pres) {
+	if(nullptr == pres) {
 		PyErr_Print();
 		error("Error calling " + funcName + " method");
 	}
@@ -137,7 +137,7 @@ auto EP_IsType(PyObject *obj, std::string moduleName, std::string className) -> 
 	pmod = EP_LoadModule(moduleName);
 	pclass = PyObject_GetAttrString(pmod, className.c_str());
 	Py_DECREF(pmod);
-	if (NULL == pclass)
+	if (nullptr == pclass)
 		error("Can't get class from module");
 	bool result = PyObject_IsInstance(obj,pclass);
 	Py_DECREF(pclass);
@@ -146,7 +146,7 @@ auto EP_IsType(PyObject *obj, std::string moduleName, std::string className) -> 
 
 auto EP_GetMethod(PyObject * obj, std::string funcName) -> PyObject *{
 	PyObject * pfunc = PyObject_GetAttrString(obj, funcName.c_str());
-	if (NULL == pfunc)
+	if (nullptr == pfunc)
 		error("Can't fetch " + funcName + " method");
 	return pfunc;
 }
@@ -157,11 +157,11 @@ auto EP_CallKWMethod(PyObject * obj, std::string funcName, PyObject *kwargs, std
     PyObject *pfunc, *pargs, *pres;
 
 	pfunc = PyObject_GetAttrString(obj, funcName.c_str());
-	if (NULL == pfunc)
+	if (nullptr == pfunc)
 		error("Can't fetch " + funcName + " method");
 
 	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
-	if (NULL == pargs){
+	if (nullptr == pargs){
 		Py_DECREF(pfunc);
 		error("Can't build arguments list");
 	}
@@ -169,7 +169,7 @@ auto EP_CallKWMethod(PyObject * obj, std::string funcName, PyObject *kwargs, std
 	pres = PyObject_Call(pfunc, pargs, kwargs);
 	Py_DECREF(pfunc);
 	Py_DECREF(pargs);
-	if(NULL == pres)
+	if(nullptr == pres)
 		error("Error calling " + funcName + " method");
 
     va_end(argsList);
@@ -184,11 +184,11 @@ auto EP_CallMethod(std::string moduleName, std::string funcName, PyObject *kwarg
     PyObject * pmod = EP_LoadModule(moduleName);
 
 	pfunc = PyObject_GetAttrString(pmod, funcName.c_str());
-	if (NULL == pfunc)
+	if (nullptr == pfunc)
 		error("Can't fetch " + funcName + " method");
 
 	pargs = Py_VaBuildValue(argTypes.c_str(), argsList);
-	if (NULL == pargs){
+	if (nullptr == pargs){
 		Py_DECREF(pfunc);
 		error("Can't build arguments list");
 	}
@@ -196,7 +196,7 @@ auto EP_CallMethod(std::string moduleName, std::string funcName, PyObject *kwarg
 	pres = PyObject_Call(pfunc, pargs, kwargs);
 	Py_DECREF(pfunc);
 	Py_DECREF(pargs);
-	if(NULL == pres) {
+	if(nullptr == pres) {
 		PyErr_Print();
 		error("Error calling " + funcName + " method");
 	}
@@ -212,14 +212,14 @@ auto EP_CreateKWObject(std::string moduleName, std::string className, PyObject *
 
     pmod = EP_LoadModule(moduleName);
 	pclass = PyObject_GetAttrString(pmod, className.c_str());
-	if (NULL == pclass){
+	if (nullptr == pclass){
 		std::string msg = "Can't get class " + className + " from module ";// + module->
 		error(msg);
 	}
 	Py_DECREF(pmod);
 
 	pargs = Py_VaBuildValue(argTypes.c_str(),argsList);
-	if (NULL == pargs){
+	if (nullptr == pargs){
 		Py_DECREF(pclass);
 		error("Can't build argument list");
 	}
@@ -227,7 +227,7 @@ auto EP_CreateKWObject(std::string moduleName, std::string className, PyObject *
 	pinst = PyObject_Call(pclass,pargs,kwargs);
 	Py_DECREF(pclass);
 	Py_DECREF(pargs);
-	if (NULL == pinst){
+	if (nullptr == pinst){
 		PyErr_Print();
 		std::string msg = "Error creating " + className + " object";
 		error(msg);

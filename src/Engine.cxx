@@ -35,7 +35,7 @@ namespace {
       virtual auto createPlot(const std::string & title, unsigned int /* width */, unsigned int /* height */,
         const std::string & /* style */, const ISequence & /* x */, const ISequence & /* y */) -> IPlot * {
         throw std::runtime_error("Cannot create plot " + title + "; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       /** \brief Create a self-contained three dimensional plot window.
@@ -51,7 +51,7 @@ namespace {
         const std::string & /* style */, const ISequence & /* x */, const ISequence & /* y */,
         const std::vector<std::vector<double> > & /* z */) -> IPlot * {
         throw std::runtime_error("Cannot create plot " + title + "; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       /** \brief Create a top-level independent frame on the desktop. This frame's purpose is to hold other frames.
@@ -63,7 +63,7 @@ namespace {
       virtual auto createMainFrame(IEventReceiver * /* receiver */, unsigned int /* width */, unsigned int /* height */,
         const std::string & title = "") -> IFrame * {
         throw std::runtime_error("Cannot create graphical main frame; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       /** \brief Create a plot which may be displayed in a plot frame.
@@ -77,7 +77,7 @@ namespace {
       virtual auto createPlot(IFrame * /* parent */, const std::string & style, const ISequence & /* x */,
         const ISequence & /* y */) -> IPlot * {
         throw std::runtime_error("Cannot create " + style + " plot; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       /** \brief Create a plot which may be displayed in a plot frame.
@@ -91,7 +91,7 @@ namespace {
       virtual auto createPlot(IFrame * /* parent */, const std::string & style, const ISequence & /* x */,
         const ISequence & /* y */, const std::vector<std::vector<double> > & /* z */) -> IPlot * {
         throw std::runtime_error("Cannot create " + style + " plot; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       /** \brief Create a frame specifically devoted to holding plots.
@@ -103,7 +103,7 @@ namespace {
       virtual auto createPlotFrame(IFrame * /* parent */, const std::string & title, unsigned int /* width */,
         unsigned int /* height */) -> IFrame * {
         throw std::runtime_error("Cannot create plotting frame " + title + "; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       /** \brief Create a button whose events are bound to the given event receiver object.
@@ -115,38 +115,38 @@ namespace {
       virtual auto createButton(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & style,
         const std::string & /* text */) -> IFrame * {
         throw std::runtime_error("Cannot create " + style + " button; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       virtual auto createLabel(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & label) -> IFrame * {
         throw std::runtime_error("Cannot create label " + label + "; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       virtual auto createTextEntry(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & content) -> IFrame * {
         throw std::runtime_error("Cannot create text entry widget " + content + "; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       virtual auto createComposite(IFrame * /* parent */, IEventReceiver * /* receiver */) -> IFrame * {
         throw std::runtime_error("Cannot create composite frame; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       virtual auto createGroupFrame(IFrame * /* parent */, IEventReceiver * /* receiver */, const std::string & label) -> IFrame * {
         throw std::runtime_error("Cannot create group frame " + label + "; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       virtual auto createTabFolder(IFrame * /* parent */, IEventReceiver * /* receiver */) -> ITabFolder * {
         throw std::runtime_error("Cannot create tab folder; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       virtual auto fileDialog(IFrame * /* parent */, const std::string & /* initial_file_name */,
         const std::string & style = "open") -> std::string {
         throw std::runtime_error("Cannot create file dialog box; graphical functions disabled.");
-        return 0;
+        return nullptr;
       }
 
       /** \brief Determine whether windows cause the application to terminate by default when they are closed.
@@ -161,7 +161,7 @@ namespace {
 
 namespace st_graph {
 
-  Engine::~Engine() {}
+  Engine::~Engine() = default;
 
   auto Engine::instance() -> Engine & {
 #ifdef ROOT_PLOTTING
@@ -173,6 +173,6 @@ namespace st_graph {
     return s_engine;
   }
 
-  Engine::Engine() {}
+  Engine::Engine() = default;
 
 }

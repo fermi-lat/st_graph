@@ -42,7 +42,7 @@ class StGraphTestApp {
       processCommandLine(argc, argv);
     }
 
-    virtual ~StGraphTestApp() throw() {}
+    virtual ~StGraphTestApp() throw() = default;
 
     /// \brief Perform all tests.
     virtual void run();
@@ -62,7 +62,7 @@ class StGraphTestApp {
     void reportUnexpected(const std::string & text) const;
 
     /// \brief Return 0 if no errors occurred, 1 otherwise.
-    auto status() const -> int { return int(m_failed); }
+    [[nodiscard]] auto status() const -> int { return int(m_failed); }
 
   protected:
     void testSequence(const st_graph::ISequence & iseq, const std::string & test_name, const double * value,
@@ -71,7 +71,7 @@ class StGraphTestApp {
   private:
     static bool m_failed;
     st_stream::StreamFormatter m_out;
-    bool m_do_test;
+    bool m_do_test{false};
 };
 
 bool StGraphTestApp::m_failed = false;
@@ -105,7 +105,7 @@ void StGraphTestApp::run() {
   for (int ii = 0; ii < num_intervals + 25; ++ii) sine_wave[ii] = sin(ii * 2 * M_PI / 100.);
 
   // Create local reference to engine singleton. This engine is an abstract factory for graphical objects.
-  Engine * engine = 0;
+  Engine * engine = nullptr;
   try {
     engine = &(Engine::instance());
   } catch (const std::exception & x) {
@@ -115,8 +115,8 @@ void StGraphTestApp::run() {
   }
 
   // Make a couple typedefs to improve readability.
-  typedef LowerBoundSequence<std::vector<double>::iterator> LowerBoundSeq_t;
-  typedef PointSequence<std::vector<double>::iterator> PointSeq_t;
+  using LowerBoundSeq_t = LowerBoundSequence<std::vector<double>::iterator>;
+  using PointSeq_t = PointSequence<std::vector<double>::iterator>;
 
   // Create a histogram plot, size 900 x 600, with the given bin definitions.
   IPlot * plot_hist_1 = engine->createPlot("Plot 1", 900, 600, "hist", LowerBoundSeq_t(intervals.begin(), intervals.end()),
@@ -206,7 +206,7 @@ void StGraphTestApp::testPlots() {
   m_out.setMethod("testPlots()");
 
   // Create local reference to engine singleton. This engine is an abstract factory for graphical objects.
-  Engine * engine_p = 0;
+  Engine * engine_p = nullptr;
   try {
     engine_p = &(Engine::instance());
   } catch (const std::exception & x) {
@@ -219,9 +219,9 @@ void StGraphTestApp::testPlots() {
 
   engine.setDefaultExitOnClose(true);
 
-  typedef std::vector<double> Vec_t;
-  typedef ValueSequence<Vec_t::iterator> ValueSeq_t;
-  typedef ValueSpreadSequence<Vec_t::iterator> ValueSpreadSeq_t;
+  using Vec_t = std::vector<double>;
+  using ValueSeq_t = ValueSequence<Vec_t::iterator>;
+  using ValueSpreadSeq_t = ValueSpreadSequence<Vec_t::iterator>;
 
   // Set up some fake data.
   int num_pts = 10;
@@ -237,7 +237,7 @@ void StGraphTestApp::testPlots() {
   }
 
   // Create a top level main frame in which to place graphical objects.
-  IFrame * mf = engine.createMainFrame(0, 600, 400);
+  IFrame * mf = engine.createMainFrame(nullptr, 600, 400);
 
   // Create a new subframe in which to display the plots.
   IFrame * pf1 = engine.createPlotFrame(mf, "Quadratic", 600, 400);
@@ -283,7 +283,7 @@ void StGraphTestApp::testPlots() {
   // delete plot2; plot2 = 0;
   // delete plot1; plot1 = 0;
   // It *is* necessary to delete pf1, because otherwise this plot would be displayed again below.
-  delete pf1; pf1 = 0;
+  delete pf1; pf1 = nullptr;
 
   // Create rectangular 2d data.
   std::vector<Vec_t> hist(2 * num_pts, Vec_t(num_pts));
@@ -355,7 +355,7 @@ void StGraphTestApp::testGuis() {
   };
 
   try {
-    char * argv[] = { "test_st_graph", 0 };
+    char * argv[] = { "test_st_graph", nullptr };
     MyStGui gui(argv);
     gui.run();
   } catch (const std::exception & x) {
@@ -368,6 +368,7 @@ void StGraphTestApp::testGuis() {
     public:
       MyGui(Engine & engine, StGraphTestApp * app): m_app(app), m_engine(engine), m_main_frame(0), m_cancel_button(0),
         m_open_button(0), m_enable_button(0), m_click_me(0), m_plot_frame(0), m_data(100), m_file_name("./requirements") {
+
         // Create a top level main frame in which to place graphical objects.
         m_main_frame = m_engine.createMainFrame(this, 600, 400);
 
@@ -377,7 +378,7 @@ void StGraphTestApp::testGuis() {
         m_enable_button = m_engine.createButton(m_main_frame, this, "check", "Enable");
 
         // Add a tabbed folder. Do not use this event receiver for the layout for now.
-        m_tab_folder = m_engine.createTabFolder(m_main_frame, 0);
+        m_tab_folder = m_engine.createTabFolder(m_main_frame, nullptr);
         IFrame * f = m_tab_folder->addTab("Folder 1");
         m_click_me = m_engine.createButton(f, this, "text", "Click me");
 
@@ -474,12 +475,12 @@ void StGraphTestApp::testGuis() {
     private:
       StGraphTestApp * m_app;
       Engine & m_engine;
-      IFrame * m_main_frame;
-      IFrame * m_cancel_button;
-      IFrame * m_open_button;
-      IFrame * m_enable_button;
-      IFrame * m_click_me;
-      IFrame * m_plot_frame;
+      IFrame * m_main_frame{nullptr};
+      IFrame * m_cancel_button{nullptr};
+      IFrame * m_open_button{nullptr};
+      IFrame * m_enable_button{nullptr};
+      IFrame * m_click_me{nullptr};
+      IFrame * m_plot_frame{nullptr};
       ITabFolder * m_tab_folder;
       std::vector<double> m_data;
       std::string m_file_name;
@@ -500,7 +501,7 @@ void StGraphTestApp::testSequence() {
   using namespace st_graph;
 
   // Typedef for brevity.
-  typedef std::vector<double> Vec_t;
+  using Vec_t = std::vector<double>;
 
   // Test PointSequence.
   {
@@ -572,7 +573,7 @@ void StGraphTestApp::testSequence() {
     const double value[] = { 11., 13.5, 16., 18., 19.5, 20.5 };
     const double right[] = { 12., 15., 17., 19., 20., 21. };
 
-    typedef std::list<double> List_t;
+    using List_t = std::list<double>;
 
     // Copy intervals to list, just to test list iteration.
     List_t left_list(left, left + sizeof(left)/sizeof(double));
@@ -593,7 +594,7 @@ void StGraphTestApp::testSequence(const st_graph::ISequence & iseq, const std::s
   m_out.setMethod("testSequence(const ISequence&, ...)");
 
   // Typedef for brevity.
-  typedef std::vector<double> Vec_t;
+  using Vec_t = std::vector<double>;
 
   // Create vectors to hold sequence's resultant values.
   Vec_t low_vec;

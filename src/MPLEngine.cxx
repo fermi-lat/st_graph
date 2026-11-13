@@ -49,7 +49,7 @@ namespace {
       bool m_exit_on_close;
   };
 
-  DefaultReceiver * s_default_receiver = 0;
+  DefaultReceiver * s_default_receiver = nullptr;
 
 }
 
@@ -95,8 +95,8 @@ namespace st_graph {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createMainFrame: graphical environment not initialized");
 
     // If client did not supply a receiver, use the default one.
-    if (0 == receiver) {
-      if (0 == s_default_receiver) s_default_receiver = new DefaultReceiver;
+    if (nullptr == receiver) {
+      if (nullptr == s_default_receiver) s_default_receiver = new DefaultReceiver;
       receiver = s_default_receiver;
     }
 
@@ -118,7 +118,7 @@ namespace st_graph {
     EP_CallMethod(p_widget,"geometry","(s)","+100+50");
 
     // Create the IFrame which refers to it.
-    MPLFrame * frame = new MPLFrame(receiver, p_widget);
+    auto * frame = new MPLFrame(receiver, p_widget);
 
     frame->setName("main");
     return frame;
@@ -129,7 +129,7 @@ namespace st_graph {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createPlot: graphical environment not initialized");
 
     // Create parent main frame.
-    IFrame * mf = createMainFrame(0, width, height);
+    IFrame * mf = createMainFrame(nullptr, width, height);
 
     // Create frame to hold plot. This frame owns and will delete its parent.
     IFrame * pf = new MPLPlotFrame(mf, title, width, height, true);
@@ -143,7 +143,7 @@ namespace st_graph {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createPlot: graphical environment not initialized");
 
     // Create parent main frame.
-    IFrame * mf = createMainFrame(0, width, height);
+    IFrame * mf = createMainFrame(nullptr, width, height);
 
     // Create frame to hold plot. This frame owns and will delete its parent.
     IFrame * pf = new MPLPlotFrame(mf, title, width, height, true);
@@ -204,7 +204,7 @@ namespace st_graph {
 //    // Connect appropriate Root Qt signals to this object's slot.
 //    tg_widget->Connect("Clicked()", "st_graph::MPLFrame", frame, "clicked()");
 //
-    return NULL;//frame;
+    return nullptr;//frame;
   }
 
   auto MPLEngine::createLabel(IFrame * parent, IEventReceiver * receiver, const std::string & text) -> IFrame * {
@@ -224,7 +224,7 @@ namespace st_graph {
 //
 //    frame->setName("label " + text);
 //
-    return NULL;//frame;
+    return nullptr;//frame;
   }
 
   auto MPLEngine::createTextEntry(IFrame * parent, IEventReceiver * receiver, const std::string & content) -> IFrame * {
@@ -245,7 +245,7 @@ namespace st_graph {
 //    // Whenever text is changed, send the changes back to root frame.
 //    tg_widget->Connect("TextChanged(char *)", "st_graph::MPLFrame", frame, "modified(const char *)");
 //
-    return NULL;// frame;
+    return nullptr;// frame;
   }
 
   auto MPLEngine::createComposite(IFrame * parent, IEventReceiver * receiver) -> IFrame * {
@@ -266,7 +266,7 @@ namespace st_graph {
 //    // Create a layout manager for the Root widget which uses the receiver to manage the layout.
 //    tg_widget->SetLayoutManager(new STGLayoutManager(receiver, frame, tg_widget));
 //
-    return NULL;// frame;
+    return nullptr;// frame;
   }
 
   auto MPLEngine::createGroupFrame(IFrame * parent, IEventReceiver * receiver, const std::string & label) -> IFrame * {
@@ -287,7 +287,7 @@ namespace st_graph {
 //    // Create a layout manager for the Root widget which uses the receiver to manage the layout.
 //    tg_widget->SetLayoutManager(new STGLayoutManager(receiver, frame, tg_widget));
 //
-    return NULL;//frame;
+    return nullptr;//frame;
   }
 
   auto MPLEngine::createTabFolder(IFrame * parent, IEventReceiver * receiver) -> ITabFolder * {
@@ -296,10 +296,10 @@ namespace st_graph {
     if (!m_init_succeeded) throw std::runtime_error("MPLEngine::createTabFolder: graphical environment not initialized");
 
     // Need the Root frame of the parent object.
-    MPLFrame * rf = dynamic_cast<MPLFrame *>(parent);
-    if (0 == rf) throw std::logic_error("MPLEngine::createTabFolder was passed an invalid parent frame pointer");
+    auto * rf = dynamic_cast<MPLFrame *>(parent);
+    if (nullptr == rf) throw std::logic_error("MPLEngine::createTabFolder was passed an invalid parent frame pointer");
 
-    MPLTabFolder * folder = new MPLTabFolder(rf, receiver);
+    auto * folder = new MPLTabFolder(rf, receiver);
 
     return folder;
   }
@@ -355,14 +355,14 @@ namespace st_graph {
   }
 
   void MPLEngine::setDefaultExitOnClose(bool exit_on_close) {
-    if (0 == s_default_receiver) s_default_receiver = new DefaultReceiver;
+    if (nullptr == s_default_receiver) s_default_receiver = new DefaultReceiver;
     s_default_receiver->setExitOnClose(exit_on_close);
   }
 
   void MPLEngine::hideHidden(IFrame * frame) {
     std::list<IFrame *> subframes;
     frame->getSubframes(subframes);
-    for (std::list<IFrame *>::iterator itor = subframes.begin(); itor != subframes.end(); ++itor) {
+    for (auto itor = subframes.begin(); itor != subframes.end(); ++itor) {
       hideHidden(*itor);
     }
     if (frame->isHidden()) frame->unDisplay(); // Will hide all children too.

@@ -21,11 +21,11 @@ namespace st_graph {
   }
 
   MPLFrame::MPLFrame(IFrame * parent, IEventReceiver * receiver, PyObject * frame, bool delete_parent): m_state(), m_name(),
-    m_subframes(), m_parent(0), m_frame(frame), m_receiver(receiver), m_delete_parent(delete_parent), m_minimum_width(0),
+    m_subframes(), m_parent(nullptr), m_frame(frame), m_receiver(receiver), m_delete_parent(delete_parent), m_minimum_width(0),
     m_minimum_height(0), m_hidden(false) {
     // Make sure the parent is a MPL parent.
     m_parent = dynamic_cast<MPLFrame *>(parent);
-    if (0 == m_parent)
+    if (nullptr == m_parent)
       throw std::logic_error("MPLFrame constructor was passed a parent IFrame which is not a MPLFrame");
 
     m_parent->addFrame(this);
@@ -48,12 +48,12 @@ namespace st_graph {
     MPLFrame * parent = m_parent;
 
     // Break all connections between this and its parent.
-    if (0 != m_parent) m_parent->removeFrame(this);
+    if (nullptr != m_parent) m_parent->removeFrame(this);
 
     // Delete children.
     while (!m_subframes.empty()) {
       // Find last child.
-      std::list<MPLFrame *>::iterator itor = --m_subframes.end();
+      auto itor = --m_subframes.end();
       // Break links between this and the child.
       removeFrame(*itor);
       // Delete the child.
@@ -64,7 +64,7 @@ namespace st_graph {
     if(EP_IsType(m_frame,"STTopLevel","STToplevel"))
     	EP_CallMethod(m_frame,"destroy","()");
     Py_DECREF(m_frame);
-    m_frame = NULL;
+    m_frame = nullptr;
 
 //    if (this == ancestor()){
 //    	std::cout << "Destructor called on base object" << std::endl;
@@ -79,9 +79,9 @@ namespace st_graph {
       unDisplay();
       return;
     }
-    for (std::list<MPLFrame *>::iterator itor = m_subframes.begin(); itor != m_subframes.end(); ++itor)
+    for (auto itor = m_subframes.begin(); itor != m_subframes.end(); ++itor)
       (*itor)->display();
-    if (0 != m_frame) {
+    if (nullptr != m_frame) {
     	bool test = EP_IsType(m_frame,"tkinter","Tk") || EP_IsType(m_frame,"tkinter","Toplevel");
     	if (false == test){
     		EP_CallMethod(m_frame,"place","()");
@@ -92,7 +92,7 @@ namespace st_graph {
   }
 
   void MPLFrame::unDisplay() {
-    if (0 != m_frame){
+    if (nullptr != m_frame){
     	bool test = EP_IsType(m_frame,"tkinter","Tk") || EP_IsType(m_frame,"tkinter","Toplevel") || m_frame == Py_None;
     	if (false == test){
     		// These are causing failures somewhere
@@ -100,7 +100,7 @@ namespace st_graph {
 //			EP_CallMethod(m_frame,"place_forget","()");
     	}
     }
-    for (std::list<MPLFrame *>::reverse_iterator itor = m_subframes.rbegin(); itor != m_subframes.rend(); ++itor)
+    for (auto itor = m_subframes.rbegin(); itor != m_subframes.rend(); ++itor)
       (*itor)->unDisplay();
   }
 
@@ -114,8 +114,8 @@ namespace st_graph {
 
     // Make certain MPL frame is not added more than once.
     if (m_subframes.end() == std::find(m_subframes.begin(), m_subframes.end(), frame)) {
-      MPLFrame * f = dynamic_cast<MPLFrame *>(frame);
-      if (0 == f) throw std::logic_error("MPLFrame::addFrame was passed an invalid child frame");
+      auto * f = dynamic_cast<MPLFrame *>(frame);
+      if (nullptr == f) throw std::logic_error("MPLFrame::addFrame was passed an invalid child frame");
 //      PyObject *child_f = f->getPythonFrame();
 
       // This linkage needs to be done then the Python frame is created before it is passed in.
@@ -136,16 +136,16 @@ namespace st_graph {
   }
 
   void MPLFrame::removeFrame(IFrame * frame) {
-    std::list<MPLFrame *>::iterator itor = std::find(m_subframes.begin(), m_subframes.end(), frame);
+    auto itor = std::find(m_subframes.begin(), m_subframes.end(), frame);
     if (m_subframes.end() != itor) {
       // Disconnect child from parent.
       m_subframes.erase(itor);
-      MPLFrame * f = dynamic_cast<MPLFrame *>(frame);
-      if (0 == f) throw std::logic_error("MPLFrame::removeFrame was passed an invalid child frame");
+      auto * f = dynamic_cast<MPLFrame *>(frame);
+      if (nullptr == f) throw std::logic_error("MPLFrame::removeFrame was passed an invalid child frame");
 //      PyObject * child_f = f->getPythonFrame();
 
       // Disconnect parent from child.
-      f->m_parent = 0;
+      f->m_parent = nullptr;
 
 //      // Check that the contained frame for this object is a Python frame
 //      bool correctType = EP_IsType(m_frame,"tkinter","Frame");
@@ -342,7 +342,7 @@ namespace st_graph {
 
   void MPLFrame::setWidth(long width) {
     width = (m_minimum_width < width) ? width : m_minimum_width;
-    if (0 != m_frame){
+    if (nullptr != m_frame){
     	//@todo Set frame width
     }
   }
@@ -355,7 +355,7 @@ namespace st_graph {
 
   void MPLFrame::setHeight(long height) {
     height = (m_minimum_height < height) ? height : m_minimum_height;
-    if (0 != m_frame){
+    if (nullptr != m_frame){
     	//@todo Set frame height
     }
   }
@@ -397,7 +397,7 @@ namespace st_graph {
 //    }
 //  }
 
-  MPLFrame::MPLFrame(): m_subframes(), m_parent(0), m_frame(0), m_receiver(0) {
+  MPLFrame::MPLFrame(): m_subframes(), m_parent(nullptr), m_frame(nullptr), m_receiver(nullptr) {
 	  // Link this to the root Python Tk() frame object
 //	  m_frame = EP_CreateObject("tkinter","Tk","({})","baseName","st_graph.app");
 //	  m_frame = EP_CreateObject("tkinter","Tk","(ss)","st_graph","st_graph");

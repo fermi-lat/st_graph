@@ -27,9 +27,9 @@ using namespace st_graph;
 namespace st_graph {
 
   ParWidget::ParWidget(Engine & engine, IFrame * parent, hoops::IPar * par, StGui * gui):
-    m_engine(engine), m_value_string(), m_gui(gui), m_frame(0), m_label(0), m_value(0), m_open(0),
+    m_engine(engine), m_value_string(), m_gui(gui), m_frame(nullptr), m_label(nullptr), m_value(nullptr), m_open(nullptr),
     m_par(par), m_bool(false), m_stretch(false), m_display(false) {
-    if (0 == m_par) throw std::logic_error("ParWidget constructor was passed a null parameter pointer");
+    if (nullptr == m_par) throw std::logic_error("ParWidget constructor was passed a null parameter pointer");
 
     m_frame = m_engine.createComposite(parent, this);
 
@@ -110,12 +110,12 @@ namespace st_graph {
 
     Center(m_value).below(Center(m_frame));
     Center(m_label).below(Center(m_frame));
-    if (0 != m_open) Center(m_open).below(Center(m_frame));
+    if (nullptr != m_open) Center(m_open).below(Center(m_frame));
 
     LeftEdge(m_label).rightOf(LeftEdge(m_frame));
     LeftEdge(m_value).rightOf(RightEdge(m_label), 3);
 
-    if (0 == m_open) {
+    if (nullptr == m_open) {
       if (m_stretch) RightEdge(m_value).stretchTo(RightEdge(m_frame));
     } else {
       RightEdge(m_open).leftOf(RightEdge(m_frame));
@@ -126,13 +126,13 @@ namespace st_graph {
       m_frame->unDisplay();
       m_label->unDisplay();
       m_value->unDisplay();
-      if (0 != m_open) m_open->unDisplay();
+      if (nullptr != m_open) m_open->unDisplay();
     }
   }
 
   void ParWidget::clicked(IFrame * f) {
     std::string state;
-    if (m_open == f && m_open != 0) {
+    if (m_open == f && m_open != nullptr) {
       if (std::string::npos != m_par->Type().find("w"))
         state = m_engine.fileDialog(m_frame, m_value_string, "save");
       else
@@ -171,7 +171,7 @@ namespace st_graph {
   void ParWidget::display(bool disp_flag) {
     m_display = disp_flag;
     if (m_display) {
-      if (0 != m_open) m_open->display();
+      if (nullptr != m_open) m_open->display();
       m_value->display();
       m_label->display();
       m_frame->display();
@@ -184,11 +184,11 @@ namespace st_graph {
     // The first time this is called, create a temporary gui with text entries corresponding to the sizes of parameters.
     static std::map<std::string, long> s_width;
     if (s_width.empty()) {
-      std::unique_ptr<IFrame> mf(m_engine.createMainFrame(0, 100, 100, "sizer"));
-      std::unique_ptr<IFrame> bool_pw(m_engine.createTextEntry(mf.get(), 0, "false"));
-      std::unique_ptr<IFrame> int_pw(m_engine.createTextEntry(mf.get(), 0, "+1234567890"));
-      std::unique_ptr<IFrame> float_pw(m_engine.createTextEntry(mf.get(), 0, "1.2345678901234E+123"));
-      std::unique_ptr<IFrame> string_pw(m_engine.createTextEntry(mf.get(), 0, "1234567890123456789012345678901234567890"));
+      std::unique_ptr<IFrame> mf(m_engine.createMainFrame(nullptr, 100, 100, "sizer"));
+      std::unique_ptr<IFrame> bool_pw(m_engine.createTextEntry(mf.get(), nullptr, "false"));
+      std::unique_ptr<IFrame> int_pw(m_engine.createTextEntry(mf.get(), nullptr, "+1234567890"));
+      std::unique_ptr<IFrame> float_pw(m_engine.createTextEntry(mf.get(), nullptr, "1.2345678901234E+123"));
+      std::unique_ptr<IFrame> string_pw(m_engine.createTextEntry(mf.get(), nullptr, "1234567890123456789012345678901234567890"));
       //std::unique_ptr<IFrame> string_pw(m_engine.createTextEntry(mf.get(), 0, "123456789012345678901234"));
       // Store sizes of text entry boxes for each parameter type.
       s_width.insert(std::make_pair(std::string("b"), bool_pw->getWidth()));
@@ -199,7 +199,7 @@ namespace st_graph {
     }
 
     long width = 10;
-    for (std::map<std::string, long>::iterator itor = s_width.begin(); itor != s_width.end(); ++itor) {
+    for (auto itor = s_width.begin(); itor != s_width.end(); ++itor) {
       if (std::string::npos != par->Type().find(itor->first)) {
         width = itor->second;
         break;
@@ -216,8 +216,8 @@ namespace st_graph {
   //StEventReceiver::StEventReceiver(st_graph::Engine & engine, hoops::IParGroup & par_group, StEventReceiver * app):
   StGui::StGui(Engine & engine, const hoops::IParGroup & par_group):
     m_os("StGui", "StGui", 2), m_engine(engine), m_par_widget(), m_tab_folder(), m_parent(), m_plot_title(),
-    m_par_group(par_group.Clone()), m_main(0), m_group_frame(0), m_run(0), m_cancel(0), m_show_advanced(0),
-    m_plot_frame(0), m_widest(0), m_tab_height(0), m_plot_enabled(false) {
+    m_par_group(par_group.Clone()), m_main(nullptr), m_group_frame(nullptr), m_run(nullptr), m_cancel(nullptr), m_show_advanced(nullptr),
+    m_plot_frame(nullptr), m_widest(nullptr), m_tab_height(0), m_plot_enabled(false) {
     try {
       m_plot_enabled = (*m_par_group)["plot"];
     } catch (const std::exception &) {
@@ -234,7 +234,7 @@ namespace st_graph {
   }
 
   StGui::~StGui() {
-    for (ParWidgetCont::reverse_iterator itor = m_par_widget.rbegin(); itor != m_par_widget.rend(); ++itor)
+    for (auto itor = m_par_widget.rbegin(); itor != m_par_widget.rend(); ++itor)
       delete *itor->second;
     delete m_main;
     delete m_par_group;
@@ -246,12 +246,12 @@ namespace st_graph {
 
       try {
         // Get parameter values which are associated with the state of a tab folder.
-        for (TabFolderCont::iterator itor = m_tab_folder.begin(); itor != m_tab_folder.end(); ++itor) {
+        for (auto itor = m_tab_folder.begin(); itor != m_tab_folder.end(); ++itor) {
 //          pars[itor->first] = itor->second->getSelected();
         }
 
         // Get parameter values which are associated with parameter widgets.
-        for (ParWidgetCont::iterator itor = m_par_widget.begin(); itor != m_par_widget.end(); ++itor) {
+        for (auto itor = m_par_widget.begin(); itor != m_par_widget.end(); ++itor) {
           pars << *itor->second;
         }
 
@@ -287,7 +287,7 @@ namespace st_graph {
       m_engine.stop();
     } else if (f == m_show_advanced) {
       // Show/hide advanced parameters.
-      for (ParWidgetCont::iterator itor = m_par_widget.begin(); itor != m_par_widget.end(); ++itor) {
+      for (auto itor = m_par_widget.begin(); itor != m_par_widget.end(); ++itor) {
         // If parameter is not "hidden" do not tamper with its visibility.
         if (std::string::npos == pars[itor->first].Mode().find("h")) continue;
         const std::string & state(m_show_advanced->getState());
@@ -321,7 +321,7 @@ namespace st_graph {
 //      RightEdge(m_group_frame).stretchTo(RightEdge(m_widest->getFrame()));
 
       // Size the plot so it sits nicely to the right of the group frame, and maintains constant aspect ratio.
-      if (0 != m_plot_frame) {
+      if (nullptr != m_plot_frame) {
         TopEdge(m_plot_frame).below(BottomEdge(m_group_frame), 6);
 //        TopEdge(m_plot_frame).below(BottomEdge(m_show_advanced), 6);
         LeftEdge(m_plot_frame).rightOf(LeftEdge(m_main), 6);
@@ -332,7 +332,7 @@ namespace st_graph {
       }
     
       // Layout tab folders.
-      for (TabFolderCont::iterator tab_itor = m_tab_folder.begin(); tab_itor != m_tab_folder.end(); ++tab_itor) {
+      for (auto tab_itor = m_tab_folder.begin(); tab_itor != m_tab_folder.end(); ++tab_itor) {
         // Starting height of tab folders is 0.
         long height = 0;
         // Fill a container with this folder's tabs.
@@ -340,7 +340,7 @@ namespace st_graph {
         tab_itor->second->getTabCont(tab_cont);
 
         // Layout widgets on each tab.
-        for (std::map<std::string, IFrame *>::iterator itor = tab_cont.begin(); itor != tab_cont.end(); ++itor) {
+        for (auto itor = tab_cont.begin(); itor != tab_cont.end(); ++itor) {
           layout(itor->second);
           height = height > itor->second->getHeight() ? height : itor->second->getHeight();
         }
@@ -351,7 +351,7 @@ namespace st_graph {
       std::list<IFrame *> subframes;
       f->getSubframes(subframes);
 
-      std::list<IFrame *>::iterator itor = subframes.begin();
+      auto itor = subframes.begin();
       if (itor != subframes.end()) {
         IFrame * previous = *itor;
         TopEdge(*itor).below(TopEdge(f), 22);
@@ -392,12 +392,12 @@ namespace st_graph {
       getParent(*itor, parent);
 
       // Loop over parents.
-      for (std::list<IFrame *>::iterator parent_itor = parent.begin(); parent_itor != parent.end(); ++parent_itor) {
+      for (auto parent_itor = parent.begin(); parent_itor != parent.end(); ++parent_itor) {
         // If parameter is a switch with an enumerated range, make it a tab-folder.
         //if (m_par_group.isSwitch(par_name) && enumerated_range) {
         if (false) {
           ITabFolder * tf = m_engine.createTabFolder(*parent_itor, this);
-          for (std::list<std::string>::iterator enum_itor = par_range.begin(); enum_itor != par_range.end(); ++enum_itor) {
+          for (auto enum_itor = par_range.begin(); enum_itor != par_range.end(); ++enum_itor) {
             IFrame * frame = tf->addTab(*enum_itor);
             // Use the current parameter value to select the correct tab.
             if ((*itor)->Value() == *enum_itor) tf->select(frame);
@@ -416,7 +416,7 @@ namespace st_graph {
           m_par_widget.insert(std::make_pair(par_name, widget));
 
           // Keep track of the widget with the widest label.
-          if (0 == m_widest || widget->getLabel()->getWidth() > m_widest->getLabel()->getWidth()) m_widest = widget;
+          if (nullptr == m_widest || widget->getLabel()->getWidth() > m_widest->getLabel()->getWidth()) m_widest = widget;
 
           // Record parent of this widget.
           m_parent.insert(std::make_pair(widget->getFrame(), *parent_itor));
@@ -424,13 +424,13 @@ namespace st_graph {
       }
     }
 
-    if (0 != m_widest) {
+    if (nullptr != m_widest) {
       m_group_frame->setMinimumWidth(m_widest->getFrame()->getWidth() + 12);
-      for (ParWidgetCont::iterator itor = m_par_widget.begin(); itor != m_par_widget.end(); ++itor) {
+      for (auto itor = m_par_widget.begin(); itor != m_par_widget.end(); ++itor) {
         itor->second->getLabel()->setWidth(m_widest->getLabel()->getWidth());
       }
     }
-    if (0 != m_plot_frame) m_plot_frame->setMinimumWidth(100);
+    if (nullptr != m_plot_frame) m_plot_frame->setMinimumWidth(100);
 
     m_engine.run();
   }
@@ -468,7 +468,7 @@ namespace st_graph {
 
   void StGui::synchronizeWidgets(const std::string & par_name, const std::string & value) {
     std::pair<ParWidgetCont::iterator, ParWidgetCont::iterator> range = m_par_widget.equal_range(par_name);
-    for (ParWidgetCont::iterator itor = range.first; itor != range.second; ++itor) {
+    for (auto itor = range.first; itor != range.second; ++itor) {
       itor->second->setValue(value);
     }
   }

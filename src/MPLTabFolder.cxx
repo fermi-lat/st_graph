@@ -15,7 +15,7 @@
 
 namespace st_graph {
 
-  MPLTabFolder::MPLTabFolder(MPLFrame * parent, IEventReceiver * receiver): m_tab(), m_frame(0),// m_tg_tab(0),
+  MPLTabFolder::MPLTabFolder(MPLFrame * parent, IEventReceiver * receiver): m_tab(), m_frame(nullptr),// m_tg_tab(0),
     m_receiver(receiver) {
 //    TGFrame * tg_parent = parent->getTGFrame();
 //    m_tg_tab = new TGTab(tg_parent, 10, 10);
@@ -24,7 +24,7 @@ namespace st_graph {
 //    m_frame->setName("tab folder");
   }
 
-  MPLTabFolder::~MPLTabFolder() {}
+  MPLTabFolder::~MPLTabFolder() = default;
 
   auto MPLTabFolder::addTab(const std::string & label) -> IFrame * {
     IFrame * frame = getTab(label);
@@ -55,7 +55,7 @@ namespace st_graph {
   }
 
   auto MPLTabFolder::getTab(const std::string & label) -> IFrame * {
-    IFrame * frame = 0;
+    IFrame * frame = nullptr;
 //    std::map<std::string, IFrame *>::iterator itor = m_tab.find(label);
 //    if (m_tab.end() != itor) frame = itor->second;
     return frame;
@@ -64,7 +64,7 @@ namespace st_graph {
   auto MPLTabFolder::getFrame() -> IFrame * { return m_frame; }
 
   auto MPLTabFolder::getSelected() const -> std::string {
-	return NULL;//m_tg_tab->GetCurrentTab()->GetString();
+	return nullptr;//m_tg_tab->GetCurrentTab()->GetString();
   }
 
   void MPLTabFolder::select(IFrame * tab) {
